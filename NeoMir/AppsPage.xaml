@@ -1,0 +1,96 @@
+﻿<Page
+    x:Class="NeoMir.AppsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NeoMir"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid x:Name="AppsGrid">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Image Margin="30" Grid.Column="0" Grid.Row="0" x:Name="cube_logo" Source="/Assets/MainPage/cube.png"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="100" PointerEntered="cube_logo_PointerEntered" PointerExited="cube_logo_PointerExited" Tapped="cube_logo_Tapped"></Image>
+
+        <ScrollViewer Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="1" Grid.RowSpan="5" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" Padding="0,40,0,0">
+            
+            <ItemsControl x:Name="rectangleItems" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <ItemsControl.ItemContainerTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition FromHorizontalOffset="200" IsStaggeringEnabled="True"/>
+                    </TransitionCollection>
+                </ItemsControl.ItemContainerTransitions>
+                
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Height="800"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                
+                <ItemsControl.Items>
+                    <Image Source="/Assets/AppsPage/exemple.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple1.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple2.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple3.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple1.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple2.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple3.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple1.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple2.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple3.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple1.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple2.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple3.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple1.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple2.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple3.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple1.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple2.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple3.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple1.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple2.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple3.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple1.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple2.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple3.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple1.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple2.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple3.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple1.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple2.png" Width="350" Height="350" Margin="10"/>
+                    <Image Source="/Assets/AppsPage/exemple3.png" Width="350" Height="350" Margin="10"/>
+                </ItemsControl.Items>
+                
+            </ItemsControl>
+            
+        </ScrollViewer>
+    </Grid>
+</Page>
