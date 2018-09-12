@@ -1,0 +1,221 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 22/06/2016 15:15
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-a-single-cloud:before { content: "\f100"; }
+.flaticon-breezy-day:before { content: "\f101"; }
+.flaticon-cloud-and-half-moon:before { content: "\f102"; }
+.flaticon-cloud-and-wind:before { content: "\f103"; }
+.flaticon-cloud-foog-and-sun:before { content: "\f104"; }
+.flaticon-cloud-with-sun:before { content: "\f105"; }
+.flaticon-cloudy-and-foggy-night:before { content: "\f106"; }
+.flaticon-cloudy-day:before { content: "\f107"; }
+.flaticon-cloudy-day-outline:before { content: "\f108"; }
+.flaticon-cloudy-morning:before { content: "\f109"; }
+.flaticon-cloudy-night:before { content: "\f10a"; }
+.flaticon-cloudy-sky:before { content: "\f10b"; }
+.flaticon-cold-wind:before { content: "\f10c"; }
+.flaticon-cold-windy-night:before { content: "\f10d"; }
+.flaticon-compass-pointing-east:before { content: "\f10e"; }
+.flaticon-compass-pointing-north:before { content: "\f10f"; }
+.flaticon-compass-pointing-south:before { content: "\f110"; }
+.flaticon-compass-pointing-west:before { content: "\f111"; }
+.flaticon-crescent-moon:before { content: "\f112"; }
+.flaticon-dense-fog:before { content: "\f113"; }
+.flaticon-drizlle-and-lightning:before { content: "\f114"; }
+.flaticon-drizzle-and-half-moon:before { content: "\f115"; }
+.flaticon-fahrenheit-degrees:before { content: "\f116"; }
+.flaticon-falling-rain:before { content: "\f117"; }
+.flaticon-fog-with-cloud:before { content: "\f118"; }
+.flaticon-foggy-day:before { content: "\f119"; }
+.flaticon-foggy-day-1:before { content: "\f11a"; }
+.flaticon-full-moon:before { content: "\f11b"; }
+.flaticon-hail-and-lightning:before { content: "\f11c"; }
+.flaticon-hail-and-lightning-with-half-moon:before { content: "\f11d"; }
+.flaticon-hail-and-sun:before { content: "\f11e"; }
+.flaticon-half-moon:before { content: "\f11f"; }
+.flaticon-half-moon-and-stars:before { content: "\f120"; }
+.flaticon-hard-rain:before { content: "\f121"; }
+.flaticon-hard-rain-and-half-moon:before { content: "\f122"; }
+.flaticon-hard-wind-and-cloud:before { content: "\f123"; }
+.flaticon-hardrain-cloud:before { content: "\f124"; }
+.flaticon-hot-mercury-thermometer:before { content: "\f125"; }
+.flaticon-lighting-and-sun:before { content: "\f126"; }
+.flaticon-lighting-cloud-outline:before { content: "\f127"; }
+.flaticon-lightining-cloud-and-moon:before { content: "\f128"; }
+.flaticon-lightining-cloud-with-sun:before { content: "\f129"; }
+.flaticon-lightning-and-drizzle-cloud:before { content: "\f12a"; }
+.flaticon-lightning-and-hail:before { content: "\f12b"; }
+.flaticon-lightning-and-sun-outline:before { content: "\f12c"; }
+.flaticon-lightning-bolt-symbol:before { content: "\f12d"; }
+.flaticon-lightning-cloud-outline:before { content: "\f12e"; }
+.flaticon-lower-sun:before { content: "\f12f"; }
+.flaticon-mercury-thermometer:before { content: "\f130"; }
+.flaticon-mercury-thermometer-at-maximun:before { content: "\f131"; }
+.flaticon-mercury-thermometer-at-minimum:before { content: "\f132"; }
+.flaticon-moon-outline:before { content: "\f133"; }
+.flaticon-precipitation-and-sun:before { content: "\f134"; }
+.flaticon-rain-and-cloud:before { content: "\f135"; }
+.flaticon-raindrops-and-umbrella:before { content: "\f136"; }
+.flaticon-raindrops-falling:before { content: "\f137"; }
+.flaticon-rainfall:before { content: "\f138"; }
+.flaticon-rainy-cloud-and-moon:before { content: "\f139"; }
+.flaticon-rainy-cloud-and-moon-1:before { content: "\f13a"; }
+.flaticon-rainy-cloud-and-sun:before { content: "\f13b"; }
+.flaticon-rainy-cloud-and-sun-outline:before { content: "\f13c"; }
+.flaticon-rainy-cloud-outline:before { content: "\f13d"; }
+.flaticon-shiny-sunrise:before { content: "\f13e"; }
+.flaticon-snorflakle-outline:before { content: "\f13f"; }
+.flaticon-snow-cloud:before { content: "\f140"; }
+.flaticon-snow-cloud-1:before { content: "\f141"; }
+.flaticon-snowing-cloud-with-moon:before { content: "\f142"; }
+.flaticon-snowing-cloud-with-sun-outline:before { content: "\f143"; }
+.flaticon-solar-eclipse:before { content: "\f144"; }
+.flaticon-storm-and-moon:before { content: "\f145"; }
+.flaticon-storm-clod:before { content: "\f146"; }
+.flaticon-stormy-and-lighting-cloud:before { content: "\f147"; }
+.flaticon-stormy-day:before { content: "\f148"; }
+.flaticon-stormy-day-1:before { content: "\f149"; }
+.flaticon-stormy-night:before { content: "\f14a"; }
+.flaticon-sun-and-cloud-with-rain:before { content: "\f14b"; }
+.flaticon-sundown:before { content: "\f14c"; }
+.flaticon-sunny-day:before { content: "\f14d"; }
+.flaticon-tornado:before { content: "\f14e"; }
+.flaticon-twilight:before { content: "\f14f"; }
+.flaticon-umbrella-outline:before { content: "\f150"; }
+.flaticon-water-drop:before { content: "\f151"; }
+.flaticon-water-drops:before { content: "\f152"; }
+.flaticon-wind-and-cloud:before { content: "\f153"; }
+.flaticon-wind-speed-flag:before { content: "\f154"; }
+.flaticon-windy-afternoon:before { content: "\f155"; }
+.flaticon-windy-day:before { content: "\f156"; }
+.flaticon-windy-night:before { content: "\f157"; }
+.flaticon-winter-rain:before { content: "\f158"; }
+.flaticon-winter-rain-1:before { content: "\f159"; }
+.flaticon-zero-degrees:before { content: "\f15a"; }
+    
+    $font-Flaticon-a-single-cloud: "\f100";
+    $font-Flaticon-breezy-day: "\f101";
+    $font-Flaticon-cloud-and-half-moon: "\f102";
+    $font-Flaticon-cloud-and-wind: "\f103";
+    $font-Flaticon-cloud-foog-and-sun: "\f104";
+    $font-Flaticon-cloud-with-sun: "\f105";
+    $font-Flaticon-cloudy-and-foggy-night: "\f106";
+    $font-Flaticon-cloudy-day: "\f107";
+    $font-Flaticon-cloudy-day-outline: "\f108";
+    $font-Flaticon-cloudy-morning: "\f109";
+    $font-Flaticon-cloudy-night: "\f10a";
+    $font-Flaticon-cloudy-sky: "\f10b";
+    $font-Flaticon-cold-wind: "\f10c";
+    $font-Flaticon-cold-windy-night: "\f10d";
+    $font-Flaticon-compass-pointing-east: "\f10e";
+    $font-Flaticon-compass-pointing-north: "\f10f";
+    $font-Flaticon-compass-pointing-south: "\f110";
+    $font-Flaticon-compass-pointing-west: "\f111";
+    $font-Flaticon-crescent-moon: "\f112";
+    $font-Flaticon-dense-fog: "\f113";
+    $font-Flaticon-drizlle-and-lightning: "\f114";
+    $font-Flaticon-drizzle-and-half-moon: "\f115";
+    $font-Flaticon-fahrenheit-degrees: "\f116";
+    $font-Flaticon-falling-rain: "\f117";
+    $font-Flaticon-fog-with-cloud: "\f118";
+    $font-Flaticon-foggy-day: "\f119";
+    $font-Flaticon-foggy-day-1: "\f11a";
+    $font-Flaticon-full-moon: "\f11b";
+    $font-Flaticon-hail-and-lightning: "\f11c";
+    $font-Flaticon-hail-and-lightning-with-half-moon: "\f11d";
+    $font-Flaticon-hail-and-sun: "\f11e";
+    $font-Flaticon-half-moon: "\f11f";
+    $font-Flaticon-half-moon-and-stars: "\f120";
+    $font-Flaticon-hard-rain: "\f121";
+    $font-Flaticon-hard-rain-and-half-moon: "\f122";
+    $font-Flaticon-hard-wind-and-cloud: "\f123";
+    $font-Flaticon-hardrain-cloud: "\f124";
+    $font-Flaticon-hot-mercury-thermometer: "\f125";
+    $font-Flaticon-lighting-and-sun: "\f126";
+    $font-Flaticon-lighting-cloud-outline: "\f127";
+    $font-Flaticon-lightining-cloud-and-moon: "\f128";
+    $font-Flaticon-lightining-cloud-with-sun: "\f129";
+    $font-Flaticon-lightning-and-drizzle-cloud: "\f12a";
+    $font-Flaticon-lightning-and-hail: "\f12b";
+    $font-Flaticon-lightning-and-sun-outline: "\f12c";
+    $font-Flaticon-lightning-bolt-symbol: "\f12d";
+    $font-Flaticon-lightning-cloud-outline: "\f12e";
+    $font-Flaticon-lower-sun: "\f12f";
+    $font-Flaticon-mercury-thermometer: "\f130";
+    $font-Flaticon-mercury-thermometer-at-maximun: "\f131";
+    $font-Flaticon-mercury-thermometer-at-minimum: "\f132";
+    $font-Flaticon-moon-outline: "\f133";
+    $font-Flaticon-precipitation-and-sun: "\f134";
+    $font-Flaticon-rain-and-cloud: "\f135";
+    $font-Flaticon-raindrops-and-umbrella: "\f136";
+    $font-Flaticon-raindrops-falling: "\f137";
+    $font-Flaticon-rainfall: "\f138";
+    $font-Flaticon-rainy-cloud-and-moon: "\f139";
+    $font-Flaticon-rainy-cloud-and-moon-1: "\f13a";
+    $font-Flaticon-rainy-cloud-and-sun: "\f13b";
+    $font-Flaticon-rainy-cloud-and-sun-outline: "\f13c";
+    $font-Flaticon-rainy-cloud-outline: "\f13d";
+    $font-Flaticon-shiny-sunrise: "\f13e";
+    $font-Flaticon-snorflakle-outline: "\f13f";
+    $font-Flaticon-snow-cloud: "\f140";
+    $font-Flaticon-snow-cloud-1: "\f141";
+    $font-Flaticon-snowing-cloud-with-moon: "\f142";
+    $font-Flaticon-snowing-cloud-with-sun-outline: "\f143";
+    $font-Flaticon-solar-eclipse: "\f144";
+    $font-Flaticon-storm-and-moon: "\f145";
+    $font-Flaticon-storm-clod: "\f146";
+    $font-Flaticon-stormy-and-lighting-cloud: "\f147";
+    $font-Flaticon-stormy-day: "\f148";
+    $font-Flaticon-stormy-day-1: "\f149";
+    $font-Flaticon-stormy-night: "\f14a";
+    $font-Flaticon-sun-and-cloud-with-rain: "\f14b";
+    $font-Flaticon-sundown: "\f14c";
+    $font-Flaticon-sunny-day: "\f14d";
+    $font-Flaticon-tornado: "\f14e";
+    $font-Flaticon-twilight: "\f14f";
+    $font-Flaticon-umbrella-outline: "\f150";
+    $font-Flaticon-water-drop: "\f151";
+    $font-Flaticon-water-drops: "\f152";
+    $font-Flaticon-wind-and-cloud: "\f153";
+    $font-Flaticon-wind-speed-flag: "\f154";
+    $font-Flaticon-windy-afternoon: "\f155";
+    $font-Flaticon-windy-day: "\f156";
+    $font-Flaticon-windy-night: "\f157";
+    $font-Flaticon-winter-rain: "\f158";
+    $font-Flaticon-winter-rain-1: "\f159";
+    $font-Flaticon-zero-degrees: "\f15a";

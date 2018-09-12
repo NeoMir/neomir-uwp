@@ -1,0 +1,122 @@
+	/*
+  	Flaticon icon font: Flaticon
+  	Creation date: 22/06/2016 15:15
+  	*/
+
+@font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+  font-family: Flaticon;
+        font-size: 20px;
+font-style: normal;
+margin-left: 20px;
+}
+
+.flaticon-a-single-cloud:before { content: "\f100"; }
+.flaticon-breezy-day:before { content: "\f101"; }
+.flaticon-cloud-and-half-moon:before { content: "\f102"; }
+.flaticon-cloud-and-wind:before { content: "\f103"; }
+.flaticon-cloud-foog-and-sun:before { content: "\f104"; }
+.flaticon-cloud-with-sun:before { content: "\f105"; }
+.flaticon-cloudy-and-foggy-night:before { content: "\f106"; }
+.flaticon-cloudy-day:before { content: "\f107"; }
+.flaticon-cloudy-day-outline:before { content: "\f108"; }
+.flaticon-cloudy-morning:before { content: "\f109"; }
+.flaticon-cloudy-night:before { content: "\f10a"; }
+.flaticon-cloudy-sky:before { content: "\f10b"; }
+.flaticon-cold-wind:before { content: "\f10c"; }
+.flaticon-cold-windy-night:before { content: "\f10d"; }
+.flaticon-compass-pointing-east:before { content: "\f10e"; }
+.flaticon-compass-pointing-north:before { content: "\f10f"; }
+.flaticon-compass-pointing-south:before { content: "\f110"; }
+.flaticon-compass-pointing-west:before { content: "\f111"; }
+.flaticon-crescent-moon:before { content: "\f112"; }
+.flaticon-dense-fog:before { content: "\f113"; }
+.flaticon-drizlle-and-lightning:before { content: "\f114"; }
+.flaticon-drizzle-and-half-moon:before { content: "\f115"; }
+.flaticon-fahrenheit-degrees:before { content: "\f116"; }
+.flaticon-falling-rain:before { content: "\f117"; }
+.flaticon-fog-with-cloud:before { content: "\f118"; }
+.flaticon-foggy-day:before { content: "\f119"; }
+.flaticon-foggy-day-1:before { content: "\f11a"; }
+.flaticon-full-moon:before { content: "\f11b"; }
+.flaticon-hail-and-lightning:before { content: "\f11c"; }
+.flaticon-hail-and-lightning-with-half-moon:before { content: "\f11d"; }
+.flaticon-hail-and-sun:before { content: "\f11e"; }
+.flaticon-half-moon:before { content: "\f11f"; }
+.flaticon-half-moon-and-stars:before { content: "\f120"; }
+.flaticon-hard-rain:before { content: "\f121"; }
+.flaticon-hard-rain-and-half-moon:before { content: "\f122"; }
+.flaticon-hard-wind-and-cloud:before { content: "\f123"; }
+.flaticon-hardrain-cloud:before { content: "\f124"; }
+.flaticon-hot-mercury-thermometer:before { content: "\f125"; }
+.flaticon-lighting-and-sun:before { content: "\f126"; }
+.flaticon-lighting-cloud-outline:before { content: "\f127"; }
+.flaticon-lightining-cloud-and-moon:before { content: "\f128"; }
+.flaticon-lightining-cloud-with-sun:before { content: "\f129"; }
+.flaticon-lightning-and-drizzle-cloud:before { content: "\f12a"; }
+.flaticon-lightning-and-hail:before { content: "\f12b"; }
+.flaticon-lightning-and-sun-outline:before { content: "\f12c"; }
+.flaticon-lightning-bolt-symbol:before { content: "\f12d"; }
+.flaticon-lightning-cloud-outline:before { content: "\f12e"; }
+.flaticon-lower-sun:before { content: "\f12f"; }
+.flaticon-mercury-thermometer:before { content: "\f130"; }
+.flaticon-mercury-thermometer-at-maximun:before { content: "\f131"; }
+.flaticon-mercury-thermometer-at-minimum:before { content: "\f132"; }
+.flaticon-moon-outline:before { content: "\f133"; }
+.flaticon-precipitation-and-sun:before { content: "\f134"; }
+.flaticon-rain-and-cloud:before { content: "\f135"; }
+.flaticon-raindrops-and-umbrella:before { content: "\f136"; }
+.flaticon-raindrops-falling:before { content: "\f137"; }
+.flaticon-rainfall:before { content: "\f138"; }
+.flaticon-rainy-cloud-and-moon:before { content: "\f139"; }
+.flaticon-rainy-cloud-and-moon-1:before { content: "\f13a"; }
+.flaticon-rainy-cloud-and-sun:before { content: "\f13b"; }
+.flaticon-rainy-cloud-and-sun-outline:before { content: "\f13c"; }
+.flaticon-rainy-cloud-outline:before { content: "\f13d"; }
+.flaticon-shiny-sunrise:before { content: "\f13e"; }
+.flaticon-snorflakle-outline:before { content: "\f13f"; }
+.flaticon-snow-cloud:before { content: "\f140"; }
+.flaticon-snow-cloud-1:before { content: "\f141"; }
+.flaticon-snowing-cloud-with-moon:before { content: "\f142"; }
+.flaticon-snowing-cloud-with-sun-outline:before { content: "\f143"; }
+.flaticon-solar-eclipse:before { content: "\f144"; }
+.flaticon-storm-and-moon:before { content: "\f145"; }
+.flaticon-storm-clod:before { content: "\f146"; }
+.flaticon-stormy-and-lighting-cloud:before { content: "\f147"; }
+.flaticon-stormy-day:before { content: "\f148"; }
+.flaticon-stormy-day-1:before { content: "\f149"; }
+.flaticon-stormy-night:before { content: "\f14a"; }
+.flaticon-sun-and-cloud-with-rain:before { content: "\f14b"; }
+.flaticon-sundown:before { content: "\f14c"; }
+.flaticon-sunny-day:before { content: "\f14d"; }
+.flaticon-tornado:before { content: "\f14e"; }
+.flaticon-twilight:before { content: "\f14f"; }
+.flaticon-umbrella-outline:before { content: "\f150"; }
+.flaticon-water-drop:before { content: "\f151"; }
+.flaticon-water-drops:before { content: "\f152"; }
+.flaticon-wind-and-cloud:before { content: "\f153"; }
+.flaticon-wind-speed-flag:before { content: "\f154"; }
+.flaticon-windy-afternoon:before { content: "\f155"; }
+.flaticon-windy-day:before { content: "\f156"; }
+.flaticon-windy-night:before { content: "\f157"; }
+.flaticon-winter-rain:before { content: "\f158"; }
+.flaticon-winter-rain-1:before { content: "\f159"; }
+.flaticon-zero-degrees:before { content: "\f15a"; }
