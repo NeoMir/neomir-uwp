@@ -90,7 +90,6 @@ namespace NeoMir
         {
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
             {
-                // Your UI update code goes here!
                 // TODO: Get current location for IoT devices
 
                 // Use or Open Wheather API to get Wheather Information of a location
@@ -118,23 +117,25 @@ namespace NeoMir
             ConnectedAnimation imageAnimation = ConnectedAnimationService.GetForCurrentView().GetAnimation("goToMain");
             if (imageAnimation != null)
             {
-                imageAnimation.TryStart(launchAppButton);
+                imageAnimation.TryStart(LaunchAppButton);
             }
         }
 
-        private void launchAppButton_PointerEntered(object sender, PointerRoutedEventArgs e)
+        private void LaunchAppButton_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            launchAppButton.Height = 110;
+            LaunchAppButton.Height += 10;
+            LaunchAppButtonName.FontSize += 3;
         }
 
-        private void launchAppButton_PointerExited(object sender, PointerRoutedEventArgs e)
+        private void LaunchAppButton_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            launchAppButton.Height = 100;
+            LaunchAppButton.Height -= 10;
+            LaunchAppButtonName.FontSize -= 3;
         }
 
-        private void launchAppButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void LaunchAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", launchAppButton);
+            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
             this.Frame.Navigate(typeof(AppsPage));
         }
     }

@@ -55,7 +55,8 @@
             
         </Grid>
 
-        <Image Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" x:Name="launchAppButton" Source="/Assets/MainPage/cube.png"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="100" PointerEntered="launchAppButton_PointerEntered" PointerExited="launchAppButton_PointerExited" Tapped="launchAppButton_Tapped"></Image>
+        <Image Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" x:Name="LaunchAppButton" Source="/Assets/MainPage/sign.png"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" PointerEntered="LaunchAppButton_PointerEntered" PointerExited="LaunchAppButton_PointerExited" Tapped="LaunchAppButton_Tapped" Margin="0,0,0,100"></Image>
+        <TextBlock Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" x:Name="LaunchAppButtonName" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontStyle="Italic" Text="Applications" Margin="0,15,0,0"></TextBlock>
 
     </Grid>
 </Page>

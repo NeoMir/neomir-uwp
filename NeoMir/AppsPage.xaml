@@ -27,27 +27,45 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Image Margin="30" Grid.Column="0" Grid.Row="0" x:Name="cube_logo" Source="/Assets/MainPage/cube.png"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="100" PointerEntered="cube_logo_PointerEntered" PointerExited="cube_logo_PointerExited" Tapped="cube_logo_Tapped"></Image>
+        <!-- Return Button & Text -->
+        <Image Grid.Column="3" Grid.Row="8" Grid.ColumnSpan="2" x:Name="BackButton" Source="/Assets/MainPage/signinverse.png"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" PointerEntered="BackButton_PointerEntered" PointerExited="BackButton_PointerExited" Tapped="BackButton_Tapped" Margin="0,20,0,0"></Image>
+        <TextBlock Grid.Column="3" Grid.Row="8" Grid.ColumnSpan="2" x:Name="BackButtonName" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontStyle="Italic" Text="Ecran principal" Margin="0,0,0,100"></TextBlock>
+        
+        <!-- Add row button (development function) -->
+        <Image Grid.Column="7" Grid.Row="8" Grid.ColumnSpan="1" x:Name="AddRowButton" Source="/Assets/AppsPage/plus.png"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" Tapped="AddRowButton_Tapped" PointerEntered="AddRowButton_PointerEntered" PointerExited="AddRowButton_PointerExited"></Image>
 
-        <ScrollViewer Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="1" Grid.RowSpan="5" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" Padding="0,40,0,0">
-            
-            <ItemsControl x:Name="rectangleItems" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <ItemsControl.ItemContainerTransitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition FromHorizontalOffset="200" IsStaggeringEnabled="True"/>
-                    </TransitionCollection>
-                </ItemsControl.ItemContainerTransitions>
+        <!-- Wrapper of all apps rows -->
+        <ScrollViewer Grid.Column="0" Grid.ColumnSpan="8" Grid.Row="0" Grid.RowSpan="7" VerticalScrollMode="Enabled" HorizontalScrollMode="Disabled">
 
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapGrid Height="800"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+            <Grid x:Name="AppsRows">
+                
+                <!-- Title of the first row-->
+                <TextBlock Text="Applications ouvertes" FontSize="25" FontStyle="Italic" Margin="20,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"></TextBlock>
 
-            </ItemsControl>
+                <!-- First apps block -->
+                <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" VerticalAlignment="Top" Margin="0,50,0,0">
+                    <ItemsControl x:Name="OpenApps">
+                        <ItemsControl.ItemContainerTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition FromHorizontalOffset="200" IsStaggeringEnabled="True"/>
+                            </TransitionCollection>
+                        </ItemsControl.ItemContainerTransitions>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapGrid Height="250"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+
+            </Grid>
             
         </ScrollViewer>
+        
     </Grid>
+    
 </Page>

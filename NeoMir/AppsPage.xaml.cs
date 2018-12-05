@@ -3,6 +3,7 @@ using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
@@ -23,13 +24,13 @@ namespace NeoMir
         public AppsPage()
         {
             this.InitializeComponent();
-            ImageSize = 350;
-            ImageHoverSize = 330;
+            ImageSize = 210;
+            ImageHoverSize = 20;
             ImageMargin = new Thickness(10);
-            ListApps();
+            FillApps(OpenApps);
         }
 
-        private void ListApps()
+        private void FillApps(ItemsControl itemsControl)
         {
             int numberOfApps = 20;
 
@@ -42,60 +43,46 @@ namespace NeoMir
                 if (numberImage == 0)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple.png"));
-                    img.Name = "mailto:";
                     numberImage++;
                 }
                 else if (numberImage == 1)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple1.png"));
-                    img.Name = "ms-settings:";
                     numberImage++;
                 }
                 else if (numberImage == 2)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple2.png"));
-                    img.Name = "ms-windows-store://home/";
                     numberImage++;
                 }
                 else if (numberImage == 3)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple3.png"));
-                    img.Name = "bingmaps:";
                     numberImage = 0;
                 }
+
                 img.Height = ImageSize;
                 img.Width = ImageSize;
                 img.Margin = ImageMargin;
                 img.PointerEntered += new PointerEventHandler(image_PointerEntered);
                 img.PointerExited += new PointerEventHandler(image_PointerExited);
-                img.Tapped += new TappedEventHandler(image_Tapped);
-                rectangleItems.Items.Add(img);
+
+                itemsControl.Items.Add(img);
             }
         }
 
         private void image_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             Image img = (Image)sender;
-            img.Height = ImageSize;
-            img.Width = ImageSize;
+            img.Height += ImageHoverSize;
+            img.Width += ImageHoverSize;
         }
 
         private void image_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             Image img = (Image)sender;
-            img.Height = ImageHoverSize;
-            img.Width = ImageHoverSize;
-        }
-
-        private async void image_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Image img = (Image)sender;
-            img.Height = ImageSize;
-
-            // We can use custom URI of the App that we want to launch
-            string uriString = string.Format(img.Name);
-            Uri uri = new Uri(uriString);
-            await Launcher.LaunchUriAsync(uri);
+            img.Height -= ImageHoverSize;
+            img.Width -= ImageHoverSize;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -104,24 +91,100 @@ namespace NeoMir
             ConnectedAnimation imageAnimation = ConnectedAnimationService.GetForCurrentView().GetAnimation("goToApps");
             if (imageAnimation != null)
             {
-                imageAnimation.TryStart(cube_logo);
+                imageAnimation.TryStart(BackButton);
             }
         }
 
-        private void cube_logo_PointerEntered(object sender, PointerRoutedEventArgs e)
+        private void BackButton_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            cube_logo.Height = 110;
+            BackButton.Height += 10;
+            BackButtonName.FontSize += 3;
         }
 
-        private void cube_logo_PointerExited(object sender, PointerRoutedEventArgs e)
+        private void BackButton_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            cube_logo.Height = 100;
+           BackButton.Height -= 10;
+            BackButtonName.FontSize -= 3;
         }
 
-        private void cube_logo_Tapped(object sender, TappedRoutedEventArgs e)
+        private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToMain", cube_logo);
+            textMargin = 300;
+            scrollViewerMargin = 350;
+            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToMain", BackButton);
             this.Frame.Navigate(typeof(MainPage));
+        }
+
+        //
+        // BEGIN test dynamic adding
+        //
+        private static int textMargin = 300;
+        private static int scrollViewerMargin = 350;
+        private string textRowName = "Pré-configuration";
+        private static int ConfNumber = 0;
+        private int lag = 300;
+        private int transitionHorizontaloffset = 200;
+        private int rowsSize = 250;
+
+        private void AddRowButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            TextBlock textBlock = new TextBlock();
+            ScrollViewer scrollViewer = new ScrollViewer();
+            ItemsControl itemsControl = new ItemsControl();
+            TransitionCollection transitions = new TransitionCollection();
+            EntranceThemeTransition entranceThemeTransition = new EntranceThemeTransition();
+
+            // TextBlock Configuration
+            textBlock.Text = textRowName + ConfNumber;
+            textBlock.FontSize = 25;
+            textBlock.FontStyle = Windows.UI.Text.FontStyle.Italic;
+            textBlock.Margin = new Thickness(20, textMargin, 0, 0);
+            textBlock.VerticalAlignment = VerticalAlignment.Top;
+            textBlock.HorizontalAlignment = HorizontalAlignment.Left;
+            ConfNumber++;
+            textMargin += lag;
+
+            // ScrollViewer Configuration
+            scrollViewer.HorizontalScrollMode = ScrollMode.Enabled;
+            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            scrollViewer.VerticalScrollMode = ScrollMode.Disabled;
+            scrollViewer.VerticalAlignment = VerticalAlignment.Top;
+            scrollViewer.Margin = new Thickness(0, scrollViewerMargin, 0, 0);
+            scrollViewerMargin += lag;
+
+            entranceThemeTransition.FromHorizontalOffset = transitionHorizontaloffset;
+            entranceThemeTransition.IsStaggeringEnabled = true;
+            transitions.Add(entranceThemeTransition);
+            itemsControl.ItemContainerTransitions = transitions;
+            itemsControl.ItemsPanel = CreateTemplate();
+
+            FillApps(itemsControl);
+
+            scrollViewer.Content = itemsControl;
+
+            // Add all to the grid
+            AppsRows.Children.Add(textBlock);
+            AppsRows.Children.Add(scrollViewer);
+        }
+
+        // Trick pour ajouter le panel wrapgrid difficile autrement
+        private ItemsPanelTemplate CreateTemplate()
+        {
+            string xaml = "<ItemsPanelTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'><WrapGrid Height='250'/></ItemsPanelTemplate>";
+            return XamlReader.Load(xaml) as ItemsPanelTemplate;
+        }
+        //
+        // END test dynamic adding
+        //
+
+        private void AddRowButton_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            AddRowButton.Height += 10;
+        }
+
+        private void AddRowButton_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            AddRowButton.Height -= 10;
         }
     }
 }

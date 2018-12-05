@@ -116,6 +116,7 @@
     <Content Include="Assets\AppsPage\exemple.png" />
     <Content Include="Assets\AppsPage\exemple2.png" />
     <Content Include="Assets\AppsPage\exemple3.png" />
+    <Content Include="Assets\AppsPage\plus.png" />
     <Content Include="Assets\BadgeLogo.scale-100.png" />
     <Content Include="Assets\BadgeLogo.scale-125.png" />
     <Content Include="Assets\BadgeLogo.scale-150.png" />
@@ -126,6 +127,8 @@
     <Content Include="Assets\LargeTile.scale-150.png" />
     <Content Include="Assets\LargeTile.scale-200.png" />
     <Content Include="Assets\LargeTile.scale-400.png" />
+    <Content Include="Assets\MainPage\sign.png" />
+    <Content Include="Assets\MainPage\signinverse.png" />
     <Content Include="Assets\SmallTile.scale-100.png" />
     <Content Include="Assets\SmallTile.scale-125.png" />
     <Content Include="Assets\SmallTile.scale-150.png" />
