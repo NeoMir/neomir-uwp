@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading;
 using System.Globalization;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -20,11 +22,26 @@ namespace NeoMir
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+
+    public class pageParams
+    {
+        public List<String> pages;
+    }
+    public partial class MainPage : Page
     {
 
         Timer timerDateTime;
         Timer timerWeather;
+
+        List<String> pages = new List<string>()
+        {
+            "MainPage",
+        };
+
+        ///List<NeoMir.ClassicPage> pages = new List<NeoMir.ClassicPage>()
+        ///{            
+        ///};
+
 
         Dictionary<string, string> weatherCodesIcons = new Dictionary<string, string>()
         {
@@ -52,6 +69,20 @@ namespace NeoMir
         public MainPage()
         {
             this.InitializeComponent();
+
+            bool flag = false;
+            foreach (string element in pages)
+            {
+                if (string.Equals("MainPage", element) == true)
+                {
+                    flag = true;
+                }
+            }
+            if (flag == false)
+            {
+                pages.Add("MainPage");
+            }
+
 
             timerDateTime = new Timer(new TimerCallback((obj) => this.refreshDateTime()), null, 0, 1000);
             timerWeather = new Timer(new TimerCallback((obj) => this.refreshWeather()), null, 0, 900000);
@@ -114,6 +145,16 @@ namespace NeoMir
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+
+            try {
+                var parameters = (pageParams)e.Parameter;
+                pages = parameters.pages;
+            }
+            catch
+            {
+                    
+            }
+
             ConnectedAnimation imageAnimation = ConnectedAnimationService.GetForCurrentView().GetAnimation("goToMain");
             if (imageAnimation != null)
             {
@@ -137,6 +178,163 @@ namespace NeoMir
         {
             ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
             this.Frame.Navigate(typeof(AppsPage));
+        }
+
+
+
+
+        private void RightButton_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            RightButton.Height += 10;
+        }
+
+        private void RightButton_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            RightButton.Height -= 10;
+        }
+
+        private void RightButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
+            goToRight("MainPage");
+        }
+
+
+
+
+
+        private void LeftButton_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            LeftButton.Height += 10;
+        }
+
+        private void LeftButton_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            LeftButton.Height -= 10;
+        }
+
+        private void LeftButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
+            goToLeft("MainPage");
+        }
+
+
+
+        private void FirstPage_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            FirstPage.Height += 10;
+        }
+
+        private void FirstPage_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            FirstPage.Height -= 10;
+        }
+
+        private void FirstPage_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
+            bool flag = false;
+            foreach(string element in pages)
+            {
+                if (string.Equals("ClassicPage", element) == true)
+                {
+                    flag = true;
+                }
+            }
+            if (flag == false)
+            {
+                pages.Add("ClassicPage");
+            }
+        }
+
+
+        private void SecondPage_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            SecondPage.Height += 10;
+        }
+
+        private void SecondPage_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            SecondPage.Height -= 10;
+        }
+
+        private void SecondPage_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
+            bool flag = false;
+            foreach (string element in pages)
+            {
+                if (string.Equals("SecondPage", element) == true)
+                {
+                    flag = true;
+                }
+            }
+            if (flag == false)
+            {
+                pages.Add("SecondPage");
+            }
+        }
+
+
+
+        private void goToRight(String page_name)
+        {
+            int count = 0;
+            foreach (String element in pages)
+            {
+                count++;
+                if (string.Equals(element, page_name) == true)
+                {
+                    if (int.Equals(count, pages.Count) == true)
+                    {
+                        goToPage(0);
+                    }
+                    else
+                    {
+                        goToPage(count);
+                    }
+                }
+            }
+        }
+        private void goToLeft(String page_name)
+        {
+            int count = 0;
+            foreach (String element in pages)
+            {
+
+                if (string.Equals(element, page_name) == true)
+                {
+                    
+                    if (count == 0)
+                    {
+                        goToPage(pages.Count - 1);
+                    }
+                    else
+                    {
+                        goToPage(count - 1);
+                    }
+                }
+
+                count++;
+            }
+        }
+        private void goToPage(int p_nbr)
+        {
+            var parameters = new pageParams();
+            parameters.pages = pages;
+            if (string.Equals("MainPage", pages[p_nbr]) == true)
+            {
+                this.Frame.Navigate(typeof(MainPage), parameters);
+            }
+            if (string.Equals("ClassicPage", pages[p_nbr]) == true)
+            {
+                this.Frame.Navigate(typeof(ClassicPage), parameters);
+            }
+            if (string.Equals("SecondPage", pages[p_nbr]) == true)
+            {
+                this.Frame.Navigate(typeof(SecondPage), parameters);
+            }
         }
     }
 }
