@@ -53,5 +53,10 @@ namespace NeoMir
             Uri uri = new Uri(this.Link);
             AppView.Navigate(uri);
         }
+
+        private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AppsPage));
+        }
     }
 }
