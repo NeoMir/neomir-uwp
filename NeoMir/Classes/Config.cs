@@ -1,4 +1,6 @@
-﻿namespace NeoMir
+﻿// Class for all config variables
+
+namespace NeoMir
 {
 
     public class Config

@@ -1,5 +1,4 @@
 ﻿using System;
-using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -8,18 +7,30 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
-// Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace NeoMir
 {
     /// <summary>
-    /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
+    /// Application Page
     /// </summary>
     public sealed partial class AppsPage : Page
     {
+        //
+        // PROPERTIES
+        //
+
         public static int ImageSize { get; private set; }
         public static int ImageHoverSize { get; private set; }
         public static Thickness ImageMargin { get; private set; }
+        private static int textMargin = 300;
+        private static int scrollViewerMargin = 350;
+        private string textRowName = "Pré-configuration ";
+        private static int ConfNumber = 0;
+        private int lag = 300;
+        private int transitionHorizontaloffset = 200;
+
+        //
+        // CONSTRUCTOR
+        //
 
         public AppsPage()
         {
@@ -29,6 +40,10 @@ namespace NeoMir
             ImageMargin = new Thickness(10);
             FillApps(OpenApps);
         }
+
+        //
+        // METHODS
+        //
 
         private void FillApps(ItemsControl itemsControl)
         {
@@ -43,21 +58,25 @@ namespace NeoMir
                 if (numberImage == 0)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple.png"));
+                    img.Tag = "http://agls-app/";
                     numberImage++;
                 }
                 else if (numberImage == 1)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple1.png"));
+                    img.Tag = "https://www.spotify.com/fr/";
                     numberImage++;
                 }
                 else if (numberImage == 2)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple2.png"));
+                    img.Tag = "https://www.netflix.com/fr/";
                     numberImage++;
                 }
                 else if (numberImage == 3)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple3.png"));
+                    img.Tag = "https://ionicframework.com/";
                     numberImage = 0;
                 }
 
@@ -66,9 +85,36 @@ namespace NeoMir
                 img.Margin = ImageMargin;
                 img.PointerEntered += new PointerEventHandler(image_PointerEntered);
                 img.PointerExited += new PointerEventHandler(image_PointerExited);
+                img.Tapped += new TappedEventHandler(image_Tapped);
 
                 itemsControl.Items.Add(img);
             }
+        }
+
+        private ItemsPanelTemplate CreateTemplate()
+        {
+            string xaml = "<ItemsPanelTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'><WrapGrid Height='250'/></ItemsPanelTemplate>";
+            return XamlReader.Load(xaml) as ItemsPanelTemplate;
+        }
+
+        //
+        // EVENTS
+        //
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            ConnectedAnimation imageAnimation = ConnectedAnimationService.GetForCurrentView().GetAnimation("goToApps");
+            if (imageAnimation != null)
+            {
+                imageAnimation.TryStart(BackButton);
+            }
+        }
+
+        private void image_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Image img = (Image)sender;
+            this.Frame.Navigate(typeof(OpenPage), img.Tag);
         }
 
         private void image_PointerExited(object sender, PointerRoutedEventArgs e)
@@ -85,28 +131,6 @@ namespace NeoMir
             img.Width -= ImageHoverSize;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            ConnectedAnimation imageAnimation = ConnectedAnimationService.GetForCurrentView().GetAnimation("goToApps");
-            if (imageAnimation != null)
-            {
-                imageAnimation.TryStart(BackButton);
-            }
-        }
-
-        private void BackButton_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            BackButton.Height += 10;
-            BackButtonName.FontSize += 3;
-        }
-
-        private void BackButton_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-           BackButton.Height -= 10;
-            BackButtonName.FontSize -= 3;
-        }
-
         private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             textMargin = 300;
@@ -114,17 +138,6 @@ namespace NeoMir
             ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToMain", BackButton);
             this.Frame.Navigate(typeof(MainPage));
         }
-
-        //
-        // BEGIN test dynamic adding
-        //
-        private static int textMargin = 300;
-        private static int scrollViewerMargin = 350;
-        private string textRowName = "Pré-configuration";
-        private static int ConfNumber = 0;
-        private int lag = 300;
-        private int transitionHorizontaloffset = 200;
-        private int rowsSize = 250;
 
         private void AddRowButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -167,24 +180,5 @@ namespace NeoMir
             AppsRows.Children.Add(scrollViewer);
         }
 
-        // Trick pour ajouter le panel wrapgrid difficile autrement
-        private ItemsPanelTemplate CreateTemplate()
-        {
-            string xaml = "<ItemsPanelTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'><WrapGrid Height='250'/></ItemsPanelTemplate>";
-            return XamlReader.Load(xaml) as ItemsPanelTemplate;
-        }
-        //
-        // END test dynamic adding
-        //
-
-        private void AddRowButton_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            AddRowButton.Height += 10;
-        }
-
-        private void AddRowButton_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            AddRowButton.Height -= 10;
-        }
     }
 }

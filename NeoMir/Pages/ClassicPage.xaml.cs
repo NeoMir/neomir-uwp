@@ -13,7 +13,6 @@ using System.Threading;
 using System.Globalization;
 using Windows.UI.Xaml.Media.Animation;
 
-
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace NeoMir
@@ -21,24 +20,25 @@ namespace NeoMir
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
-    public sealed partial class SecondPage : Page
+public sealed partial class ClassicPage : Page
     {
+
         List<String> pages = new List<string>();
-        public SecondPage()
+        public ClassicPage()
         {
             this.InitializeComponent();
 
             bool flag = false;
             foreach (string element in pages)
             {
-                if (string.Equals("SecondPage", element) == true)
+                if (string.Equals("MainPage", element) == true)
                 {
                     flag = true;
                 }
             }
             if (flag == false)
             {
-                pages.Add("SecondPage");
+                pages.Add("MainPage");
             }
         }
 
@@ -48,7 +48,7 @@ namespace NeoMir
 
             try
             {
-                var parameters = (pageParams)e.Parameter;
+                var parameters = (PageParams)e.Parameter;
                 pages = parameters.pages;
             }
             catch
@@ -95,7 +95,7 @@ namespace NeoMir
         private void RightButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
-            goToRight("SecondPage");
+            goToRight("ClassicPage");
         }
 
 
@@ -115,7 +115,7 @@ namespace NeoMir
         private void LeftButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
-            goToLeft("SecondPage");
+            goToLeft("ClassicPage");
         }
 
 
@@ -163,7 +163,7 @@ namespace NeoMir
         }
         private void goToPage(int p_nbr)
         {
-            var parameters = new pageParams();
+            var parameters = new PageParams();
             parameters.pages = pages;
             if (string.Equals("MainPage", pages[p_nbr]) == true)
             {
@@ -181,6 +181,7 @@ namespace NeoMir
             {
                 this.Frame.Navigate(typeof(SecondPage), parameters);
             }
+
         }
     }
 }
