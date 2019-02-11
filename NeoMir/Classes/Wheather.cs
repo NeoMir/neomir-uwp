@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 // Class to receive the data from WeatherAPI
 
-namespace NeoMir
+namespace NeoMir.Classes
 {
     [DataContract]
     public class Coord

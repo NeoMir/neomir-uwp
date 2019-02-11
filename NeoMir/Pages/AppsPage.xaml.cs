@@ -7,10 +7,10 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
-namespace NeoMir
+namespace NeoMir.Pages
 {
     /// <summary>
-    /// Application Page
+    /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
     public sealed partial class AppsPage : Page
     {
@@ -58,19 +58,19 @@ namespace NeoMir
                 if (numberImage == 0)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple.png"));
-                    img.Tag = "http://agls-app/";
+                    img.Tag = "https://facebook.github.io/react-native/";
                     numberImage++;
                 }
                 else if (numberImage == 1)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple1.png"));
-                    img.Tag = "https://www.spotify.com/fr/";
+                    img.Tag = "https://electronjs.org/";
                     numberImage++;
                 }
                 else if (numberImage == 2)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple2.png"));
-                    img.Tag = "https://www.netflix.com/fr/";
+                    img.Tag = "https://unity3d.com/fr";
                     numberImage++;
                 }
                 else if (numberImage == 3)
@@ -114,7 +114,8 @@ namespace NeoMir
         private void image_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Image img = (Image)sender;
-            this.Frame.Navigate(typeof(OpenPage), img.Tag);
+            Classes.AppManager.AddApp((string)img.Tag);
+            Classes.AppManager.RootFrame.Navigate(typeof(Pages.MainPage));
         }
 
         private void image_PointerExited(object sender, PointerRoutedEventArgs e)
@@ -136,7 +137,7 @@ namespace NeoMir
             textMargin = 300;
             scrollViewerMargin = 350;
             ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToMain", BackButton);
-            this.Frame.Navigate(typeof(MainPage));
+            Classes.AppManager.RootFrame.Navigate(typeof(MainPage));
         }
 
         private void AddRowButton_Tapped(object sender, TappedRoutedEventArgs e)
@@ -179,6 +180,5 @@ namespace NeoMir
             AppsRows.Children.Add(textBlock);
             AppsRows.Children.Add(scrollViewer);
         }
-
     }
 }

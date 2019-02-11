@@ -1,25 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml.Media.Imaging;
 using System.Net.Http;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading;
-using System.Globalization;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Navigation;
 
-namespace NeoMir
+// Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=234238
+
+namespace NeoMir.Pages
 {
     /// <summary>
-    /// Main Page
+    /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
-
-    public partial class MainPage : Page
+    public sealed partial class MainPage : Page
     {
         //
         // PROPERTIES
@@ -27,10 +35,7 @@ namespace NeoMir
 
         Timer timerDateTime;
         Timer timerWeather;
-        List<String> pages = new List<string>()
-        {
-            "MainPage",
-        };
+
         Dictionary<string, string> weatherCodesIcons = new Dictionary<string, string>()
         {
             {"11d", "thunderstorm.png"},
@@ -61,21 +66,6 @@ namespace NeoMir
         public MainPage()
         {
             this.InitializeComponent();
-
-            bool flag = false;
-            foreach (string element in pages)
-            {
-                if (string.Equals("MainPage", element) == true)
-                {
-                    flag = true;
-                }
-            }
-            if (flag == false)
-            {
-                pages.Add("MainPage");
-            }
-
-
             timerDateTime = new Timer(new TimerCallback((obj) => this.refreshDateTime()), null, 0, 1000);
             timerWeather = new Timer(new TimerCallback((obj) => this.refreshWeather()), null, 0, 900000);
         }
@@ -83,7 +73,7 @@ namespace NeoMir
         //
         // METHODS
         //
-        
+
         private async void refreshDateTime()
         {
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
@@ -117,14 +107,14 @@ namespace NeoMir
 
                 // Use or Open Wheather API to get Wheather Information of a location
                 var http = new HttpClient();
-                var url = String.Format("http://api.openweathermap.org/data/2.5/weather?APPID={0}&units=metric&lang=fr&lat=16.265&lon=-61.551", Config.openWheatherAPIKey);
+                var url = String.Format("http://api.openweathermap.org/data/2.5/weather?APPID={0}&units=metric&lang=fr&lat=16.265&lon=-61.551", Classes.Config.openWheatherAPIKey);
                 var response = await http.GetAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
-                var serializer = new DataContractJsonSerializer(typeof(RootObject));
+                var serializer = new DataContractJsonSerializer(typeof(Classes.RootObject));
                 var ms = new MemoryStream(Encoding.UTF8.GetBytes(result));
 
                 // Now we have all the data of the weather
-                var data = (RootObject)serializer.ReadObject(ms);
+                var data = (Classes.RootObject)serializer.ReadObject(ms);
 
                 // Get and display the weather icon and temperature
                 var uri = "ms-appx:///Assets/weather-icons/" + weatherCodesIcons[data.weather.First().icon.ToString()];
@@ -134,67 +124,6 @@ namespace NeoMir
             });
         }
 
-        private void goToRight(String page_name)
-        {
-            int count = 0;
-            foreach (String element in pages)
-            {
-                count++;
-                if (string.Equals(element, page_name) == true)
-                {
-                    if (int.Equals(count, pages.Count) == true)
-                    {
-                        goToPage(0);
-                    }
-                    else
-                    {
-                        goToPage(count);
-                    }
-                }
-            }
-        }
-
-        private void goToLeft(String page_name)
-        {
-            int count = 0;
-            foreach (String element in pages)
-            {
-
-                if (string.Equals(element, page_name) == true)
-                {
-
-                    if (count == 0)
-                    {
-                        goToPage(pages.Count - 1);
-                    }
-                    else
-                    {
-                        goToPage(count - 1);
-                    }
-                }
-
-                count++;
-            }
-        }
-
-        private void goToPage(int p_nbr)
-        {
-            var parameters = new PageParams();
-            parameters.pages = pages;
-            if (string.Equals("MainPage", pages[p_nbr]) == true)
-            {
-                this.Frame.Navigate(typeof(MainPage), parameters);
-            }
-            if (string.Equals("ClassicPage", pages[p_nbr]) == true)
-            {
-                this.Frame.Navigate(typeof(ClassicPage), parameters);
-            }
-            if (string.Equals("SecondPage", pages[p_nbr]) == true)
-            {
-                this.Frame.Navigate(typeof(SecondPage), parameters);
-            }
-        }
-
         //
         // EVENTS
         //
@@ -202,16 +131,6 @@ namespace NeoMir
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
-            try {
-                var parameters = (PageParams)e.Parameter;
-                pages = parameters.pages;
-            }
-            catch
-            {
-                    
-            }
-
             ConnectedAnimation imageAnimation = ConnectedAnimationService.GetForCurrentView().GetAnimation("goToMain");
             if (imageAnimation != null)
             {
@@ -222,54 +141,17 @@ namespace NeoMir
         private void LaunchAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
-            this.Frame.Navigate(typeof(AppsPage));
+            Classes.AppManager.RootFrame.Navigate(typeof(Pages.AppsPage));
         }
 
-        private void RightButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
-            goToRight("MainPage");
+            Classes.AppManager.NextApp();
         }
 
-        private void LeftButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void PrevAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
-            goToLeft("MainPage");
+            Classes.AppManager.PrevApp();
         }
-
-        private void FirstPage_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
-            bool flag = false;
-            foreach(string element in pages)
-            {
-                if (string.Equals("ClassicPage", element) == true)
-                {
-                    flag = true;
-                }
-            }
-            if (flag == false)
-            {
-                pages.Add("ClassicPage");
-            }
-        }
-
-        private void SecondPage_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
-            bool flag = false;
-            foreach (string element in pages)
-            {
-                if (string.Equals("SecondPage", element) == true)
-                {
-                    flag = true;
-                }
-            }
-            if (flag == false)
-            {
-                pages.Add("SecondPage");
-            }
-        }
-
     }
 }

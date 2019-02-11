@@ -1,0 +1,18 @@
+﻿<Page
+    x:Class="NeoMir.Pages.AppPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NeoMir.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <WebView x:Name="AppView" Margin="0,0,0,0"/>
+        <Image x:Name= "NextAppButton" Source="/Assets/MainPage/signright.png"  HorizontalAlignment= "Right" VerticalAlignment= "Center" Height= "70" Margin= "0,0,20,0" Tapped="NextAppButton_Tapped"/>
+        <Image x:Name= "PrevAppButton" Source="/Assets/MainPage/signleft.png"  HorizontalAlignment= "Left" VerticalAlignment= "Center" Height= "70" Margin= "20,0,0,0" Tapped="PrevAppButton_Tapped"/>
+        <Image x:Name= "HomeButton" Source="/Assets/AppPage/home.png"  HorizontalAlignment= "Center" VerticalAlignment= "Top" Height= "70" Margin= "0,20,200,0" Tapped="HomeButton_Tapped"/>
+        <Image x:Name= "AppsButton" Source="/Assets/AppPage/menu.png"  HorizontalAlignment= "Center" VerticalAlignment= "Top" Height= "70" Margin= "200,20,0,0" Tapped="AppsButton_Tapped"/>
+    </Grid>
+</Page>

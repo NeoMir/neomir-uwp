@@ -40,6 +40,7 @@ namespace NeoMir
             {
                 // Créez un Frame utilisable comme contexte de navigation et naviguez jusqu'à la première page
                 rootFrame = new Frame();
+                Classes.AppManager.RootFrame = rootFrame;
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
@@ -59,7 +60,7 @@ namespace NeoMir
                     // Quand la pile de navigation n'est pas restaurée, accédez à la première page,
                     // puis configurez la nouvelle page en transmettant les informations requises en tant que
                     // paramètre
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(Pages.MainPage), e.Arguments);
                 }
                 // Vérifiez que la fenêtre actuelle est active
                 Window.Current.Activate();
