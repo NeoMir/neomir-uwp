@@ -104,6 +104,9 @@
     <Compile Include="Pages\AppsPage.xaml.cs">
       <DependentUpon>AppsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\CloseAppPage.xaml.cs">
+      <DependentUpon>CloseAppPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -123,11 +126,13 @@
     <Content Include="Assets\AppsPage\exemple2.png" />
     <Content Include="Assets\AppsPage\exemple3.png" />
     <Content Include="Assets\AppsPage\plus.png" />
+    <Content Include="Assets\AppsPage\trash.png" />
     <Content Include="Assets\BadgeLogo.scale-100.png" />
     <Content Include="Assets\BadgeLogo.scale-125.png" />
     <Content Include="Assets\BadgeLogo.scale-150.png" />
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\BadgeLogo.scale-400.png" />
+    <Content Include="Assets\CloseAppPage\left-arrow.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />
@@ -206,6 +211,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\AppsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\CloseAppPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

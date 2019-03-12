@@ -6,23 +6,18 @@ namespace NeoMir.Classes
     public class App
     {
         // PROPERTIES
-        public Frame Frame { get; set; }
-        private string Link { get; set; }
+        public Frame Frame { get; private set; }
+        public string Link { get; private set; }
 
         // CONSTRUCTOR
         public App(string _link)
         {
-            this.Frame = new Frame();
-            this.Link = _link;
+            Frame = new Frame();
+            Link = _link;
         }
 
         // METHODS
-        public void Open()
-        {
-            this.Frame.Navigate(typeof(Pages.AppPage), this.Link);
-            Window.Current.Content = this.Frame;
-            Window.Current.Activate();
-        }
+
     }
 }
 
