@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Storage;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -88,6 +89,10 @@ namespace NeoMir
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: enregistrez l'état de l'application et arrêtez toute activité en arrière-plan
+            /*deferral = e.SuspendingOperation.GetDeferral();
+            string navstate = Classes.AppManager.Apps[Classes.AppManager.AppPosition - 1].Frame.GetNavigationState();
+            var localSettings = ApplicationData.Current.LocalSettings;
+            localSettings.Values["nav"] = navstate;*/
             deferral.Complete();
         }
     }

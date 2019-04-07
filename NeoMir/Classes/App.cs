@@ -6,7 +6,10 @@ namespace NeoMir.Classes
     public class App
     {
         // PROPERTIES
+
+        // Frame of the app
         public Frame Frame { get; private set; }
+        // Link of the app
         public string Link { get; private set; }
 
         // CONSTRUCTOR
