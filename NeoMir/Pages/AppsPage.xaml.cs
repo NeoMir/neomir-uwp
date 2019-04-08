@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NeoMir.Classes.Communication;
+using System;
 using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -29,7 +30,7 @@ namespace NeoMir.Pages
         private int lag = 300;
         private int transitionHorizontaloffset = 200;
         private bool removeState;
-
+        GestureCollector gestureCollector;
         //
         // CONSTRUCTOR
         //
@@ -39,6 +40,7 @@ namespace NeoMir.Pages
             this.InitializeComponent();
             this.InitializeVariables();
             ListOpenApps();
+            GestureSetup();
         }
 
         //
@@ -186,6 +188,32 @@ namespace NeoMir.Pages
             return XamlReader.Load(xaml) as ItemsPanelTemplate;
         }
 
+        private void GestureSetup()
+        {
+            gestureCollector = GestureCollector.Instance;
+            gestureCollector.GestureCollected += ApplyGesture;
+        }
+
+        private async void ApplyGesture(string gesture)
+        {
+
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                if (this == Classes.AppManager.RootFrame.Content)
+                {
+                    if (gesture == "Validate")
+                    {
+                        AddApp();
+                    }
+                    else if (gesture == "Back")
+                    {
+                        Back();
+                    }
+                }
+
+            });
+        }
+
         //
         // EVENTS
         //
@@ -227,14 +255,8 @@ namespace NeoMir.Pages
             img.Width -= ImageHoverSize;
         }
 
-        private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToMain", BackButton);
-            Classes.AppManager.RootFrame.Navigate(typeof(MainPage));
-        }
 
-        // [Test] Fonction qui rajoute de manière automatique les différentes lignes de fausses configurations d'applications
-        private void AddRowButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void AddApp()
         {
             TextBlock textBlock = new TextBlock();
             ScrollViewer scrollViewer = new ScrollViewer();
@@ -275,13 +297,35 @@ namespace NeoMir.Pages
             AppsRows.Children.Add(scrollViewer);
         }
 
-        private void RemoveAppButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void RemoveApp()
         {
             if (Classes.AppManager.Apps.Count > 0)
             {
                 Classes.AppManager.PendingApp = "None";
                 Classes.AppManager.RootFrame.Navigate(typeof(CloseAppPage));
             }
+        }
+
+        private void Back()
+        {
+            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToMain", BackButton);
+            Classes.AppManager.RootFrame.Navigate(typeof(MainPage));
+        }
+
+        private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Back();
+        }
+
+        // [Test] Fonction qui rajoute de manière automatique les différentes lignes de fausses configurations d'applications
+        private void AddRowButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            AddApp();
+        }
+
+        private void RemoveAppButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            RemoveApp();
         }
     }
 }

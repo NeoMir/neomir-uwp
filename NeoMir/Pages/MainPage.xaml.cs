@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NeoMir.Classes.Communication;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -35,6 +36,7 @@ namespace NeoMir.Pages
 
         Timer timerDateTime;
         Timer timerWeather;
+        GestureCollector gestureCollector;
 
         Dictionary<string, string> weatherCodesIcons = new Dictionary<string, string>()
         {
@@ -68,6 +70,7 @@ namespace NeoMir.Pages
             this.InitializeComponent();
             timerDateTime = new Timer(new TimerCallback((obj) => this.refreshDateTime()), null, 0, 1000);
             timerWeather = new Timer(new TimerCallback((obj) => this.refreshWeather()), null, 0, 900000);
+            GestureSetup();
         }
 
         //
@@ -121,6 +124,34 @@ namespace NeoMir.Pages
                 weather_icon.Source = new BitmapImage(new Uri(uri));
                 weather_temperature.Text = data.main.temp + " °C";
                 weather_description.Text = char.ToUpper(data.weather.First().description[0]) + data.weather.First().description.Substring(1);
+            });
+        }
+
+        private void GestureSetup()
+        {
+            gestureCollector = GestureCollector.Instance;
+            gestureCollector.GestureCollected += ApplyGesture;
+        }
+
+        private async void ApplyGesture(string gesture)
+        {
+
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                if (this == Classes.AppManager.RootFrame.Content)
+                {
+                    if (gesture == "Next Right")
+                    {
+                        Classes.AppManager.NextApp();
+                    }
+                    else if (gesture == "Validate")
+                    {
+                        ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
+                        Classes.AppManager.RootFrame.Navigate(typeof(Pages.AppsPage));
+                        gestureCollector.GestureCollected -= ApplyGesture;
+                    }
+                }
+
             });
         }
 
