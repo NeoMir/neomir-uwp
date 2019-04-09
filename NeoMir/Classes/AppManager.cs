@@ -12,16 +12,18 @@ namespace NeoMir.Classes
     public class AppManager
     {
         // PROPERTIES
-        // The Main Frame where we find navigate to MainPage and AppsPage
-        public static Frame RootFrame { get; set; }
+        // The Frame where we can find the MainPage
+        public static Frame MainPageFrame { get; set; }
+        // The Frame where we can find the AppsPage
+        public static Frame AppsPageFrame { get; set; }
         // List of the apps
         public static List<App> Apps = new List<App>();
         // The maximum of apps allowed to be opened
-        private static int MaxApp = 3;
+        public static int MaxApp = 3;
         // The actual position of the navigation is the list of apps
         public static int AppPosition = 0; // 0 = Accueil, 1 = App rang 1, 2 = App rang 2, etc..
         // The temporary pending app when we reach the maximum of app
-        public static string PendingApp;
+        public static string PendingApp { get; set; }
 
         // METHODS
 
@@ -31,21 +33,11 @@ namespace NeoMir.Classes
         /// <param name="link">The link of the app</param>
         public static void CreateApp(string link)
         {
-            if (Apps.Count < MaxApp)
-            {
-                App app = new App(link);
-                Apps.Add(app);
-                AppPosition = Apps.Count;
-                Apps[AppPosition - 1].Frame.Navigate(typeof(Pages.AppPage), Apps[AppPosition - 1].Link);
-                LaunchApp(Apps[AppPosition - 1]);
-                RootFrame.Navigate(typeof(Pages.MainPage));
-            }
-            else
-            {
-                // Maximum apps reached, ask the user confirmation to replace one.
-                PendingApp = link;
-                DisplayMaximumAppDialog();
-            }
+            App app = new App(link);
+            Apps.Add(app);
+            AppPosition = Apps.Count;
+            Apps[AppPosition - 1].Frame.Navigate(typeof(Pages.AppPage), Apps[AppPosition - 1].Link);
+            LaunchApp(Apps[AppPosition - 1]);
         }
 
         /// <summary>
@@ -56,7 +48,6 @@ namespace NeoMir.Classes
         {
             Window.Current.Content = app.Frame;
             Window.Current.Activate();
-            RootFrame.Navigate(typeof(Pages.MainPage));
         }
 
         /// <summary>
@@ -71,7 +62,7 @@ namespace NeoMir.Classes
             else if (AppPosition == Apps.Count)
             {
                 AppPosition = 0;
-                Window.Current.Content = RootFrame;
+                Window.Current.Content = MainPageFrame;
                 Window.Current.Activate();
             }
             else
@@ -98,7 +89,7 @@ namespace NeoMir.Classes
             else if (AppPosition == 1)
             {
                 AppPosition = 0;
-                Window.Current.Content = RootFrame;
+                Window.Current.Content = MainPageFrame;
                 Window.Current.Activate();
             }
             else
@@ -114,8 +105,7 @@ namespace NeoMir.Classes
         public static void GoToHome()
         {
             AppPosition = 0;
-            RootFrame.Navigate(typeof(Pages.MainPage));
-            Window.Current.Content = RootFrame;
+            Window.Current.Content = MainPageFrame;
             Window.Current.Activate();
         }
 
@@ -125,38 +115,8 @@ namespace NeoMir.Classes
         public static void GoToApps()
         {
             AppPosition = 0;
-            RootFrame.Navigate(typeof(Pages.AppsPage));
-            Window.Current.Content = RootFrame;
+            Window.Current.Content = AppsPageFrame;
             Window.Current.Activate();
-        }
-
-        /// <summary>
-        /// When we reach the maximum of opened apps, display a dialog to ask the user to close or not an existing
-        /// to be able to open a new one
-        /// </summary>
-        private async static void DisplayMaximumAppDialog()
-        {
-            ContentDialog contentDialog = new ContentDialog
-            {
-                Title = "Maximum d'application ouvertes atteint !",
-                Content = "Vous avez atteint le maximum d'applications ouvertes simultanément, vous devez choisir quelle application vous voulez fermer.",
-                PrimaryButtonText = "Continuer",
-                CloseButtonText = "Pas maintenant"
-            };
-
-            ContentDialogResult result = await contentDialog.ShowAsync();
-
-            // Annonce à l'utilisateur qu'il doit choisir une application à fermer.
-            /// Ne rien faire sinon.
-            if (result == ContentDialogResult.Primary)
-            {
-                // Afficher les applications pour que l'utilisateur puisse choisir.
-                RootFrame.Navigate(typeof(Pages.CloseAppPage));
-            }
-            else
-            {
-                // Ne rien faire, l'utilisateur à pressé sur le boutton CloseButton.
-            }
         }
     }
 }

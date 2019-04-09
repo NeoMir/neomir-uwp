@@ -41,7 +41,8 @@ namespace NeoMir
             {
                 // Créez un Frame utilisable comme contexte de navigation et naviguez jusqu'à la première page
                 rootFrame = new Frame();
-                Classes.AppManager.RootFrame = rootFrame;
+                Classes.AppManager.MainPageFrame = rootFrame;
+                Classes.AppManager.AppsPageFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
@@ -62,6 +63,7 @@ namespace NeoMir
                     // puis configurez la nouvelle page en transmettant les informations requises en tant que
                     // paramètre
                     rootFrame.Navigate(typeof(Pages.MainPage), e.Arguments);
+                    Classes.AppManager.AppsPageFrame.Navigate(typeof(Pages.AppsPage));
                 }
                 // Vérifiez que la fenêtre actuelle est active
                 Window.Current.Activate();

@@ -45,12 +45,6 @@ namespace NeoMir.Pages
             AppView.Source = uri;
         }
 
-        private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Window.Current.Content = Classes.AppManager.RootFrame;
-            Window.Current.Activate();
-        }
-
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Classes.AppManager.NextApp();
