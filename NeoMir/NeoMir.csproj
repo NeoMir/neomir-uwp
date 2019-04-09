@@ -96,14 +96,20 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\AppManager.cs" />
-    <Compile Include="Classes\Communication\GestureCollector.cs" />
+    <Compile Include="Classes\Communicate.cs" />
+    <Compile Include="Classes\Com\GestureCollector.cs" />
     <Compile Include="Classes\Config.cs" />
     <Compile Include="Classes\App.cs" />
+    <Compile Include="Classes\User.cs" />
+    <Compile Include="Classes\UserManager.cs" />
     <Compile Include="Pages\AppPage.xaml.cs">
       <DependentUpon>AppPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\AppsPage.xaml.cs">
       <DependentUpon>AppsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ChooseUserPage.xaml.cs">
+      <DependentUpon>ChooseUserPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\CloseAppPage.xaml.cs">
       <DependentUpon>CloseAppPage.xaml</DependentUpon>
@@ -212,6 +218,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\AppsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ChooseUserPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

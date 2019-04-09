@@ -29,8 +29,8 @@ namespace NeoMir.Pages
         private static int ConfNumber;
         private int lag = 300;
         private int transitionHorizontaloffset = 200;
-        private bool removeState;
         GestureCollector gestureCollector;
+
         //
         // CONSTRUCTOR
         //
@@ -47,6 +47,9 @@ namespace NeoMir.Pages
         // METHODS
         //
 
+        /// <summary>
+        /// Initialize the variables
+        /// </summary>
         private void InitializeVariables()
         {
             ImageSize = 210;
@@ -55,10 +58,11 @@ namespace NeoMir.Pages
             textMargin = 300;
             scrollViewerMargin = 350;
             ConfNumber = 0;
-            removeState = false;
         }
 
-        // Fonction qui affiche les applications ouvertes dans le sélecteur
+        /// <summary>
+        /// Display the open apps in the AppsPage
+        /// </summary>
         private void ListOpenApps()
         {
             try
@@ -105,7 +109,10 @@ namespace NeoMir.Pages
             
         }
 
-        // Fonction qui crée la première ligne d'applications => Applications ouvertes
+        /// <summary>
+        /// Create the controls for the open apps
+        /// </summary>
+        /// <returns></returns>
         private ItemsControl CreateOpenAppsList()
         {
             ScrollViewer scrollViewer = new ScrollViewer();
@@ -132,6 +139,16 @@ namespace NeoMir.Pages
             AppsRows.Children.Add(scrollViewer);
 
             return ((ItemsControl)scrollViewer.Content);
+        }
+
+        /// <summary>
+        /// [Important] For the good display of the applications (Trick)
+        /// </summary>
+        /// <returns></returns>
+        private ItemsPanelTemplate CreateTemplate()
+        {
+            string xaml = "<ItemsPanelTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'><WrapGrid Height='250'/></ItemsPanelTemplate>";
+            return XamlReader.Load(xaml) as ItemsPanelTemplate;
         }
 
         // [Test] Fonction qui remplie des lignes d'applications avec de fausses applications
@@ -181,11 +198,46 @@ namespace NeoMir.Pages
             }
         }
 
-        // [Important] Pour le bon affichage des applications
-        private ItemsPanelTemplate CreateTemplate()
+        // [Test] Fonction qui rajoute de manière automatique les différentes lignes de fausses configurations d'applications
+        private void AddRowButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            string xaml = "<ItemsPanelTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'><WrapGrid Height='250'/></ItemsPanelTemplate>";
-            return XamlReader.Load(xaml) as ItemsPanelTemplate;
+            TextBlock textBlock = new TextBlock();
+            ScrollViewer scrollViewer = new ScrollViewer();
+            ItemsControl itemsControl = new ItemsControl();
+            TransitionCollection transitions = new TransitionCollection();
+            EntranceThemeTransition entranceThemeTransition = new EntranceThemeTransition();
+
+            // TextBlock Configuration
+            textBlock.Text = textRowName + ConfNumber;
+            textBlock.FontSize = 25;
+            textBlock.FontStyle = Windows.UI.Text.FontStyle.Italic;
+            textBlock.Margin = new Thickness(20, textMargin, 0, 0);
+            textBlock.VerticalAlignment = VerticalAlignment.Top;
+            textBlock.HorizontalAlignment = HorizontalAlignment.Left;
+            ConfNumber++;
+            textMargin += lag;
+
+            // ScrollViewer Configuration
+            scrollViewer.HorizontalScrollMode = ScrollMode.Enabled;
+            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            scrollViewer.VerticalScrollMode = ScrollMode.Disabled;
+            scrollViewer.VerticalAlignment = VerticalAlignment.Top;
+            scrollViewer.Margin = new Thickness(0, scrollViewerMargin, 0, 0);
+            scrollViewerMargin += lag;
+
+            entranceThemeTransition.FromHorizontalOffset = transitionHorizontaloffset;
+            entranceThemeTransition.IsStaggeringEnabled = true;
+            transitions.Add(entranceThemeTransition);
+            itemsControl.ItemContainerTransitions = transitions;
+            itemsControl.ItemsPanel = CreateTemplate();
+
+            FillApps(itemsControl);
+
+            scrollViewer.Content = itemsControl;
+
+            // Add all to the grid
+            AppsRows.Children.Add(textBlock);
+            AppsRows.Children.Add(scrollViewer);
         }
 
         private void GestureSetup()
@@ -203,16 +255,17 @@ namespace NeoMir.Pages
                 {
                     if (gesture == "Validate")
                     {
-                        AddApp();
+                        AddRowButton_Tapped(null, null);
                     }
                     else if (gesture == "Back")
                     {
-                        Back();
+                        BackButton_Tapped(null, null);
                     }
                 }
 
             });
         }
+
 
         //
         // EVENTS
@@ -255,77 +308,19 @@ namespace NeoMir.Pages
             img.Width -= ImageHoverSize;
         }
 
-
-        private void AddApp()
+        private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            TextBlock textBlock = new TextBlock();
-            ScrollViewer scrollViewer = new ScrollViewer();
-            ItemsControl itemsControl = new ItemsControl();
-            TransitionCollection transitions = new TransitionCollection();
-            EntranceThemeTransition entranceThemeTransition = new EntranceThemeTransition();
-
-            // TextBlock Configuration
-            textBlock.Text = textRowName + ConfNumber;
-            textBlock.FontSize = 25;
-            textBlock.FontStyle = Windows.UI.Text.FontStyle.Italic;
-            textBlock.Margin = new Thickness(20, textMargin, 0, 0);
-            textBlock.VerticalAlignment = VerticalAlignment.Top;
-            textBlock.HorizontalAlignment = HorizontalAlignment.Left;
-            ConfNumber++;
-            textMargin += lag;
-
-            // ScrollViewer Configuration
-            scrollViewer.HorizontalScrollMode = ScrollMode.Enabled;
-            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            scrollViewer.VerticalScrollMode = ScrollMode.Disabled;
-            scrollViewer.VerticalAlignment = VerticalAlignment.Top;
-            scrollViewer.Margin = new Thickness(0, scrollViewerMargin, 0, 0);
-            scrollViewerMargin += lag;
-
-            entranceThemeTransition.FromHorizontalOffset = transitionHorizontaloffset;
-            entranceThemeTransition.IsStaggeringEnabled = true;
-            transitions.Add(entranceThemeTransition);
-            itemsControl.ItemContainerTransitions = transitions;
-            itemsControl.ItemsPanel = CreateTemplate();
-
-            FillApps(itemsControl);
-
-            scrollViewer.Content = itemsControl;
-
-            // Add all to the grid
-            AppsRows.Children.Add(textBlock);
-            AppsRows.Children.Add(scrollViewer);
+            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToMain", BackButton);
+            Classes.AppManager.RootFrame.Navigate(typeof(MainPage));
         }
 
-        private void RemoveApp()
+        private void RemoveAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             if (Classes.AppManager.Apps.Count > 0)
             {
                 Classes.AppManager.PendingApp = "None";
                 Classes.AppManager.RootFrame.Navigate(typeof(CloseAppPage));
             }
-        }
-
-        private void Back()
-        {
-            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToMain", BackButton);
-            Classes.AppManager.RootFrame.Navigate(typeof(MainPage));
-        }
-
-        private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Back();
-        }
-
-        // [Test] Fonction qui rajoute de manière automatique les différentes lignes de fausses configurations d'applications
-        private void AddRowButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            AddApp();
-        }
-
-        private void RemoveAppButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            RemoveApp();
         }
     }
 }

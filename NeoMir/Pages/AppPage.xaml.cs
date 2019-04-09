@@ -24,6 +24,7 @@ namespace NeoMir.Pages
         public AppPage()
         {
             this.InitializeComponent();
+            AppView.ScriptNotify += Classes.Communicate.ScriptNotify;
         }
 
         //
@@ -40,9 +41,8 @@ namespace NeoMir.Pages
         {
             base.OnNavigatedTo(e);
             this.Link = (string)e.Parameter;
-
             Uri uri = new Uri(this.Link);
-            AppView.Navigate(uri);
+            AppView.Source = uri;
         }
 
         private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)

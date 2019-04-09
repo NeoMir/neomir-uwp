@@ -1,25 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
-
-// Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace NeoMir.Pages
 {
     /// <summary>
-    /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
+    /// Allow to close an app already opened
     /// </summary>
     public sealed partial class CloseAppPage : Page
     {
@@ -46,6 +34,11 @@ namespace NeoMir.Pages
         // METHODS
         //
 
+
+        /// <summary>
+        /// List the open apps
+        /// </summary>
+        /// <param name="itemsControl">The XAML Controls that receives the apps for display</param>
         private void ListOpenApps(ItemsControl itemsControl)
         {
             int numberOfApps = Classes.AppManager.Apps.Count;
@@ -65,66 +58,73 @@ namespace NeoMir.Pages
 
                 itemsControl.Items.Add(img);
             }
+        }
 
-            void image_Tapped(object sender, TappedRoutedEventArgs e)
+        /// <summary>
+        /// Display a dialog to prevent the user that he is about to close an app
+        /// </summary>
+        /// <param name="link">The link of the chosen app</param>
+        async private void DisplayCloseAppDialog(string link)
+        {
+            ContentDialog contentDialog = new ContentDialog
             {
-                Image img = (Image)sender;
-                DisplayCloseAppDialog(img.Tag as string);
-            }
+                Title = "Fermer l'application",
+                Content = "Voulez-vous vraiment fermer cette application ?",
+                PrimaryButtonText = "Oui",
+                CloseButtonText = "Non"
+            };
 
-            void image_PointerExited(object sender, PointerRoutedEventArgs e)
-            {
-                Image img = (Image)sender;
-                img.Height += ImageHoverSize;
-                img.Width += ImageHoverSize;
-            }
+            ContentDialogResult result = await contentDialog.ShowAsync();
 
-            void image_PointerEntered(object sender, PointerRoutedEventArgs e)
+            // Display to the user that he is about to close an app
+            if (result == ContentDialogResult.Primary)
             {
-                Image img = (Image)sender;
-                img.Height -= ImageHoverSize;
-                img.Width -= ImageHoverSize;
-            }
-
-            async void DisplayCloseAppDialog(string link)
-            {
-                ContentDialog contentDialog = new ContentDialog
+                // Close the chosen app
+                foreach (Classes.App app in Classes.AppManager.Apps)
                 {
-                    Title = "Fermer l'application",
-                    Content = "Voulez-vous vraiment fermer cette application ?",
-                    PrimaryButtonText = "Oui",
-                    CloseButtonText = "Non"
-                };
-
-                ContentDialogResult result = await contentDialog.ShowAsync();
-
-                // Annonce à l'utilisateur qu'il est sur le point de fermer une application
-                /// Ne rien faire sinon.
-                if (result == ContentDialogResult.Primary)
-                {
-                    // Fermer l'application choisie.
-                    foreach (Classes.App app in Classes.AppManager.Apps)
+                    if (app.Link == link)
                     {
-                        if (app.Link == link)
+                        Classes.AppManager.Apps.Remove(app);
+                        if (Classes.AppManager.PendingApp == "None")
                         {
-                            Classes.AppManager.Apps.Remove(app);
-                            if (Classes.AppManager.PendingApp == "None")
-                            {
-                                Classes.AppManager.GoToApps();
-                            }
-                            else
-                            {
-                                Classes.AppManager.CreateApp(Classes.AppManager.PendingApp);
-                            }
-                            break;
+                            Classes.AppManager.GoToApps();
                         }
+                        else
+                        {
+                            Classes.AppManager.CreateApp(Classes.AppManager.PendingApp);
+                        }
+                        break;
                     }
                 }
-                else
-                {
-                    // Ne rien faire, l'utilisateur à pressé sur le boutton CloseButton.
-                }
             }
+            else
+            {
+                // DO nothing, the use pressed Cancel Button.
+            }
+        }
+
+        //
+        // EVENTS
+        //
+
+        private void image_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Image img = (Image)sender;
+            DisplayCloseAppDialog(img.Tag as string);
+        }
+
+        private void image_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            Image img = (Image)sender;
+            img.Height += ImageHoverSize;
+            img.Width += ImageHoverSize;
+        }
+
+        private void image_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            Image img = (Image)sender;
+            img.Height -= ImageHoverSize;
+            img.Width -= ImageHoverSize;
         }
 
         private void CancelButton_Tapped(object sender, TappedRoutedEventArgs e)
