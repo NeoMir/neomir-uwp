@@ -20,12 +20,14 @@ namespace NeoMir.Pages
         //
 
         public static int ImageSize;
+        public static int CloseAppImageSize;
         public static int ImageHoverSize;
         public static Thickness ImageMargin;
         private static int textMargin;
         private static int scrollViewerMargin;
         private string textRowName = "Pré-configuration ";
         private static int ConfNumber;
+        private ItemsControl OpenAppsControl;
         private int lag = 300;
         private int transitionHorizontaloffset = 200;
 
@@ -50,11 +52,13 @@ namespace NeoMir.Pages
         private void InitializeVariables()
         {
             ImageSize = 210;
+            CloseAppImageSize = 500;
             ImageHoverSize = 20;
             ImageMargin = new Thickness(10);
             textMargin = 300;
             scrollViewerMargin = 350;
             ConfNumber = 0;
+            OpenAppsControl = CreateOpenAppsList();
         }
 
         /// <summary>
@@ -64,25 +68,18 @@ namespace NeoMir.Pages
         {
             try
             {
+                // Clear the first row
+                OpenAppsControl.Items.Clear();
                 int numberOfApps = Classes.AppManager.Apps.Count;
 
                 if (numberOfApps == 0)
                 {
-                    // Création du texte si aucune application ouverte
-                    TextBlock textBlock = new TextBlock();
-                    textBlock.VerticalAlignment = VerticalAlignment.Top;
-                    textBlock.HorizontalAlignment = HorizontalAlignment.Center;
-                    textBlock.Margin = new Thickness(0, 150, 0, 0);
-                    textBlock.FontSize = 30;
-                    textBlock.Text = "Aucune application ouverte";
-                    AppsRows.Children.Add(textBlock);
+                    NoOpenedAppsTitle.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    // Création de la liste XAML
-                    ItemsControl itemsControl = CreateOpenAppsList();
-
                     // Ajout de chaque applications ouvertes dans la liste crée
+                    NoOpenedAppsTitle.Visibility = Visibility.Collapsed;
                     for (int i = 0; i < numberOfApps; i++)
                     {
                         Image image = new Image();
@@ -95,7 +92,7 @@ namespace NeoMir.Pages
                         image.PointerExited += new PointerEventHandler(image_PointerExited);
                         image.Tapped += new TappedEventHandler(image_Tapped);
 
-                        itemsControl.Items.Add(image);
+                        OpenAppsControl.Items.Add(image);
                     }
                 }
             }
@@ -104,6 +101,32 @@ namespace NeoMir.Pages
                 Debug.WriteLine(ex.Message);
             }
             
+        }
+
+        /// <summary>
+        /// List the open apps for the close process
+        /// </summary>
+        /// <param name="itemsControl">The XAML Controls that receives the apps for display</param>
+        private void ListOpenApps(ItemsControl itemsControl)
+        {
+            itemsControl.Items.Clear();
+            int numberOfApps = Classes.AppManager.Apps.Count;
+
+            for (int i = 0; i < numberOfApps; i++)
+            {
+                Image img = new Image();
+                img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple1.png"));
+                img.Tag = Classes.AppManager.Apps[i].Link;
+                img.Height = CloseAppImageSize;
+                img.Width = CloseAppImageSize;
+                img.Margin = ImageMargin;
+                img.VerticalAlignment = VerticalAlignment.Top;
+                img.PointerEntered += new PointerEventHandler(image_PointerEntered);
+                img.PointerExited += new PointerEventHandler(image_PointerExited);
+                img.Tapped += new TappedEventHandler(image_Tapped3);
+
+                itemsControl.Items.Add(img);
+            }
         }
 
         /// <summary>
@@ -131,8 +154,6 @@ namespace NeoMir.Pages
             itemsControl.ItemsPanel = CreateTemplate();
 
             scrollViewer.Content = itemsControl;
-
-            // Add to the grid
             AppsRows.Children.Add(scrollViewer);
 
             return ((ItemsControl)scrollViewer.Content);
@@ -146,6 +167,83 @@ namespace NeoMir.Pages
         {
             string xaml = "<ItemsPanelTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'><WrapGrid Height='250'/></ItemsPanelTemplate>";
             return XamlReader.Load(xaml) as ItemsPanelTemplate;
+        }
+
+        /// <summary>
+        /// Display a dialog to prevent the user that he is about to close an app
+        /// </summary>
+        /// <param name="link">The link of the chosen app</param>
+        async private void DisplayCloseAppDialog(string link)
+        {
+            ContentDialog contentDialog = new ContentDialog
+            {
+                Title = "Fermer l'application",
+                Content = "Voulez-vous vraiment fermer cette application ?",
+                PrimaryButtonText = "Oui",
+                CloseButtonText = "Non"
+            };
+
+            ContentDialogResult result = await contentDialog.ShowAsync();
+
+            // Display to the user that he is about to close an app
+            if (result == ContentDialogResult.Primary)
+            {
+                // Close the chosen app
+                foreach (Classes.App app in Classes.AppManager.Apps)
+                {
+                    if (app.Link == link)
+                    {
+                        Classes.AppManager.Apps.Remove(app);
+                        backgroundCloseApp.Visibility = Visibility.Collapsed;
+                        cancelButtonCloseApp.Visibility = Visibility.Collapsed;
+                        titleCloseApp.Visibility = Visibility.Collapsed;
+                        scrollviewerCloseApp.Visibility = Visibility.Collapsed;
+                        if (Classes.AppManager.PendingApp != "None")
+                        {
+                            Classes.AppManager.CreateApp(Classes.AppManager.PendingApp);
+                        }
+                        ListOpenApps();
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                // DO nothing, the use pressed Cancel Button.
+            }
+        }
+
+        /// <summary>
+        /// When we reach the maximum of opened apps, display a dialog to ask the user to close or not an existing
+        /// to be able to open a new one
+        /// </summary>
+        private async void DisplayMaximumAppDialog()
+        {
+            ContentDialog contentDialog = new ContentDialog
+            {
+                Title = "Maximum d'application ouvertes atteint !",
+                Content = "Vous avez atteint le maximum d'applications ouvertes simultanément, vous devez choisir quelle application vous voulez fermer.",
+                PrimaryButtonText = "Continuer",
+                CloseButtonText = "Pas maintenant"
+            };
+
+            ContentDialogResult result = await contentDialog.ShowAsync();
+
+            // Annonce à l'utilisateur qu'il doit choisir une application à fermer.
+            /// Ne rien faire sinon.
+            if (result == ContentDialogResult.Primary)
+            {
+                // Afficher les applications pour que l'utilisateur puisse choisir.
+                backgroundCloseApp.Visibility = Visibility.Visible;
+                cancelButtonCloseApp.Visibility = Visibility.Visible;
+                titleCloseApp.Visibility = Visibility.Visible;
+                scrollviewerCloseApp.Visibility = Visibility.Visible;
+                ListOpenApps(itemsControlCloseApp);
+            }
+            else
+            {
+                // Ne rien faire, l'utilisateur à pressé sur le boutton CloseButton.
+            }
         }
 
         // [Test] Fonction qui remplie des lignes d'applications avec de fausses applications
@@ -241,16 +339,6 @@ namespace NeoMir.Pages
         // EVENTS
         //
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            ConnectedAnimation imageAnimation = ConnectedAnimationService.GetForCurrentView().GetAnimation("goToApps");
-            if (imageAnimation != null)
-            {
-                imageAnimation.TryStart(BackButton);
-            }
-        }
-
         private void image_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Image img = (Image)sender;
@@ -261,7 +349,24 @@ namespace NeoMir.Pages
         private void image_Tapped2(object sender, TappedRoutedEventArgs e)
         {
             Image img = (Image)sender;
-            Classes.AppManager.CreateApp((string)img.Tag);
+            if (Classes.AppManager.Apps.Count < Classes.AppManager.MaxApp)
+            {
+                Classes.AppManager.CreateApp((string)img.Tag);
+                ListOpenApps();
+            }
+            else
+            {
+                // Maximum apps reached, ask the user confirmation to replace one.
+                Classes.AppManager.PendingApp = (string)img.Tag;
+                DisplayMaximumAppDialog();
+            }
+        }
+
+        // For the close process
+        private void image_Tapped3(object sender, TappedRoutedEventArgs e)
+        {
+            Image img = (Image)sender;
+            DisplayCloseAppDialog(img.Tag as string);
         }
 
         private void image_PointerExited(object sender, PointerRoutedEventArgs e)
@@ -280,8 +385,7 @@ namespace NeoMir.Pages
 
         private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToMain", BackButton);
-            Classes.AppManager.RootFrame.Navigate(typeof(MainPage));
+            Classes.AppManager.GoToHome();
         }
 
         private void RemoveAppButton_Tapped(object sender, TappedRoutedEventArgs e)
@@ -289,8 +393,21 @@ namespace NeoMir.Pages
             if (Classes.AppManager.Apps.Count > 0)
             {
                 Classes.AppManager.PendingApp = "None";
-                Classes.AppManager.RootFrame.Navigate(typeof(CloseAppPage));
+                backgroundCloseApp.Visibility = Visibility.Visible;
+                cancelButtonCloseApp.Visibility = Visibility.Visible;
+                titleCloseApp.Visibility = Visibility.Visible;
+                scrollviewerCloseApp.Visibility = Visibility.Visible;
+                ListOpenApps(itemsControlCloseApp);
             }
         }
+
+        private void CancelButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            backgroundCloseApp.Visibility = Visibility.Collapsed;
+            cancelButtonCloseApp.Visibility = Visibility.Collapsed;
+            titleCloseApp.Visibility = Visibility.Collapsed;
+            scrollviewerCloseApp.Visibility = Visibility.Collapsed;
+        }
+
     }
 }

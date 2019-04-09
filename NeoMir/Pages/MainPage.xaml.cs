@@ -127,20 +127,9 @@ namespace NeoMir.Pages
         // EVENTS
         //
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            ConnectedAnimation imageAnimation = ConnectedAnimationService.GetForCurrentView().GetAnimation("goToMain");
-            if (imageAnimation != null)
-            {
-                imageAnimation.TryStart(LaunchAppButton);
-            }
-        }
-
         private void LaunchAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ConnectedAnimation animation = ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("goToApps", LaunchAppButton);
-            Classes.AppManager.RootFrame.Navigate(typeof(Pages.AppsPage));
+            Classes.AppManager.GoToApps();
         }
 
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)

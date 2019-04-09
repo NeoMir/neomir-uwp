@@ -34,7 +34,9 @@
         <!-- Return Button & Text -->
         <Image Grid.Column="3" Grid.Row= "8" Grid.ColumnSpan= "2" x:Name= "BackButton" Source= "/Assets/MainPage/signinverse.png"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height= "70" Tapped= "BackButton_Tapped" Margin= "0,20,0,0" />
         <TextBlock Grid.Column= "3" Grid.Row= "8" Grid.ColumnSpan= "2" x:Name= "BackButtonName" HorizontalAlignment= "Center" VerticalAlignment= "Center" FontSize= "20" FontStyle= "Italic" Text= "Ecran principal" Margin= "0,0,0,100" ></TextBlock >
-
+        
+        <!-- No Opened Apps title -->
+        <TextBlock Grid.ColumnSpan="8" Grid.Row="0" x:Name="NoOpenedAppsTitle" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize= "30" Text="Aucune application ouverte" ></TextBlock >
 
         <!--Add row button (development function) -->
         <Image Grid.Column= "7" Grid.Row= "8" Grid.ColumnSpan= "1" x:Name="AddRowButton" Source= "/Assets/AppsPage/plus.png"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height= "70" Tapped= "AddRowButton_Tapped" />
@@ -53,5 +55,25 @@
         </Grid>
             
         </ScrollViewer>
+
+        <!-- Part for closing application => Collapsed by default -->
+        <Rectangle Visibility="Collapsed" x:Name="backgroundCloseApp" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="8" Grid.RowSpan="8" Fill="Black"></Rectangle>
+        <TextBlock Visibility="Collapsed" x:Name="titleCloseApp" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="8" Text = "Quelle appplication voulez-vous fermer ?" FontSize= "40" FontStyle= "Italic" Margin= "0,10,0,0" VerticalAlignment= "Top" HorizontalAlignment= "Center" ></TextBlock>
+        <Image Visibility="Collapsed" x:Name="cancelButtonCloseApp" Grid.Column= "0" Grid.Row= "0" Grid.ColumnSpan= "1" Source= "/Assets/CloseAppPage/left-arrow.png"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height= "70" Tapped="CancelButton_Tapped"/>
+        <ScrollViewer Visibility="Collapsed" x:Name="scrollviewerCloseApp" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="8" Grid.RowSpan="7" HorizontalScrollMode = "Enabled" VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden">
+            <ItemsControl x:Name= "itemsControlCloseApp">
+                <ItemsControl.ItemContainerTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition FromHorizontalOffset= "500" IsStaggeringEnabled= "True"/>
+                    </TransitionCollection>
+                </ItemsControl.ItemContainerTransitions>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Height= "700"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+
     </Grid>
 </Page>

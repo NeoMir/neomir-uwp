@@ -110,9 +110,6 @@
     <Compile Include="Pages\ChooseUserPage.xaml.cs">
       <DependentUpon>ChooseUserPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\CloseAppPage.xaml.cs">
-      <DependentUpon>CloseAppPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -221,10 +218,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ChooseUserPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\CloseAppPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
