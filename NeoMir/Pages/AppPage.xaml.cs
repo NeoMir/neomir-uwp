@@ -1,4 +1,5 @@
-﻿using NeoMir.Classes.Communication;
+﻿using NeoMir.Classes.Com;
+using NeoMir.Classes.Communication;
 using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -40,38 +41,42 @@ namespace NeoMir.Pages
         // EVENTS
         //
 
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
             this.Link = (string)e.Parameter;
             Uri uri = new Uri(this.Link);
             AppView.Source = uri;
-            gestureCollector.GestureCollected += ApplyGesture;
         }
 
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
+            gestureCollector.GestureCollected += ApplyGesture;
         }
 
-        private async void ApplyGesture(string gesture)
+        private async void ApplyGesture(Gesture gesture)
         {
 
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 if (this == Classes.AppManager.GetCurrentPage())
                 {
-                    if (gesture == "Next Right")
+                    if (gesture.Name == "Next Right" && !gesture.IsConsumed)
                     {
                         NextAppButton_Tapped(null, null);
+                        gesture.IsConsumed = true;
                     }
-                    else if (gesture == "Back")
+                    else if (gesture.Name == "Back" && !gesture.IsConsumed)
                     {
                         PrevAppButton_Tapped(null, null);
+                        gesture.IsConsumed = true;
                     }
-                    else if (gesture == "Validate")
+                    else if (gesture.Name == "Validate" && !gesture.IsConsumed)
                     {
                         HomeButton_Tapped(null, null);
+                        gesture.IsConsumed = true;
                     }
                 }
             });
@@ -79,25 +84,21 @@ namespace NeoMir.Pages
 
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            gestureCollector.GestureCollected -= ApplyGesture;
             Classes.AppManager.NextApp();
         }
 
         private void PrevAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            gestureCollector.GestureCollected -= ApplyGesture;
             Classes.AppManager.PrevApp();
         }
 
         private void HomeButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            gestureCollector.GestureCollected -= ApplyGesture;
             Classes.AppManager.GoToHome();
         }
 
         private void AppsButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            gestureCollector.GestureCollected -= ApplyGesture;
             Classes.AppManager.GoToApps();
         }
     }

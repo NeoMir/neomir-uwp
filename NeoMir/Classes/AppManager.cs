@@ -62,9 +62,7 @@ namespace NeoMir.Classes
             }
             else if (AppPosition == Apps.Count)
             {
-                AppPosition = 0;
-                Window.Current.Content = MainPageFrame;
-                Window.Current.Activate();
+                GoToHome();
             }
             else
             {
@@ -89,9 +87,7 @@ namespace NeoMir.Classes
             }
             else if (AppPosition == 1)
             {
-                AppPosition = 0;
-                Window.Current.Content = MainPageFrame;
-                Window.Current.Activate();
+                GoToHome();
             }
             else
             {

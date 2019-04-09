@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Classes\AppManager.cs" />
     <Compile Include="Classes\Communicate.cs" />
+    <Compile Include="Classes\Com\Gesture.cs" />
     <Compile Include="Classes\Com\GestureCollector.cs" />
     <Compile Include="Classes\Config.cs" />
     <Compile Include="Classes\App.cs" />
@@ -110,6 +111,9 @@
     </Compile>
     <Compile Include="Pages\ChooseUserPage.xaml.cs">
       <DependentUpon>ChooseUserPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ConnectToApi.xaml.cs">
+      <DependentUpon>ConnectToApi.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -197,6 +201,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <Content Include="id\id.txt" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -219,6 +224,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ChooseUserPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ConnectToApi.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

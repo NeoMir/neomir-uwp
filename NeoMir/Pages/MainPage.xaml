@@ -59,6 +59,8 @@
         <TextBlock Grid.Column= "1" Grid.Row= "0" Grid.ColumnSpan= "2" x:Name= "LaunchAppButtonName" HorizontalAlignment= "Center" VerticalAlignment= "Center" FontSize= "20" FontStyle= "Italic" Text= "Applications" Margin= "0,15,0,0" ></TextBlock>
         <Image Grid.RowSpan="2" Grid.Column="3" Grid.Row="1" x:Name= "NextAppButton" Source= "/Assets/MainPage/signright.png"  HorizontalAlignment= "Right" VerticalAlignment= "Center" Height= "70" Tapped= "NextAppButton_Tapped" Margin= "0,0,20,0"/>
         <Image Grid.RowSpan="2" Grid.Column="0" Grid.Row="1" x:Name= "PrevAppButton" Source= "/Assets/MainPage/signleft.png"  HorizontalAlignment= "Left" VerticalAlignment= "Center" Height= "70" Tapped= "PrevAppButton_Tapped" Margin= "20,0,0,0"/>
+        <Image Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="1" x:Name="ApiPage"  Source= "/Assets/MainPage/sign.png"  HorizontalAlignment="Center" VerticalAlignment="center" Height="70" Tapped="ApiPage_Tapped" Margin="0,0,0,100"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="1" x:Name="msgWelcome"  FontSize= "40" FontStyle= "Italic" Text= "" HorizontalAlignment="Left" VerticalAlignment="center" Margin="0,0,0,0"/>
 
     </Grid>
 </Page>

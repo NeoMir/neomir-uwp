@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NeoMir.Classes.Com;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace NeoMir.Classes.Communication
         private StorageFile file;
         private StorageFileQueryResult query;
         private DateTimeOffset lastModification;
-        public delegate void GestureCollectedHandler(string gesture);
+        public delegate void GestureCollectedHandler(Gesture gesture);
 
         public event GestureCollectedHandler GestureCollected;
 
@@ -62,6 +63,10 @@ namespace NeoMir.Classes.Communication
                 try
                 {
                     BasicProperties prop = await file.GetBasicPropertiesAsync();
+                    if (lastModification == default(DateTimeOffset))
+                    {
+                        lastModification = prop.DateModified;
+                    }
                     if (prop.DateModified != lastModification)
                     {
                         GetGesture(null, null);
@@ -79,7 +84,7 @@ namespace NeoMir.Classes.Communication
         private async void GetGesture(Windows.Storage.Search.IStorageQueryResultBase sender, object args)
         {
             string text = await FileIO.ReadTextAsync(file);
-            GestureCollected?.Invoke(text.Replace("\r\n", string.Empty));
+            GestureCollected?.Invoke(new Gesture(text.Replace("\r\n", string.Empty)));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using NeoMir.Classes.Communication;
+﻿using NeoMir.Classes.Com;
+using NeoMir.Classes.Communication;
 using System;
 using System.Diagnostics;
 using Windows.UI.Xaml;
@@ -103,7 +104,7 @@ namespace NeoMir.Pages
             {
                 Debug.WriteLine(ex.Message);
             }
-            
+
         }
 
         /// <summary>
@@ -341,31 +342,30 @@ namespace NeoMir.Pages
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
-        }
-
-        private async void ApplyGesture(string gesture)
-        {
-
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                if (this == Classes.AppManager.GetCurrentPage())
-                {
-                    if (gesture == "Validate")
-                    {
-                        AddRowButton_Tapped(null, null);
-                    }
-                    else if (gesture == "Back")
-                    {
-                        BackButton_Tapped(null, null);
-                    }
-                }
-            });
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
             gestureCollector.GestureCollected += ApplyGesture;
+        }
+
+        private async void ApplyGesture(Gesture gesture)
+        {
+            if (!gesture.IsConsumed)
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    if (this == Classes.AppManager.GetCurrentPage())
+                    {
+                        if (gesture.Name == "Validate" && !gesture.IsConsumed)
+                        {
+                            AddRowButton_Tapped(null, null);
+                            gesture.IsConsumed = true;
+                        }
+                        else if (gesture.Name == "Back" && !gesture.IsConsumed)
+                        {
+                            BackButton_Tapped(null, null);
+                            gesture.IsConsumed = true;
+                        }
+                    }
+                });
+            }
         }
 
         //
@@ -418,7 +418,6 @@ namespace NeoMir.Pages
 
         private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            gestureCollector.GestureCollected -= ApplyGesture;
             Classes.AppManager.GoToHome();
         }
 
@@ -442,6 +441,5 @@ namespace NeoMir.Pages
             titleCloseApp.Visibility = Visibility.Collapsed;
             scrollviewerCloseApp.Visibility = Visibility.Collapsed;
         }
-
     }
 }

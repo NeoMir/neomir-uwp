@@ -1,4 +1,5 @@
-﻿using NeoMir.Classes.Communication;
+﻿using NeoMir.Classes.Com;
+using NeoMir.Classes.Communication;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,6 +9,7 @@ using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -64,12 +66,34 @@ namespace NeoMir.Pages
             this.InitializeComponent();
             timerDateTime = new Timer(new TimerCallback((obj) => this.refreshDateTime()), null, 0, 1000);
             timerWeather = new Timer(new TimerCallback((obj) => this.refreshWeather()), null, 0, 900000);
+            getProfile();
             GestureSetup();
         }
 
         //
         // METHODS
         //
+
+        private async void getProfile()
+        {
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            {
+                var id = "";
+                var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
+                using (var inputStream = await file.OpenReadAsync())
+                using (var classicStream = inputStream.AsStreamForRead())
+                using (var streamReader = new StreamReader(classicStream))
+                {
+                    id = streamReader.ReadToEnd();
+                }
+
+                var http = new HttpClient();
+                var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
+                var response = await http.GetAsync(url);
+                var result = await response.Content.ReadAsStringAsync();
+                msgWelcome.Text += "Welcome " + result;
+            });
+        }
 
         /// <summary>
         /// Actualize the datetime
@@ -127,38 +151,38 @@ namespace NeoMir.Pages
             });
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            gestureCollector.GestureCollected += ApplyGesture;
-        }
-
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
+            gestureCollector.GestureCollected += ApplyGesture;
         }
 
-        private async void ApplyGesture(string gesture)
+        private async void ApplyGesture(Gesture gesture)
         {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            if (!gesture.IsConsumed)
             {
-                if (this == Classes.AppManager.GetCurrentPage())
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
-                    if (gesture == "Next Right")
+                    if (this == Classes.AppManager.GetCurrentPage())
                     {
-                        NextAppButton_Tapped(null, null);
+                        if (gesture.Name == "Next Right" && !gesture.IsConsumed)
+                        {
+                            NextAppButton_Tapped(null, null);
+                            gesture.IsConsumed = true;
+                        }
+                        else if (gesture.Name == "Validate" && !gesture.IsConsumed) 
+                        {
+                            LaunchAppButton_Tapped(null, null);
+                            gesture.IsConsumed = true;
+                        }
+                        else if (gesture.Name == "Back" && !gesture.IsConsumed)
+                        {
+                            PrevAppButton_Tapped(null, null);
+                            gesture.IsConsumed = true;
+                        }
                     }
-                    else if (gesture == "Validate")
-                    {
-                        LaunchAppButton_Tapped(null, null);
-                    }
-                    else if (gesture == "Back")
-                    {
-                        PrevAppButton_Tapped(null, null);
-                    }
-                    
-                }
-            });
+                });
+            }
         }
 
         //
@@ -167,26 +191,23 @@ namespace NeoMir.Pages
 
         private void LaunchAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            gestureCollector.GestureCollected -= ApplyGesture;
             Classes.AppManager.GoToApps();
         }
 
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (Classes.AppManager.Apps.Count > 0)
-            {
-                gestureCollector.GestureCollected -= ApplyGesture;
-            }
+
             Classes.AppManager.NextApp();
         }
 
         private void PrevAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (Classes.AppManager.Apps.Count > 0)
-            {
-                gestureCollector.GestureCollected -= ApplyGesture;
-            }
             Classes.AppManager.PrevApp();
+        }
+
+        private void ApiPage_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(ConnectToApi));
         }
     }
 }
