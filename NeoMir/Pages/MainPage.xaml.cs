@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
@@ -126,18 +127,22 @@ namespace NeoMir.Pages
             });
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            gestureCollector.GestureCollected += ApplyGesture;
+        }
+
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
-            gestureCollector.GestureCollected += ApplyGesture;
         }
 
         private async void ApplyGesture(string gesture)
         {
-
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                if (this == Classes.AppManager.RootFrame.Content)
+                if (this == Classes.AppManager.GetCurrentPage())
                 {
                     if (gesture == "Next Right")
                     {
@@ -147,8 +152,12 @@ namespace NeoMir.Pages
                     {
                         LaunchAppButton_Tapped(null, null);
                     }
+                    else if (gesture == "Back")
+                    {
+                        PrevAppButton_Tapped(null, null);
+                    }
+                    
                 }
-
             });
         }
 
@@ -158,16 +167,25 @@ namespace NeoMir.Pages
 
         private void LaunchAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            gestureCollector.GestureCollected -= ApplyGesture;
             Classes.AppManager.GoToApps();
         }
 
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            if (Classes.AppManager.Apps.Count > 0)
+            {
+                gestureCollector.GestureCollected -= ApplyGesture;
+            }
             Classes.AppManager.NextApp();
         }
 
         private void PrevAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            if (Classes.AppManager.Apps.Count > 0)
+            {
+                gestureCollector.GestureCollected -= ApplyGesture;
+            }
             Classes.AppManager.PrevApp();
         }
     }

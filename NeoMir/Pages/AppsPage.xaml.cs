@@ -341,7 +341,6 @@ namespace NeoMir.Pages
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
-            gestureCollector.GestureCollected += ApplyGesture;
         }
 
         private async void ApplyGesture(string gesture)
@@ -349,7 +348,7 @@ namespace NeoMir.Pages
 
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                if (this == Classes.AppManager.RootFrame.Content)
+                if (this == Classes.AppManager.GetCurrentPage())
                 {
                     if (gesture == "Validate")
                     {
@@ -360,10 +359,14 @@ namespace NeoMir.Pages
                         BackButton_Tapped(null, null);
                     }
                 }
-
             });
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            gestureCollector.GestureCollected += ApplyGesture;
+        }
 
         //
         // EVENTS
@@ -415,6 +418,7 @@ namespace NeoMir.Pages
 
         private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            gestureCollector.GestureCollected -= ApplyGesture;
             Classes.AppManager.GoToHome();
         }
 
