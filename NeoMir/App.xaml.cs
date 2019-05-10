@@ -43,6 +43,7 @@ namespace NeoMir
                 rootFrame = new Frame();
                 Classes.AppManager.MainPageFrame = rootFrame;
                 Classes.AppManager.AppsPageFrame = new Frame();
+                Classes.AppManager.LockPageFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
@@ -64,9 +65,10 @@ namespace NeoMir
                     // paramètre
                     rootFrame.Navigate(typeof(Pages.MainPage), e.Arguments);
                     Classes.AppManager.AppsPageFrame.Navigate(typeof(Pages.AppsPage));
+                    Classes.AppManager.LockPageFrame.Navigate(typeof(Pages.LockScreenPage));
                 }
                 // Vérifiez que la fenêtre actuelle est active
-                Window.Current.Activate();
+                Classes.AppManager.GoToLock();
             }
         }
 

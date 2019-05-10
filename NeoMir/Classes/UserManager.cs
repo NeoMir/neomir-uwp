@@ -13,6 +13,7 @@ namespace NeoMir.Classes
     {
         // PROPERTIES
         public static List<User> Users = new List<User>();
+        public static User currentUser;
 
         // METHODS
     }

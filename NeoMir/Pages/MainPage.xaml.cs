@@ -13,13 +13,8 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
-// Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace NeoMir.Pages
 {
-    /// <summary>
-    /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         //
@@ -140,6 +135,11 @@ namespace NeoMir.Pages
         private void PrevAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Classes.AppManager.PrevApp();
+        }
+
+        private void LockButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Classes.AppManager.GoToLock();
         }
     }
 }

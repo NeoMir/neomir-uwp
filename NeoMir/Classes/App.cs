@@ -1,5 +1,6 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace NeoMir.Classes
 {
@@ -11,6 +12,8 @@ namespace NeoMir.Classes
         public Frame Frame { get; private set; }
         // Link of the app
         public string Link { get; private set; }
+        // Preview of the app
+        public BitmapSource Preview { get; set; }
 
         // CONSTRUCTOR
         public App(string _link)

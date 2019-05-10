@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Graphics.Imaging;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 namespace NeoMir.Pages
 {
-    /// <summary>
-    /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
-    /// </summary>
     public sealed partial class AppPage : Page
     {
         //
@@ -25,6 +26,7 @@ namespace NeoMir.Pages
         {
             this.InitializeComponent();
             AppView.ScriptNotify += Classes.Communicate.ScriptNotify;
+            AppView.NavigationCompleted += AppView_NavigationCompleted;
         }
 
         //
@@ -36,6 +38,13 @@ namespace NeoMir.Pages
         //
         // EVENTS
         //
+
+        private void AppView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            //Classes.Communicate.CallFunction(sender, "Hello", null);
+            //Classes.Communicate.InjectContent(sender, "document.getElementById('usernametest').innerHTML = 'Injection I. !!' ;");
+            //Classes.Communicate.InjectContent(sender, "document.getElementById('passwordtest').innerHTML = 'Injection II. !!' ;");
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

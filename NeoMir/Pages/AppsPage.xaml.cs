@@ -260,7 +260,7 @@ namespace NeoMir.Pages
                 if (numberImage == 0)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple.png"));
-                    img.Tag = "https://facebook.github.io/react-native/";
+                    img.Tag = "http://agls-app/";
                     numberImage++;
                 }
                 else if (numberImage == 1)
