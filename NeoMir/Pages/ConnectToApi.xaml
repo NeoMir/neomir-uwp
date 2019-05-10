@@ -1,0 +1,21 @@
+﻿<Page
+    x:Class="NeoMir.Pages.ConnectToApi"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NeoMir.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+
+        <Image x:Name="AskId" Source="/Assets/MainPage/signright.png" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="500,0,400,0" Tapped="AskId_Tapped"/>
+        <TextBlock x:Name="ID" FontSize= "40" FontStyle= "Italic" Text= "" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="700,0,00,0"/>
+        <TextBlock x:Name="msgconnexion" FontSize= "40" FontStyle= "Italic" Text= "" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="500,150,50,0"/>
+        <TextBlock x:Name="time" FontSize= "40" FontStyle= "Italic" Text= "" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="800,300,50,0"/>
+
+        <Image x:Name= "HomeButton" Source="/Assets/AppPage/home.png"  HorizontalAlignment= "Center" VerticalAlignment= "Bottom" Height= "70" Margin= "0,0,0,50" Tapped="HomeButton_Tapped"/>
+
+    </Grid>
+</Page>

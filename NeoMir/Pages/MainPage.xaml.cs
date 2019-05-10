@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading;
+using Windows.Storage;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
@@ -56,11 +57,37 @@ namespace NeoMir.Pages
             this.InitializeComponent();
             timerDateTime = new Timer(new TimerCallback((obj) => this.refreshDateTime()), null, 0, 1000);
             timerWeather = new Timer(new TimerCallback((obj) => this.refreshWeather()), null, 0, 900000);
+
+            getProfile();
         }
 
         //
         // METHODS
         //
+
+        private async void getProfile()
+        {
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            {
+                var id = "";
+                var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
+                using (var inputStream = await file.OpenReadAsync())
+                using (var classicStream = inputStream.AsStreamForRead())
+                using (var streamReader = new StreamReader(classicStream))
+                {
+                    id = streamReader.ReadToEnd();
+                }
+
+                var http = new HttpClient();
+                var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
+                var response = await http.GetAsync(url);
+                var result = await response.Content.ReadAsStringAsync();
+                msgWelcome.Text += "Welcome " + result;
+
+
+
+            });
+        }
 
         /// <summary>
         /// Actualize the datetime
@@ -140,6 +167,11 @@ namespace NeoMir.Pages
         private void LockButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Classes.AppManager.GoToLock();
+        }
+        
+        private void ApiPage_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(ConnectToApi));
         }
     }
 }
