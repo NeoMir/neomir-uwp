@@ -48,7 +48,6 @@ namespace NeoMir.Pages
                 ID.Text = result.ToString();
                 msgconnexion.Text = "En attente de connexion";
 
-
             });
         }
     }

@@ -53,7 +53,7 @@ namespace NeoMir.Pages
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
-            gestureCollector.GestureCollected += ApplyGesture;
+            gestureCollector.RegisterToGestures(this, ApplyGesture);
         }
 
         private async void ApplyGesture(Gesture gesture)

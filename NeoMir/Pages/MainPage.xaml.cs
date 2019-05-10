@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -74,25 +75,29 @@ namespace NeoMir.Pages
         // METHODS
         //
 
-        private async void getProfile()
+        private async Task getProfile()
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            while (true)
             {
-                var id = "";
-                var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
-                using (var inputStream = await file.OpenReadAsync())
-                using (var classicStream = inputStream.AsStreamForRead())
-                using (var streamReader = new StreamReader(classicStream))
+                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                 {
-                    id = streamReader.ReadToEnd();
-                }
+                    var id = "";
+                    var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
+                    using (var inputStream = await file.OpenReadAsync())
+                    using (var classicStream = inputStream.AsStreamForRead())
+                    using (var streamReader = new StreamReader(classicStream))
+                    {
+                        id = streamReader.ReadToEnd();
+                    }
 
-                var http = new HttpClient();
-                var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
-                var response = await http.GetAsync(url);
-                var result = await response.Content.ReadAsStringAsync();
-                msgWelcome.Text += "Welcome " + result;
-            });
+                    var http = new HttpClient();
+                    var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
+                    var response = await http.GetAsync(url);
+                    var result = await response.Content.ReadAsStringAsync();
+                    msgWelcome.Text = "Welcome " + result;
+                });
+                await Task.Delay(1000);
+            }
         }
 
         /// <summary>
@@ -154,7 +159,7 @@ namespace NeoMir.Pages
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
-            gestureCollector.GestureCollected += ApplyGesture;
+            gestureCollector.RegisterToGestures(this, ApplyGesture);
         }
 
         private async void ApplyGesture(Gesture gesture)

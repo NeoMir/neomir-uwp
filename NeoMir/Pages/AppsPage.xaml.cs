@@ -342,7 +342,7 @@ namespace NeoMir.Pages
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
-            gestureCollector.GestureCollected += ApplyGesture;
+            gestureCollector.RegisterToGestures(this, ApplyGesture);
         }
 
         private async void ApplyGesture(Gesture gesture)
@@ -361,6 +361,11 @@ namespace NeoMir.Pages
                         else if (gesture.Name == "Back" && !gesture.IsConsumed)
                         {
                             BackButton_Tapped(null, null);
+                            gesture.IsConsumed = true;
+                        }
+                        else if (gesture.Name == "Next Right" && ConfNumber >= 1)
+                        {
+                            OpenAppWithGesture();
                             gesture.IsConsumed = true;
                         }
                     }
@@ -391,6 +396,22 @@ namespace NeoMir.Pages
             {
                 // Maximum apps reached, ask the user confirmation to replace one.
                 Classes.AppManager.PendingApp = (string)img.Tag;
+                DisplayMaximumAppDialog();
+            }
+        }
+
+        private void OpenAppWithGesture()
+        {
+            string tag = "https://unity3d.com/fr";
+            if (Classes.AppManager.Apps.Count < Classes.AppManager.MaxApp)
+            {
+                Classes.AppManager.CreateApp(tag);
+                ListOpenApps();
+            }
+            else
+            {
+                // Maximum apps reached, ask the user confirmation to replace one.
+                Classes.AppManager.PendingApp = (string)tag;
                 DisplayMaximumAppDialog();
             }
         }
