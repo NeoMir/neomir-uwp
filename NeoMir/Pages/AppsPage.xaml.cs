@@ -361,6 +361,7 @@ namespace NeoMir.Pages
 
             if (flag == false)
             {
+                //test
                 test_applications();
             }
             ItemsControl itemsControl = new ItemsControl();
