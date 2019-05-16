@@ -56,26 +56,26 @@ namespace NeoMir.Pages
                 itemsControl.Items.Add(textBox);
             }
 
-            void textBox_Tapped(object sender, TappedRoutedEventArgs e)
-            {
-                TextBox img = (TextBox)sender;
-                Classes.AppManager.GoToHome();
-            }
+        }
 
-            void textBox_PointerExited(object sender, PointerRoutedEventArgs e)
-            {
-                TextBox img = (TextBox)sender;
-                img.Height += HoverSize;
-                img.Width += HoverSize;
-            }
+        private void textBox_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            TextBox img = (TextBox)sender;
+            Classes.AppManager.GoToHome();
+        }
 
-            void textBox_PointerEntered(object sender, PointerRoutedEventArgs e)
-            {
-                TextBox img = (TextBox)sender;
-                img.Height -= HoverSize;
-                img.Width -= HoverSize;
-            }
+        private void textBox_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            TextBox img = (TextBox)sender;
+            img.Height += HoverSize;
+            img.Width += HoverSize;
+        }
 
+        private void textBox_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            TextBox img = (TextBox)sender;
+            img.Height -= HoverSize;
+            img.Width -= HoverSize;
         }
     }
 }

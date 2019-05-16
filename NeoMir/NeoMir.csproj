@@ -112,6 +112,9 @@
     <Compile Include="Pages\ChooseUserPage.xaml.cs">
       <DependentUpon>ChooseUserPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\LockScreenPage.xaml.cs">
+      <DependentUpon>LockScreenPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ConnectToApi.xaml.cs">
       <DependentUpon>ConnectToApi.xaml</DependentUpon>
     </Compile>
@@ -146,6 +149,7 @@
     <Content Include="Assets\LargeTile.scale-150.png" />
     <Content Include="Assets\LargeTile.scale-200.png" />
     <Content Include="Assets\LargeTile.scale-400.png" />
+    <Content Include="Assets\MainPage\lock.png" />
     <Content Include="Assets\MainPage\numero1.png" />
     <Content Include="Assets\MainPage\numero2.png" />
     <Content Include="Assets\MainPage\numero3.png" />
@@ -153,6 +157,7 @@
     <Content Include="Assets\MainPage\signinverse.png" />
     <Content Include="Assets\MainPage\signleft.png" />
     <Content Include="Assets\MainPage\signright.png" />
+    <Content Include="Assets\MainPage\smoke.mp4" />
     <Content Include="Assets\SmallTile.scale-100.png" />
     <Content Include="Assets\SmallTile.scale-125.png" />
     <Content Include="Assets\SmallTile.scale-150.png" />
@@ -224,6 +229,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ChooseUserPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LockScreenPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -16,6 +16,8 @@ namespace NeoMir.Classes
         public static Frame MainPageFrame { get; set; }
         // The Frame where we can find the AppsPage
         public static Frame AppsPageFrame { get; set; }
+        // The Frame where we can find the LockPage
+        public static Frame LockPageFrame { get; set; }
         // List of the apps
         public static List<App> Apps = new List<App>();
         // The maximum of apps allowed to be opened
@@ -113,6 +115,16 @@ namespace NeoMir.Classes
         {
             AppPosition = 0;
             Window.Current.Content = AppsPageFrame;
+            Window.Current.Activate();
+        }
+
+        /// <summary>
+        /// Go to the AppsPage
+        /// </summary>
+        public static void GoToLock()
+        {
+            AppPosition = 0;
+            Window.Current.Content = LockPageFrame;
             Window.Current.Activate();
         }
 

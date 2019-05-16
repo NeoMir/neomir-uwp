@@ -18,19 +18,15 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
-// Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace NeoMir.Pages
 {
-    /// <summary>
-    /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         //
         // PROPERTIES
         //
 
+        private bool isLock;
         Timer timerDateTime;
         Timer timerWeather;
         GestureCollector gestureCollector;
@@ -168,7 +164,7 @@ namespace NeoMir.Pages
             {
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
-                    if (this == Classes.AppManager.GetCurrentPage())
+                    if (this == Classes.AppManager.GetCurrentPage() && !isLock)
                     {
                         if (gesture.Name == "Next Right" && !gesture.IsConsumed)
                         {
@@ -185,6 +181,10 @@ namespace NeoMir.Pages
                             PrevAppButton_Tapped(null, null);
                             gesture.IsConsumed = true;
                         }
+                    }
+                    if (gesture.Name == "Lock" && !gesture.IsConsumed)
+                    {
+                        isLock = !isLock;
                     }
                 });
             }
@@ -210,6 +210,11 @@ namespace NeoMir.Pages
             Classes.AppManager.PrevApp();
         }
 
+        private void LockButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Classes.AppManager.GoToLock();
+        }
+        
         private void ApiPage_Tapped(object sender, TappedRoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ConnectToApi));

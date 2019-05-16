@@ -33,6 +33,7 @@ namespace NeoMir.Pages
         private int lag = 300;
         private int transitionHorizontaloffset = 200;
         GestureCollector gestureCollector;
+        bool isLock;
 
         //
         // CONSTRUCTOR
@@ -42,6 +43,7 @@ namespace NeoMir.Pages
         {
             this.InitializeComponent();
             this.InitializeVariables();
+            isLock = false;
             ListOpenApps();
             GestureSetup();
         }
@@ -264,7 +266,7 @@ namespace NeoMir.Pages
                 if (numberImage == 0)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple.png"));
-                    img.Tag = "https://facebook.github.io/react-native/";
+                    img.Tag = "http://agls-app/";
                     numberImage++;
                 }
                 else if (numberImage == 1)
@@ -351,7 +353,7 @@ namespace NeoMir.Pages
             {
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
-                    if (this == Classes.AppManager.GetCurrentPage())
+                    if (this == Classes.AppManager.GetCurrentPage() && !isLock)
                     {
                         if (gesture.Name == "Validate" && !gesture.IsConsumed)
                         {
@@ -368,6 +370,10 @@ namespace NeoMir.Pages
                             OpenAppWithGesture();
                             gesture.IsConsumed = true;
                         }
+                    }
+                    if (gesture.Name == "Lock")
+                    {
+                        isLock = !isLock;
                     }
                 });
             }

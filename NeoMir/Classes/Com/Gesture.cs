@@ -16,6 +16,5 @@ namespace NeoMir.Classes.Com
             Name = name;
             IsConsumed = false;
         }
-
     }
 }
