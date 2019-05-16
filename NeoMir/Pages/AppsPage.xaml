@@ -44,6 +44,9 @@
         <!-- Remove app button -->
         <Image Grid.Column= "6" Grid.Row= "7" Grid.ColumnSpan= "1" x:Name="RemoveAppButton" Source= "/Assets/AppsPage/trash.png"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height= "70" Tapped="RemoveAppButton_Tapped" />
 
+        <Image Grid.Column= "0" Grid.Row= "7" Grid.ColumnSpan= "1" x:Name="SynchronizeButton" Source= "/Assets/AppsPage/synchronize.png"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height= "70" Tapped="SynchronizeButton_Tapped" />
+
+
         <!--Wrapper of all apps rows -->
         <ScrollViewer Grid.Column= "0" Grid.ColumnSpan= "8" Grid.Row= "0" Grid.RowSpan= "7" VerticalScrollMode= "Enabled" HorizontalScrollMode= "Disabled" >
 
