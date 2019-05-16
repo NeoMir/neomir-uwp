@@ -1,5 +1,9 @@
-﻿using System;
+﻿using NeoMir.Classes;
+using System;
 using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -7,12 +11,14 @@ using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using System.Threading.Tasks;
 
 namespace NeoMir.Pages
 {
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
+    /// 
     public sealed partial class AppsPage : Page
     {
         //
@@ -30,7 +36,8 @@ namespace NeoMir.Pages
         private ItemsControl OpenAppsControl;
         private int lag = 300;
         private int transitionHorizontaloffset = 200;
-
+        private static bool flag = false;
+        //private static ItemsControl itemsControl = new ItemsControl();
         //
         // CONSTRUCTOR
         //
@@ -61,6 +68,36 @@ namespace NeoMir.Pages
             OpenAppsControl = CreateOpenAppsList();
         }
 
+        private async void getApplication()
+        {
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            {
+                var id = "";
+                var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
+                using (var inputStream = await file.OpenReadAsync())
+                using (var classicStream = inputStream.AsStreamForRead())
+                using (var streamReader = new StreamReader(classicStream))
+                {
+                    id = streamReader.ReadToEnd();
+                }
+                var http = new HttpClient();
+                var url = String.Format("http://www.martinbaud.com/V1/getAppInfo.php?id_mirror=" + id);
+                var response = await http.GetAsync(url);
+                var result = await response.Content.ReadAsStringAsync();
+                string[] links = result.Split(' ');
+                Classes.AppManager.InstalledApps.Clear();
+
+                foreach (string link in links)
+                {
+                    if (link != "")
+                    {
+                        AppManager.CreateInstalledApp(link);
+                    }
+                }
+            });
+        }
+
+    
         /// <summary>
         /// Display the open apps in the AppsPage
         /// </summary>
@@ -249,39 +286,44 @@ namespace NeoMir.Pages
         // [Test] Fonction qui remplie des lignes d'applications avec de fausses applications
         private void FillApps(ItemsControl itemsControl)
         {
+            //itemsControl.Items.Clear();
+            //Classes.AppManager.InstalledApps.Clear();
             int numberOfApps = 20;
 
             // test for images
             int numberImage = 0;
-
-            for (int i = 0; i < numberOfApps; i++)
+            
+            //getApplication();
+            foreach (Classes.App app in Classes.AppManager.InstalledApps)
             {
                 Image img = new Image();
+                img.Tag = app;
+
+               
                 if (numberImage == 0)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple.png"));
-                    img.Tag = "http://agls-app/";
+                   
                     numberImage++;
                 }
                 else if (numberImage == 1)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple1.png"));
-                    img.Tag = "https://electronjs.org/";
+                    
                     numberImage++;
                 }
                 else if (numberImage == 2)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple2.png"));
-                    img.Tag = "https://unity3d.com/fr";
+                    
                     numberImage++;
                 }
                 else if (numberImage == 3)
                 {
                     img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple3.png"));
-                    img.Tag = "https://ionicframework.com/";
+                    
                     numberImage = 0;
                 }
-
                 img.Height = ImageSize;
                 img.Width = ImageSize;
                 img.Margin = ImageMargin;
@@ -293,12 +335,38 @@ namespace NeoMir.Pages
             }
         }
 
+        private void test_applications()
+        {
+            Classes.AppManager.InstalledApps.Clear();
+            AppManager.CreateInstalledApp("https://electronjs.org/");
+            AppManager.CreateInstalledApp("https://unity3d.com/fr");
+            AppManager.CreateInstalledApp("https://ionicframework.com/");
+            AppManager.CreateInstalledApp("https://electronjs.org/");
+            AppManager.CreateInstalledApp("https://unity3d.com/fr");
+            AppManager.CreateInstalledApp("https://ionicframework.com/");
+            AppManager.CreateInstalledApp("https://electronjs.org/");
+            AppManager.CreateInstalledApp("https://unity3d.com/fr");
+            AppManager.CreateInstalledApp("https://ionicframework.com/");
+            AppManager.CreateInstalledApp("https://electronjs.org/");
+            AppManager.CreateInstalledApp("https://unity3d.com/fr");
+            AppManager.CreateInstalledApp("https://ionicframework.com/");
+            AppManager.CreateInstalledApp("https://electronjs.org/");
+            AppManager.CreateInstalledApp("https://unity3d.com/fr");
+            AppManager.CreateInstalledApp("https://ionicframework.com/");
+        }
+
         // [Test] Fonction qui rajoute de manière automatique les différentes lignes de fausses configurations d'applications
         private void AddRowButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
+
+            if (flag == false)
+            {
+                test_applications();
+            }
+            ItemsControl itemsControl = new ItemsControl();
             TextBlock textBlock = new TextBlock();
             ScrollViewer scrollViewer = new ScrollViewer();
-            ItemsControl itemsControl = new ItemsControl();
+
             TransitionCollection transitions = new TransitionCollection();
             EntranceThemeTransition entranceThemeTransition = new EntranceThemeTransition();
 
@@ -326,13 +394,14 @@ namespace NeoMir.Pages
             itemsControl.ItemContainerTransitions = transitions;
             itemsControl.ItemsPanel = CreateTemplate();
 
-            FillApps(itemsControl);
-
             scrollViewer.Content = itemsControl;
 
             // Add all to the grid
             AppsRows.Children.Add(textBlock);
             AppsRows.Children.Add(scrollViewer);
+
+            FillApps(itemsControl);
+
         }
 
         //
@@ -351,13 +420,15 @@ namespace NeoMir.Pages
             Image img = (Image)sender;
             if (Classes.AppManager.Apps.Count < Classes.AppManager.MaxApp)
             {
-                Classes.AppManager.CreateApp((string)img.Tag);
+                
+                Classes.AppManager.LaunchInstalledApp((Classes.App)img.Tag);
                 ListOpenApps();
             }
             else
             {
+                Classes.App app = (Classes.App)img.Tag;
                 // Maximum apps reached, ask the user confirmation to replace one.
-                Classes.AppManager.PendingApp = (string)img.Tag;
+                Classes.AppManager.PendingApp = app.Link;
                 DisplayMaximumAppDialog();
             }
         }
@@ -409,5 +480,12 @@ namespace NeoMir.Pages
             scrollviewerCloseApp.Visibility = Visibility.Collapsed;
         }
 
+        private void SynchronizeButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            flag = true;
+            getApplication();
+            Task.Delay(2000);
+
+        }
     }
 }

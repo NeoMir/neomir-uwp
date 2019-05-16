@@ -135,6 +135,7 @@
     <Content Include="Assets\AppsPage\exemple2.png" />
     <Content Include="Assets\AppsPage\exemple3.png" />
     <Content Include="Assets\AppsPage\plus.png" />
+    <Content Include="Assets\AppsPage\synchronize.png" />
     <Content Include="Assets\AppsPage\trash.png" />
     <Content Include="Assets\BadgeLogo.scale-100.png" />
     <Content Include="Assets\BadgeLogo.scale-125.png" />

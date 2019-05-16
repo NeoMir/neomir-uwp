@@ -20,7 +20,9 @@ namespace NeoMir.Classes
         public static Frame LockPageFrame { get; set; }
         // List of the apps
         public static List<App> Apps = new List<App>();
-        // The maximum of apps allowed to be opened
+        // The maximum of apps allowed to be openede
+        public static List<App> InstalledApps = new List<App>();
+
         public static int MaxApp = 3;
         // The actual position of the navigation is the list of apps
         public static int AppPosition = 0; // 0 = Accueil, 1 = App rang 1, 2 = App rang 2, etc..
@@ -42,12 +44,27 @@ namespace NeoMir.Classes
             LaunchApp(Apps[AppPosition - 1]);
         }
 
+        public static void CreateInstalledApp(string link)
+        {
+            App app = new App(link);
+            app.Frame.Navigate(typeof(Pages.AppPage), app.Link);
+            InstalledApps.Add(app);
+            
+        }
+
         /// <summary>
         /// Navigate to an app directly from its instance
         /// </summary>
         /// <param name="app">The app we want navigate to</param>
         public static void LaunchApp(App app)
         {
+            Window.Current.Content = app.Frame;
+            Window.Current.Activate();
+        }
+
+        public static void LaunchInstalledApp(App app)
+        {
+            Apps.Add(app);
             Window.Current.Content = app.Frame;
             Window.Current.Activate();
         }

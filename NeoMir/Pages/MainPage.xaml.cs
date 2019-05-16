@@ -83,9 +83,6 @@ namespace NeoMir.Pages
                 var response = await http.GetAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
                 msgWelcome.Text += "Welcome " + result;
-
-
-
             });
         }
 
