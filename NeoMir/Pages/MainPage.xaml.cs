@@ -26,7 +26,6 @@ namespace NeoMir.Pages
         // PROPERTIES
         //
 
-        private bool isLock;
         Timer timerDateTime;
         Timer timerWeather;
         GestureCollector gestureCollector;
@@ -181,10 +180,11 @@ namespace NeoMir.Pages
                             PrevAppButton_Tapped(null, null);
                             gesture.IsConsumed = true;
                         }
-                    }
-                    if (gesture.Name == "Lock" && !gesture.IsConsumed)
-                    {
-                        isLock = !isLock;
+                        else if (gesture.Name == "Lock" && !gesture.IsConsumed)
+                        {
+                            LockButton_Tapped(null, null);
+                            gesture.IsConsumed;
+                        }
                     }
                 });
             }
