@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NeoMir.Classes.Com;
+using NeoMir.Classes.Communication;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,12 +28,11 @@ namespace NeoMir.Pages
         public static int HoverSize = 20;
         public static Thickness BoxMargin = new Thickness(10);
         public static bool IsShowed = false;
-
+        GestureCollector gestureCollector;
 
         //
         // CONSTRUCTOR
         //
-
         public LockScreenPage()
         {
             this.InitializeComponent();
@@ -40,11 +41,18 @@ namespace NeoMir.Pages
             Classes.UserManager.Users.Add(new Classes.User("Robin", "DACALOR"));
             Classes.UserManager.Users.Add(new Classes.User("Ambroise", "DAMIER"));
             Classes.UserManager.Users.Add(new Classes.User("Martin", "BAUD"));
+            GestureSetup();
         }
 
         //
         // METHODS
         //
+
+        private void GestureSetup()
+        {
+            gestureCollector = GestureCollector.Instance;
+            gestureCollector.RegisterToGestures(this, ApplyGesture);
+        }
 
         private void StartBackgroundMedia()
         {
@@ -116,6 +124,27 @@ namespace NeoMir.Pages
                 ListUsers();
             IsShowed = true;
 
+        }
+
+        private async void ApplyGesture(Gesture gesture)
+        {
+            if (!gesture.IsConsumed)
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    if (this == Classes.AppManager.GetCurrentPage())
+                    {
+                        if (gesture.Name == "Lock" && !gesture.IsConsumed)
+                        {
+                            IsShowed = false;
+                            MainScroll.Visibility = Visibility.Collapsed;
+                            Users.Items.Clear();
+                            Classes.AppManager.GoToHome();
+                            gesture.IsConsumed = true;
+                        }
+                    }
+                });
+            }
         }
     }
 }

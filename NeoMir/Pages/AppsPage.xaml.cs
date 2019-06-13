@@ -370,6 +370,9 @@ namespace NeoMir.Pages
             {
                 test_applications();
             }
+            flag = true;
+            getApplication();
+            Task.Delay(2000);
             ItemsControl itemsControl = new ItemsControl();
             TextBlock textBlock = new TextBlock();
             ScrollViewer scrollViewer = new ScrollViewer();
@@ -430,7 +433,7 @@ namespace NeoMir.Pages
                             AddRowButton_Tapped(null, null);
                             gesture.IsConsumed = true;
                         }
-                        else if (gesture.Name == "Back" && !gesture.IsConsumed)
+                        else if (gesture.Name == "Next Left" && !gesture.IsConsumed)
                         {
                             BackButton_Tapped(null, null);
                             gesture.IsConsumed = true;
@@ -489,7 +492,7 @@ namespace NeoMir.Pages
             else
             {
                 // Maximum apps reached, ask the user confirmation to replace one.
-                Classes.AppManager.PendingApp = (string)tag;
+                Classes.AppManager.PendingApp = tag;
                 DisplayMaximumAppDialog();
             }
         }
@@ -543,9 +546,6 @@ namespace NeoMir.Pages
 
         private void SynchronizeButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            flag = true;
-            getApplication();
-            Task.Delay(2000);
 
         }
     }

@@ -48,7 +48,6 @@ namespace NeoMir.Classes
         public static void CreateInstalledApp(string link)
         {
             App app = new App(link);
-            app.Frame.Navigate(typeof(Pages.AppPage), app.Link);
             InstalledApps.Add(app);
             
         }
@@ -65,6 +64,7 @@ namespace NeoMir.Classes
 
         public static void LaunchInstalledApp(App app)
         {
+            app.Frame.Navigate(typeof(Pages.AppPage), app.Link);
             Apps.Add(app);
             Window.Current.Content = app.Frame;
             Window.Current.Activate();

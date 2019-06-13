@@ -84,14 +84,12 @@ namespace NeoMir.Pages
                         id = streamReader.ReadToEnd();
                     }
 
-                    var http = new HttpClient();
-                    var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
-                    var response = await http.GetAsync(url);
-                    var result = await response.Content.ReadAsStringAsync();
-                    msgWelcome.Text += "Welcome " + result;
-                    await Task.Delay(2000);
-                });
-                  
+                var http = new HttpClient();
+                var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
+                var response = await http.GetAsync(url);
+                var result = await response.Content.ReadAsStringAsync();
+                msgWelcome.Text += "Welcome " + result;
+            });
         }
 
         /// <summary>
@@ -162,7 +160,7 @@ namespace NeoMir.Pages
             {
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
-                    if (this == Classes.AppManager.GetCurrentPage() && !isLock)
+                    if (this == Classes.AppManager.GetCurrentPage())
                     {
                         if (gesture.Name == "Next Right" && !gesture.IsConsumed)
                         {
@@ -182,7 +180,7 @@ namespace NeoMir.Pages
                         else if (gesture.Name == "Lock" && !gesture.IsConsumed)
                         {
                             LockButton_Tapped(null, null);
-                            gesture.IsConsumed;
+                            gesture.IsConsumed = true;
                         }
                     }
                 });
