@@ -68,7 +68,10 @@ namespace NeoMir
                     Classes.AppManager.LockPageFrame.Navigate(typeof(Pages.LockScreenPage));
                 }
                 // Vérifiez que la fenêtre actuelle est active
-                Classes.AppManager.GoToLock();
+                Classes.AppManager.GoTo(Classes.AppManager.LockPageFrame);
+
+                // Création du detecteur d'activité
+                Classes.ActivityDetector activityDectector = new Classes.ActivityDetector();
             }
         }
 

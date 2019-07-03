@@ -20,9 +20,9 @@ namespace NeoMir.Classes
         public static Frame LockPageFrame { get; set; }
         // List of the apps
         public static List<App> Apps = new List<App>();
-        // The maximum of apps allowed to be openede
+        // List of installed Apps
         public static List<App> InstalledApps = new List<App>();
-
+        // Maximum allowed of opened apps
         public static int MaxApp = 3;
         // The actual position of the navigation is the list of apps
         public static int AppPosition = 0; // 0 = Accueil, 1 = App rang 1, 2 = App rang 2, etc..
@@ -119,32 +119,13 @@ namespace NeoMir.Classes
         }
 
         /// <summary>
-        /// Go to the MainPage
+        /// Go to the destination frame
         /// </summary>
-        public static void GoToHome()
+        /// <param name="destination">The frame you would like to go.</param>
+        public static void GoTo(Frame destination)
         {
             AppPosition = 0;
-            Window.Current.Content = MainPageFrame;
-            Window.Current.Activate();
-        }
-
-        /// <summary>
-        /// Go to the AppsPage
-        /// </summary>
-        public static void GoToApps()
-        {
-            AppPosition = 0;
-            Window.Current.Content = AppsPageFrame;
-            Window.Current.Activate();
-        }
-
-        /// <summary>
-        /// Go to the AppsPage
-        /// </summary>
-        public static void GoToLock()
-        {
-            AppPosition = 0;
-            Window.Current.Content = LockPageFrame;
+            Window.Current.Content = destination;
             Window.Current.Activate();
         }
     }

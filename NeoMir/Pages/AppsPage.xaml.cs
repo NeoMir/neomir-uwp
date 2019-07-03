@@ -457,7 +457,7 @@ namespace NeoMir.Pages
 
         private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoToHome();
+            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
         }
 
         private void RemoveAppButton_Tapped(object sender, TappedRoutedEventArgs e)
@@ -486,7 +486,6 @@ namespace NeoMir.Pages
             flag = true;
             getApplication();
             Task.Delay(2000);
-
         }
     }
 }
