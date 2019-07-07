@@ -108,12 +108,12 @@ namespace NeoMir.Pages
 
         private void HomeButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoToHome();
+            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
         }
 
         private void AppsButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoToApps();
+            Classes.AppManager.GoTo(Classes.AppManager.AppsPageFrame);
         }
     }
 }

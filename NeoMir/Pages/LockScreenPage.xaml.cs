@@ -100,7 +100,7 @@ namespace NeoMir.Pages
             IsShowed = false;
             MainScroll.Visibility = Visibility.Collapsed;
             Users.Items.Clear();
-            Classes.AppManager.GoToHome();
+            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
         }
 
         private void button_PointerExited(object sender, PointerRoutedEventArgs e)
@@ -139,7 +139,7 @@ namespace NeoMir.Pages
                             IsShowed = false;
                             MainScroll.Visibility = Visibility.Collapsed;
                             Users.Items.Clear();
-                            Classes.AppManager.GoToHome();
+                            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
                             gesture.IsConsumed = true;
                         }
                     }

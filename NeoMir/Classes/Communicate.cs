@@ -46,21 +46,16 @@ namespace NeoMir.Classes
         }
 
         /// <summary>
-        /// Go back in the navigation of the webview.
+        /// Navigate Back or Forward in the webview
         /// </summary>
-        /// <param name="webView">The concerned webview</param>
-        public static void GoBack(WebView webView)
+        /// <param name="webView">the webview variable</param>
+        /// <param name="direction">The direction of the webview values => "back" or "forward"</param>
+        public static void Navigate(WebView webView, string direction)
         {
-            webView.GoBack();
-        }
-
-        /// <summary>
-        /// Go forward in the navigation of the webview.
-        /// </summary>
-        /// <param name="webView">The concerned webview</param>
-        public static void GoForward(WebView webView)
-        {
-            webView.GoForward();
+            if (direction == "back")
+                webView.GoBack();
+            else if (direction == "forward")
+                webView.GoForward();
         }
     }
 }

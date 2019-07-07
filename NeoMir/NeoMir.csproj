@@ -95,6 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\ActivityDetector.cs" />
     <Compile Include="Classes\AppManager.cs" />
     <Compile Include="Classes\Communicate.cs" />
     <Compile Include="Classes\Com\Gesture.cs" />

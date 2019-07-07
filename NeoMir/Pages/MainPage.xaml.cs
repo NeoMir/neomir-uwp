@@ -196,7 +196,7 @@ namespace NeoMir.Pages
 
         private void LaunchAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoToApps();
+            Classes.AppManager.GoTo(Classes.AppManager.AppsPageFrame);
         }
 
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)
@@ -212,7 +212,7 @@ namespace NeoMir.Pages
 
         private void LockButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoToLock();
+            Classes.AppManager.GoTo(Classes.AppManager.LockPageFrame);
         }
         
         private void ApiPage_Tapped(object sender, TappedRoutedEventArgs e)
