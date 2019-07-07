@@ -98,6 +98,8 @@
     <Compile Include="Classes\ActivityDetector.cs" />
     <Compile Include="Classes\AppManager.cs" />
     <Compile Include="Classes\Communicate.cs" />
+    <Compile Include="Classes\Com\Face.cs" />
+    <Compile Include="Classes\Com\FaceCollector.cs" />
     <Compile Include="Classes\Com\Gesture.cs" />
     <Compile Include="Classes\Com\GestureCollector.cs" />
     <Compile Include="Classes\Config.cs" />
