@@ -10,6 +10,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Media.Core;
 using Windows.Media.Playback;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -171,6 +172,14 @@ namespace NeoMir.Pages
                             Users.Items.Clear();
                             Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
                             face.IsConsumed = true;
+                        }
+                       else
+                        {
+                            this.DetectedMessage.Foreground = new SolidColorBrush(Colors.Red);
+                            this.DetectedMessage.Text = string.Format("{0} is not a valid user", face.Name);
+                            await Task.Delay(2000);
+                            this.DetectedMessage.Text = string.Empty;
+                            this.DetectedMessage.Foreground = new SolidColorBrush(Colors.ForestGreen);
                         }
                     }
                 });
