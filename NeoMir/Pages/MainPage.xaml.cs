@@ -72,7 +72,8 @@ namespace NeoMir.Pages
 
         private async Task getProfile()
         {
-        
+            while (true)
+            {
                 await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                 {
                     var id = "";
@@ -84,12 +85,14 @@ namespace NeoMir.Pages
                         id = streamReader.ReadToEnd();
                     }
 
-                var http = new HttpClient();
-                var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
-                var response = await http.GetAsync(url);
-                var result = await response.Content.ReadAsStringAsync();
-                msgWelcome.Text += "Welcome " + result;
-            });
+                    var http = new HttpClient();
+                    var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
+                    var response = await http.GetAsync(url);
+                    var result = await response.Content.ReadAsStringAsync();
+                    msgWelcome.Text = "Welcome " + result;
+                });
+                await Task.Delay(1000);
+            }
         }
 
         /// <summary>

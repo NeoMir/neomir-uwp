@@ -88,7 +88,8 @@ namespace NeoMir.Pages
                     id = streamReader.ReadToEnd();
                 }
                 var http = new HttpClient();
-                var url = String.Format("http://www.martinbaud.com/V1/getAppInfo.php?id_mirror=" + id);
+                //var url = String.Format("http://www.martinbaud.com/V1/getAppInfo.php?id_mirror=" + id);
+                var url = String.Format("http://www.martinbaud.com/V1/getAppListFromProfil.php?email=test@test.com&id_profil=2");
                 var response = await http.GetAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
                 string[] links = result.Split(' ');
