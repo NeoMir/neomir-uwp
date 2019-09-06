@@ -28,6 +28,7 @@ namespace NeoMir.Classes
         public static int AppPosition = 0; // 0 = Accueil, 1 = App rang 1, 2 = App rang 2, etc..
         // The temporary pending app when we reach the maximum of app
         public static string PendingApp { get; set; }
+        // Return the current window
 
         // METHODS
 
@@ -80,9 +81,7 @@ namespace NeoMir.Classes
             }
             else if (AppPosition == Apps.Count)
             {
-                AppPosition = 0;
-                Window.Current.Content = MainPageFrame;
-                Window.Current.Activate();
+                Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
             }
             else
             {
@@ -107,9 +106,7 @@ namespace NeoMir.Classes
             }
             else if (AppPosition == 1)
             {
-                AppPosition = 0;
-                Window.Current.Content = MainPageFrame;
-                Window.Current.Activate();
+                Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
             }
             else
             {
@@ -127,6 +124,12 @@ namespace NeoMir.Classes
             AppPosition = 0;
             Window.Current.Content = destination;
             Window.Current.Activate();
+        }
+
+        public static Page GetCurrentPage()
+        {
+            Frame currentWindow = Window.Current.Content as Frame;
+            return currentWindow.Content as Page;
         }
     }
 }

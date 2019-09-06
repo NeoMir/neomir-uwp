@@ -1,4 +1,6 @@
-﻿using NeoMir.Classes;
+﻿using NeoMir.Classes.Com;
+using NeoMir.Classes.Communication;
+using NeoMir.Classes;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -36,6 +38,9 @@ namespace NeoMir.Pages
         private ItemsControl OpenAppsControl;
         private int lag = 300;
         private int transitionHorizontaloffset = 200;
+        GestureCollector gestureCollector;
+        bool isLock;
+
         private static bool flag = false;
         //private static ItemsControl itemsControl = new ItemsControl();
         //
@@ -46,7 +51,9 @@ namespace NeoMir.Pages
         {
             this.InitializeComponent();
             this.InitializeVariables();
+            isLock = false;
             ListOpenApps();
+            GestureSetup();
         }
 
         //
@@ -81,7 +88,8 @@ namespace NeoMir.Pages
                     id = streamReader.ReadToEnd();
                 }
                 var http = new HttpClient();
-                var url = String.Format("http://www.martinbaud.com/V1/getAppInfo.php?id_mirror=" + id);
+                //var url = String.Format("http://www.martinbaud.com/V1/getAppInfo.php?id_mirror=" + id);
+                var url = String.Format("http://www.martinbaud.com/V1/getAppListFromProfil.php?email=test@test.com&id_profil=2");
                 var response = await http.GetAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
                 string[] links = result.Split(' ');
@@ -137,7 +145,7 @@ namespace NeoMir.Pages
             {
                 Debug.WriteLine(ex.Message);
             }
-            
+
         }
 
         /// <summary>
@@ -361,9 +369,11 @@ namespace NeoMir.Pages
 
             if (flag == false)
             {
-                //test
                 test_applications();
             }
+            flag = true;
+            getApplication();
+            Task.Delay(2000);
             ItemsControl itemsControl = new ItemsControl();
             TextBlock textBlock = new TextBlock();
             ScrollViewer scrollViewer = new ScrollViewer();
@@ -405,6 +415,44 @@ namespace NeoMir.Pages
 
         }
 
+        private void GestureSetup()
+        {
+            gestureCollector = GestureCollector.Instance;
+            gestureCollector.RegisterToGestures(this, ApplyGesture);
+        }
+
+        private async void ApplyGesture(Gesture gesture)
+        {
+            if (!gesture.IsConsumed)
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    if (this == Classes.AppManager.GetCurrentPage() && !isLock)
+                    {
+                        if (gesture.Name == "Validate" && !gesture.IsConsumed)
+                        {
+                            AddRowButton_Tapped(null, null);
+                            gesture.IsConsumed = true;
+                        }
+                        else if (gesture.Name == "Next Left" && !gesture.IsConsumed)
+                        {
+                            BackButton_Tapped(null, null);
+                            gesture.IsConsumed = true;
+                        }
+                        else if (gesture.Name == "Next Right" && ConfNumber >= 1)
+                        {
+                            OpenAppWithGesture();
+                            gesture.IsConsumed = true;
+                        }
+                    }
+                    if (gesture.Name == "Lock")
+                    {
+                        isLock = !isLock;
+                    }
+                });
+            }
+        }
+
         //
         // EVENTS
         //
@@ -430,6 +478,22 @@ namespace NeoMir.Pages
                 Classes.App app = (Classes.App)img.Tag;
                 // Maximum apps reached, ask the user confirmation to replace one.
                 Classes.AppManager.PendingApp = app.Link;
+                DisplayMaximumAppDialog();
+            }
+        }
+
+        private void OpenAppWithGesture()
+        {
+            string tag = "https://unity3d.com/fr";
+            if (Classes.AppManager.Apps.Count < Classes.AppManager.MaxApp)
+            {
+                Classes.AppManager.CreateApp(tag);
+                ListOpenApps();
+            }
+            else
+            {
+                // Maximum apps reached, ask the user confirmation to replace one.
+                Classes.AppManager.PendingApp = tag;
                 DisplayMaximumAppDialog();
             }
         }
@@ -483,9 +547,7 @@ namespace NeoMir.Pages
 
         private void SynchronizeButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            flag = true;
-            getApplication();
-            Task.Delay(2000);
+
         }
     }
 }

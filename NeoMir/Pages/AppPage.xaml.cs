@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NeoMir.Classes.Com;
+using NeoMir.Classes.Communication;
+using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
@@ -12,6 +14,8 @@ namespace NeoMir.Pages
 {
     public sealed partial class AppPage : Page
     {
+        private GestureCollector gestureCollector;
+        private bool isLock;
         //
         // PROPERTIES
         //
@@ -24,9 +28,11 @@ namespace NeoMir.Pages
 
         public AppPage()
         {
+            isLock = false;
             this.InitializeComponent();
             AppView.ScriptNotify += Classes.Communicate.ScriptNotify;
             AppView.NavigationCompleted += AppView_NavigationCompleted;
+            GestureSetup();
         }
 
         //
@@ -52,6 +58,42 @@ namespace NeoMir.Pages
             this.Link = (string)e.Parameter;
             Uri uri = new Uri(this.Link);
             AppView.Source = uri;
+        }
+
+        private void GestureSetup()
+        {
+            gestureCollector = GestureCollector.Instance;
+            gestureCollector.RegisterToGestures(this, ApplyGesture);
+        }
+
+        private async void ApplyGesture(Gesture gesture)
+        {
+
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                if (this == Classes.AppManager.GetCurrentPage() && !isLock)
+                {
+                    if (gesture.Name == "Next Right" && !gesture.IsConsumed)
+                    {
+                        NextAppButton_Tapped(null, null);
+                        gesture.IsConsumed = true;
+                    }
+                    else if (gesture.Name == "Back" && !gesture.IsConsumed)
+                    {
+                        PrevAppButton_Tapped(null, null);
+                        gesture.IsConsumed = true;
+                    }
+                    else if (gesture.Name == "Validate" && !gesture.IsConsumed)
+                    {
+                        HomeButton_Tapped(null, null);
+                        gesture.IsConsumed = true;
+                    }
+                }
+                if (gesture.Name == "Lock")
+                {
+                    isLock = !isLock;
+                }
+            });
         }
 
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)

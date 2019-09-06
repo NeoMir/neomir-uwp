@@ -43,6 +43,6 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-
+        <TextBlock Name="DetectedMessage" Grid.Row="0" Grid.ColumnSpan="7" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="70" Foreground="ForestGreen"> </TextBlock>
     </Grid>
 </Page>

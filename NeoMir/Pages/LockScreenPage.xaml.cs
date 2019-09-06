@@ -1,12 +1,16 @@
-﻿using System;
+﻿using NeoMir.Classes.Com;
+using NeoMir.Classes.Communication;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Media.Core;
 using Windows.Media.Playback;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,12 +30,15 @@ namespace NeoMir.Pages
         public static int HoverSize = 20;
         public static Thickness BoxMargin = new Thickness(10);
         public static bool IsShowed = false;
+        private GestureCollector gestureCollector;
+        private FaceCollector faceCollector;
+        private List<string> owners = new List<string>() { "Marwin", "Quentin", "Ambroise", "Ambroise" };
+
 
 
         //
         // CONSTRUCTOR
         //
-
         public LockScreenPage()
         {
             this.InitializeComponent();
@@ -40,11 +47,20 @@ namespace NeoMir.Pages
             Classes.UserManager.Users.Add(new Classes.User("Robin", "DACALOR"));
             Classes.UserManager.Users.Add(new Classes.User("Ambroise", "DAMIER"));
             Classes.UserManager.Users.Add(new Classes.User("Martin", "BAUD"));
+            CollectorSetup();
         }
 
         //
         // METHODS
         //
+
+        private void CollectorSetup()
+        {
+            gestureCollector = GestureCollector.Instance;
+            gestureCollector.RegisterToGestures(this, ApplyGesture);
+            faceCollector = FaceCollector.Instance;
+            faceCollector.RegisterToFace(this, FaceDetected);
+        }
 
         private void StartBackgroundMedia()
         {
@@ -116,6 +132,58 @@ namespace NeoMir.Pages
                 ListUsers();
             IsShowed = true;
 
+        }
+
+        private async void ApplyGesture(Gesture gesture)
+        {
+            if (!gesture.IsConsumed)
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    if (this == Classes.AppManager.GetCurrentPage())
+                    {
+                        if (gesture.Name == "Lock" && !gesture.IsConsumed)
+                        {
+                            IsShowed = false;
+                            MainScroll.Visibility = Visibility.Collapsed;
+                            Users.Items.Clear();
+                            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
+                            gesture.IsConsumed = true;
+                        }
+                    }
+                });
+            }
+        }
+
+        private async void FaceDetected(Face face)
+        {
+            if (!face.IsConsumed)
+            {
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                {
+                    if (this == Classes.AppManager.GetCurrentPage())
+                    {
+                       if (owners.Contains(face.Name))
+                        {
+                            this.DetectedMessage.Text = string.Format("{0} has been detected", face.Name);
+                            await Task.Delay(2000);
+                            this.DetectedMessage.Text = string.Empty;
+                            MainScroll.Visibility = Visibility.Collapsed;
+                            Users.Items.Clear();
+                            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
+                            face.IsConsumed = true;
+                        }
+                       else
+                        {
+                            this.DetectedMessage.Foreground = new SolidColorBrush(Colors.Red);
+                            this.DetectedMessage.Text = string.Format("{0} is not a valid user", face.Name);
+                            await Task.Delay(2000);
+                            this.DetectedMessage.Text = string.Empty;
+                            this.DetectedMessage.Foreground = new SolidColorBrush(Colors.ForestGreen);
+                        }
+                    }
+                });
+            }
         }
     }
 }
