@@ -75,7 +75,7 @@ namespace NeoMir.Classes.Com
             if (text != lastMessage)
             {
                 lastMessage = text;
-                Page current = AppManager.GetCurrentPage();
+                Page current = FrameManager.GetCurrentPage();
                 if (pageEventDico.ContainsKey(current))
                 {
                     int index = text.IndexOf('-');

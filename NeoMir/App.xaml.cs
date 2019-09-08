@@ -1,11 +1,14 @@
-﻿using System;
+﻿using NeoMir.Classes;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Storage;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using DataAccessLibrary;
+using DataAccessLibrary.Entitites;
+using NeoMir.API;
 
 namespace NeoMir
 {
@@ -20,6 +23,7 @@ namespace NeoMir
         /// </summary>
         public App()
         {
+            SetStatus();
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -41,9 +45,10 @@ namespace NeoMir
             {
                 // Créez un Frame utilisable comme contexte de navigation et naviguez jusqu'à la première page
                 rootFrame = new Frame();
-                Classes.AppManager.MainPageFrame = rootFrame;
-                Classes.AppManager.AppsPageFrame = new Frame();
-                Classes.AppManager.LockPageFrame = new Frame();
+                Classes.FrameManager.MainPageFrame = rootFrame;
+                Classes.FrameManager.AppsPageFrame = new Frame();
+                Classes.FrameManager.LockPageFrame = new Frame();
+                Classes.FrameManager.PairPageFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
@@ -64,12 +69,19 @@ namespace NeoMir
                     // puis configurez la nouvelle page en transmettant les informations requises en tant que
                     // paramètre
                     rootFrame.Navigate(typeof(Pages.MainPage), e.Arguments);
-                    Classes.AppManager.AppsPageFrame.Navigate(typeof(Pages.AppsPage));
-                    Classes.AppManager.LockPageFrame.Navigate(typeof(Pages.LockScreenPage));
+                    Classes.FrameManager.AppsPageFrame.Navigate(typeof(Pages.AppsPage));
+                    Classes.FrameManager.PairPageFrame.Navigate(typeof(Pages.ConnectToApi));
+                    Classes.FrameManager.LockPageFrame.Navigate(typeof(Pages.LockScreenPage));
                 }
                 // Vérifiez que la fenêtre actuelle est active
-                Classes.AppManager.GoTo(Classes.AppManager.LockPageFrame);
-
+                if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.FirstLaunch)
+                {
+                    Classes.FrameManager.GoTo(Classes.FrameManager.PairPageFrame);
+                }
+                else
+                {
+                    Classes.FrameManager.GoTo(Classes.FrameManager.LockPageFrame);
+                }
                 // Création du detecteur d'activité
                 Classes.ActivityDetector activityDectector = new Classes.ActivityDetector();
             }
@@ -101,6 +113,25 @@ namespace NeoMir
             var localSettings = ApplicationData.Current.LocalSettings;
             localSettings.Values["nav"] = navstate;*/
             deferral.Complete();
+        }
+
+        private async void SetStatus()
+        {
+            Miror miror = DataAccess.GetMiror();
+            if (miror != null && miror.IsPaired)
+            {
+                GlobalStatusManager.Instance.GlobalStatus = EGlobalStatus.Paired;
+            }
+            else if (miror != null && !miror.IsPaired)
+            {
+                GlobalStatusManager.Instance.GlobalStatus = EGlobalStatus.FirstLaunch;
+            }
+            else
+            {
+                GlobalStatusManager.Instance.GlobalStatus = EGlobalStatus.FirstLaunch;
+                string id = await APIManager.GetMirorId();
+                DataAccess.AddEntity<Miror>(new Miror() { Id = id, IsPaired = false });
+            }
         }
     }
 }

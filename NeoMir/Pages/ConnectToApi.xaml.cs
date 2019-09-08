@@ -1,11 +1,16 @@
-﻿using System;
+﻿using DataAccessLibrary;
+using NeoMir.API;
+using NeoMir.Classes;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -23,18 +28,13 @@ namespace NeoMir.Pages
     /// </summary>
     public sealed partial class ConnectToApi : Page
     {
+        private string id;
+
         public ConnectToApi()
         {
             this.InitializeComponent();
-        }
-        private void HomeButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(MainPage));
-        }
-
-        private void AskId_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            getID();
+            CheckStatus();
+            ShowId();
         }
 
         private async void getID()
@@ -45,10 +45,67 @@ namespace NeoMir.Pages
                 var url = String.Format("http://www.martinbaud.com/V1/gid.php?id");
                 var response = await http.GetAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
-                ID.Text = result.ToString();
-                msgconnexion.Text = "En attente de connexion";
 
             });
+        }
+
+        /// <summary>
+        /// How the Mirror ID to the user
+        /// </summary>
+        private void ShowId()
+        {
+            id = DataAccess.GetMiror()?.Id;
+            MirorID.Text = id;
+            WaitForLink();
+        }
+
+        /// <summary>
+        /// Get the Id from the db through API request
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetIdFromDatabase()
+        {
+            id = await APIManager.GetMirorId();
+        }
+
+        /// <summary>
+        /// Wait for the API to validate a link between this miror and a user account
+        /// </summary>
+        private async void WaitForLink()
+        {
+            while (FrameManager.GetCurrentPage() == this)
+            {
+                if (await APIManager.GetIsLinked(id))
+                {
+                    //BackHomePanel.Visibility = Visibility.Visible;
+                    LinkDone.Visibility = Visibility.Visible;
+                    break;
+                }
+                await Task.Delay(1000);
+                //id = "5b8f";
+                //TODO : Appel API popur savoir si on est pair a un compte
+                //await Task.Delay(1000);
+            }
+        }
+
+        private void CheckStatus()
+        {
+            if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.FirstLaunch)
+            {
+               // BackHomePanel.Visibility = Visibility.Collapsed;
+                LinkDone.Visibility = Visibility.Collapsed;
+                WaitForLink();
+            }
+            else if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.Paired)
+            {
+                BackHomePanel.Visibility = Visibility.Visible;
+                LinkDone.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
         }
     }
 }

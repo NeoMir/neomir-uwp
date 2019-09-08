@@ -93,13 +93,13 @@ namespace NeoMir.Pages
                 var response = await http.GetAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
                 string[] links = result.Split(' ');
-                Classes.AppManager.InstalledApps.Clear();
+                Classes.FrameManager.InstalledApps.Clear();
 
                 foreach (string link in links)
                 {
                     if (link != "")
                     {
-                        AppManager.CreateInstalledApp(link);
+                        FrameManager.CreateInstalledApp(link);
                     }
                 }
             });
@@ -115,7 +115,7 @@ namespace NeoMir.Pages
             {
                 // Clear the first row
                 OpenAppsControl.Items.Clear();
-                int numberOfApps = Classes.AppManager.Apps.Count;
+                int numberOfApps = Classes.FrameManager.Apps.Count;
 
                 if (numberOfApps == 0)
                 {
@@ -155,13 +155,13 @@ namespace NeoMir.Pages
         private void ListOpenApps(ItemsControl itemsControl)
         {
             itemsControl.Items.Clear();
-            int numberOfApps = Classes.AppManager.Apps.Count;
+            int numberOfApps = Classes.FrameManager.Apps.Count;
 
             for (int i = 0; i < numberOfApps; i++)
             {
                 Image img = new Image();
                 img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple1.png"));
-                img.Tag = Classes.AppManager.Apps[i].Link;
+                img.Tag = Classes.FrameManager.Apps[i].Link;
                 img.Height = CloseAppImageSize;
                 img.Width = CloseAppImageSize;
                 img.Margin = ImageMargin;
@@ -234,18 +234,18 @@ namespace NeoMir.Pages
             if (result == ContentDialogResult.Primary)
             {
                 // Close the chosen app
-                foreach (Classes.App app in Classes.AppManager.Apps)
+                foreach (Classes.App app in Classes.FrameManager.Apps)
                 {
                     if (app.Link == link)
                     {
-                        Classes.AppManager.Apps.Remove(app);
+                        Classes.FrameManager.Apps.Remove(app);
                         backgroundCloseApp.Visibility = Visibility.Collapsed;
                         cancelButtonCloseApp.Visibility = Visibility.Collapsed;
                         titleCloseApp.Visibility = Visibility.Collapsed;
                         scrollviewerCloseApp.Visibility = Visibility.Collapsed;
-                        if (Classes.AppManager.PendingApp != "None")
+                        if (Classes.FrameManager.PendingApp != "None")
                         {
-                            Classes.AppManager.CreateApp(Classes.AppManager.PendingApp);
+                            Classes.FrameManager.CreateApp(Classes.FrameManager.PendingApp);
                         }
                         ListOpenApps();
                         break;
@@ -302,7 +302,7 @@ namespace NeoMir.Pages
             int numberImage = 0;
             
             //getApplication();
-            foreach (Classes.App app in Classes.AppManager.InstalledApps)
+            foreach (Classes.App app in Classes.FrameManager.InstalledApps)
             {
                 Image img = new Image();
                 img.Tag = app;
@@ -343,35 +343,9 @@ namespace NeoMir.Pages
             }
         }
 
-        private void test_applications()
-        {
-            Classes.AppManager.InstalledApps.Clear();
-            AppManager.CreateInstalledApp("https://electronjs.org/");
-            AppManager.CreateInstalledApp("https://unity3d.com/fr");
-            AppManager.CreateInstalledApp("https://ionicframework.com/");
-            AppManager.CreateInstalledApp("https://electronjs.org/");
-            AppManager.CreateInstalledApp("https://unity3d.com/fr");
-            AppManager.CreateInstalledApp("https://ionicframework.com/");
-            AppManager.CreateInstalledApp("https://electronjs.org/");
-            AppManager.CreateInstalledApp("https://unity3d.com/fr");
-            AppManager.CreateInstalledApp("https://ionicframework.com/");
-            AppManager.CreateInstalledApp("https://electronjs.org/");
-            AppManager.CreateInstalledApp("https://unity3d.com/fr");
-            AppManager.CreateInstalledApp("https://ionicframework.com/");
-            AppManager.CreateInstalledApp("https://electronjs.org/");
-            AppManager.CreateInstalledApp("https://unity3d.com/fr");
-            AppManager.CreateInstalledApp("https://ionicframework.com/");
-        }
-
         // [Test] Fonction qui rajoute de manière automatique les différentes lignes de fausses configurations d'applications
         private void AddRowButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-
-            if (flag == false)
-            {
-                test_applications();
-            }
-            flag = true;
             getApplication();
             Task.Delay(2000);
             ItemsControl itemsControl = new ItemsControl();
@@ -427,7 +401,7 @@ namespace NeoMir.Pages
             {
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
-                    if (this == Classes.AppManager.GetCurrentPage() && !isLock)
+                    if (this == Classes.FrameManager.GetCurrentPage() && !isLock)
                     {
                         if (gesture.Name == "Validate" && !gesture.IsConsumed)
                         {
@@ -460,24 +434,24 @@ namespace NeoMir.Pages
         private void image_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Image img = (Image)sender;
-            Classes.AppManager.AppPosition = (int)img.Tag + 1;
-            Classes.AppManager.LaunchApp(Classes.AppManager.Apps[(int)img.Tag]);
+            Classes.FrameManager.AppPosition = (int)img.Tag + 1;
+            Classes.FrameManager.LaunchApp(Classes.FrameManager.Apps[(int)img.Tag]);
         }
 
         private void image_Tapped2(object sender, TappedRoutedEventArgs e)
         {
             Image img = (Image)sender;
-            if (Classes.AppManager.Apps.Count < Classes.AppManager.MaxApp)
+            if (Classes.FrameManager.Apps.Count < Classes.FrameManager.MaxApp)
             {
                 
-                Classes.AppManager.LaunchInstalledApp((Classes.App)img.Tag);
+                Classes.FrameManager.LaunchInstalledApp((Classes.App)img.Tag);
                 ListOpenApps();
             }
             else
             {
                 Classes.App app = (Classes.App)img.Tag;
                 // Maximum apps reached, ask the user confirmation to replace one.
-                Classes.AppManager.PendingApp = app.Link;
+                Classes.FrameManager.PendingApp = app.Link;
                 DisplayMaximumAppDialog();
             }
         }
@@ -485,15 +459,15 @@ namespace NeoMir.Pages
         private void OpenAppWithGesture()
         {
             string tag = "https://unity3d.com/fr";
-            if (Classes.AppManager.Apps.Count < Classes.AppManager.MaxApp)
+            if (Classes.FrameManager.Apps.Count < Classes.FrameManager.MaxApp)
             {
-                Classes.AppManager.CreateApp(tag);
+                Classes.FrameManager.CreateApp(tag);
                 ListOpenApps();
             }
             else
             {
                 // Maximum apps reached, ask the user confirmation to replace one.
-                Classes.AppManager.PendingApp = tag;
+                Classes.FrameManager.PendingApp = tag;
                 DisplayMaximumAppDialog();
             }
         }
@@ -521,14 +495,14 @@ namespace NeoMir.Pages
 
         private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
+            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
         }
 
         private void RemoveAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            if (Classes.AppManager.Apps.Count > 0)
+            if (Classes.FrameManager.Apps.Count > 0)
             {
-                Classes.AppManager.PendingApp = "None";
+                Classes.FrameManager.PendingApp = "None";
                 backgroundCloseApp.Visibility = Visibility.Visible;
                 cancelButtonCloseApp.Visibility = Visibility.Visible;
                 titleCloseApp.Visibility = Visibility.Visible;

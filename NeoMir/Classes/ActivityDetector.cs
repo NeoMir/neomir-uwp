@@ -49,7 +49,7 @@ namespace NeoMir.Classes
         {
             Window.Current.CoreWindow.PointerPressed += UpdateLastActivity;
             LastActivity = DateTime.Now;
-            this.LockFrame = AppManager.LockPageFrame;
+            this.LockFrame = FrameManager.LockPageFrame;
             this.PeriodToLock = TimeSpan.FromSeconds(Period);
             this.isLock = true;
         }
@@ -68,7 +68,7 @@ namespace NeoMir.Classes
                         if (Difference >= PeriodToLock.TotalSeconds && !this.isLock)
                         {
                             isLock = true;
-                            AppManager.GoTo(this.LockFrame);
+                            FrameManager.GoTo(this.LockFrame);
                         }
                     });
             }, this.PeriodToLock);

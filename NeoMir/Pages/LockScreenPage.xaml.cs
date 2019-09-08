@@ -108,7 +108,7 @@ namespace NeoMir.Pages
             IsShowed = false;
             MainScroll.Visibility = Visibility.Collapsed;
             Users.Items.Clear();
-            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
+            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
         }
 
         private void button_PointerExited(object sender, PointerRoutedEventArgs e)
@@ -140,14 +140,14 @@ namespace NeoMir.Pages
             {
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
-                    if (this == Classes.AppManager.GetCurrentPage())
+                    if (this == Classes.FrameManager.GetCurrentPage())
                     {
                         if (gesture.Name == "Lock" && !gesture.IsConsumed)
                         {
                             IsShowed = false;
                             MainScroll.Visibility = Visibility.Collapsed;
                             Users.Items.Clear();
-                            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
+                            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
                             gesture.IsConsumed = true;
                         }
                     }
@@ -161,7 +161,7 @@ namespace NeoMir.Pages
             {
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                 {
-                    if (this == Classes.AppManager.GetCurrentPage())
+                    if (this == Classes.FrameManager.GetCurrentPage())
                     {
                        if (owners.Contains(face.Name))
                         {
@@ -170,7 +170,7 @@ namespace NeoMir.Pages
                             this.DetectedMessage.Text = string.Empty;
                             MainScroll.Visibility = Visibility.Collapsed;
                             Users.Items.Clear();
-                            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
+                            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
                             face.IsConsumed = true;
                         }
                        else

@@ -163,7 +163,7 @@ namespace NeoMir.Pages
             {
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
-                    if (this == Classes.AppManager.GetCurrentPage())
+                    if (this == Classes.FrameManager.GetCurrentPage())
                     {
                         if (gesture.Name == "Next Right" && !gesture.IsConsumed)
                         {
@@ -196,28 +196,28 @@ namespace NeoMir.Pages
 
         private void LaunchAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoTo(Classes.AppManager.AppsPageFrame);
+            Classes.FrameManager.GoTo(Classes.FrameManager.AppsPageFrame);
         }
 
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
 
-            Classes.AppManager.NextApp();
+            Classes.FrameManager.NextApp();
         }
 
         private void PrevAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.PrevApp();
+            Classes.FrameManager.PrevApp();
         }
 
         private void LockButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoTo(Classes.AppManager.LockPageFrame);
+            Classes.FrameManager.GoTo(Classes.FrameManager.LockPageFrame);
         }
         
         private void ApiPage_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ConnectToApi));
+            Classes.FrameManager.GoTo(Classes.FrameManager.PairPageFrame);
         }
     }
 }

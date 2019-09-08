@@ -61,7 +61,7 @@ namespace NeoMir.Pages
         private void textBox_Tapped(object sender, TappedRoutedEventArgs e)
         {
             TextBox img = (TextBox)sender;
-            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
+            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
         }
 
         private void textBox_PointerExited(object sender, PointerRoutedEventArgs e)

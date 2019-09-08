@@ -9,13 +9,24 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
-        <Image x:Name="AskId" Source="/Assets/MainPage/signright.png" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="500,0,400,0" Tapped="AskId_Tapped"/>
-        <TextBlock x:Name="ID" FontSize= "40" FontStyle= "Italic" Text= "" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="700,0,00,0"/>
-        <TextBlock x:Name="msgconnexion" FontSize= "40" FontStyle= "Italic" Text= "" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="500,150,50,0"/>
-        <TextBlock x:Name="time" FontSize= "40" FontStyle= "Italic" Text= "" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="800,300,50,0"/>
-
-        <Image x:Name= "HomeButton" Source="/Assets/AppPage/home.png"  HorizontalAlignment= "Center" VerticalAlignment= "Bottom" Height= "70" Margin= "0,0,0,50" Tapped="HomeButton_Tapped"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="50*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="Votre ID miroir:" FontSize="50" Margin="5"/>
+            <TextBlock x:Name="MirorID" FontSize="50" Margin="5"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Entrez l'ID miroir sur votre appliacation mobile afin de lier votre miroir à votre compte" 
+                   FontSize="25"
+                   HorizontalAlignment="Center"></TextBlock>
+            <TextBlock x:Name="LinkDone" Text="Votre NeoMir est maintenant lié à votre compte !" FontSize="50" Foreground="GreenYellow" Margin="10" HorizontalAlignment="Center"></TextBlock>
+        </StackPanel>
+        <StackPanel x:Name="BackHomePanel" Grid.Row= "1" VerticalAlignment="Bottom" Margin="0,0,0,10">
+            <TextBlock x:Name= "BackButtonName" HorizontalAlignment= "Center" VerticalAlignment= "Center" FontSize= "20" FontStyle= "Italic" Text= "Ecran principal" Margin="5"></TextBlock >
+            <Image x:Name= "BackButton" Source= "/Assets/MainPage/signinverse.png"  HorizontalAlignment= "Center" VerticalAlignment= "Bottom" Height= "70" Tapped= "BackButton_Tapped" Margin="5"/>
+        </StackPanel>
 
     </Grid>
 </Page>
