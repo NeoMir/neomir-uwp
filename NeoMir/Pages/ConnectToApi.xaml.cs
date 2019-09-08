@@ -1,5 +1,5 @@
 ﻿using DataAccessLibrary;
-using NeoMir.API;
+using DataAccessLibrary.API;
 using NeoMir.Classes;
 using System;
 using System.Collections.Generic;
@@ -95,7 +95,7 @@ namespace NeoMir.Pages
                // BackHomePanel.Visibility = Visibility.Collapsed;
                 LinkDone.Visibility = Visibility.Collapsed;
                 WaitForLink();
-            }
+            } 
             else if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.Paired)
             {
                 BackHomePanel.Visibility = Visibility.Visible;
@@ -105,7 +105,14 @@ namespace NeoMir.Pages
 
         private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
+            if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.FirstLaunch)
+            {
+                Classes.FrameManager.GoTo(Classes.FrameManager.LockPageFrame);
+            }
+            else
+            {
+                Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
+            }
         }
     }
 }

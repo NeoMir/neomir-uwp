@@ -1,5 +1,6 @@
 ﻿using NeoMir.Classes.Com;
 using NeoMir.Classes.Communication;
+using NeoMir.UserManagment;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -62,37 +63,42 @@ namespace NeoMir.Pages
             this.InitializeComponent();
             timerDateTime = new Timer(new TimerCallback((obj) => this.refreshDateTime()), null, 0, 1000);
             timerWeather = new Timer(new TimerCallback((obj) => this.refreshWeather()), null, 0, 900000);
-            getProfile();
             GestureSetup();
+            UserManager.Instance.ProfileChanged += GetProfile;
         }
 
         //
         // METHODS
         //
 
-        private async Task getProfile()
+        
+        /// <summary>
+        /// Recupère le profil de l'utilisateur actuellement connécté
+        /// </summary>
+        private void GetProfile()
         {
-            while (true)
-            {
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
-                {
-                    var id = "";
-                    var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
-                    using (var inputStream = await file.OpenReadAsync())
-                    using (var classicStream = inputStream.AsStreamForRead())
-                    using (var streamReader = new StreamReader(classicStream))
-                    {
-                        id = streamReader.ReadToEnd();
-                    }
+            //while (true)
+            //{
+            //    await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            //    {
+            //        var id = "";
+            //        var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
+            //        using (var inputStream = await file.OpenReadAsync())
+            //        using (var classicStream = inputStream.AsStreamForRead())
+            //        using (var streamReader = new StreamReader(classicStream))
+            //        {
+            //            id = streamReader.ReadToEnd();
+            //        }
 
-                    var http = new HttpClient();
-                    var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
-                    var response = await http.GetAsync(url);
-                    var result = await response.Content.ReadAsStringAsync();
-                    msgWelcome.Text = "Welcome " + result;
-                });
-                await Task.Delay(1000);
-            }
+            //        var http = new HttpClient();
+            //        var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
+            //        var response = await http.GetAsync(url);
+            //        var result = await response.Content.ReadAsStringAsync();
+            //        msgWelcome.Text = "Welcome " + result;
+            //    });
+            //    await Task.Delay(1000);
+            //}
+            msgWelcome.Text = "Bienvenue " + UserManager.Instance.CurrentProfile.Name;
         }
 
         /// <summary>

@@ -120,10 +120,12 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="API\APIManager.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="DataAccess.cs" />
     <Compile Include="Entitites\IEntity.cs" />
     <Compile Include="Entitites\Miror.cs" />
+    <Compile Include="Entitites\UserApp.cs" />
     <Compile Include="Entitites\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\DataAccessLibrary.rd.xml" />

@@ -43,6 +43,7 @@ namespace DataAccessLibrary
             Db = new SQLiteConnection(DbName);
             Db.CreateTable<Miror>();
             Db.CreateTable<UserProfile>();
+            Db.CreateTable<UserApp>();
         }
 
         /// <summary>

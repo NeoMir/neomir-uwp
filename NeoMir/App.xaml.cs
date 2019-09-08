@@ -8,7 +8,9 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using DataAccessLibrary;
 using DataAccessLibrary.Entitites;
-using NeoMir.API;
+using DataAccessLibrary.API;
+using NeoMir.UserManagment;
+using NeoMir.Helpers;
 
 namespace NeoMir
 {
@@ -23,7 +25,6 @@ namespace NeoMir
         /// </summary>
         public App()
         {
-            SetStatus();
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -35,6 +36,9 @@ namespace NeoMir
         /// <param name="e">Détails concernant la requête et le processus de lancement.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            SetStatus();
+            UserManager.Instance.Init();
+            UserAppsManager.Instance.Init();
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
 
             Frame rootFrame = Window.Current.Content as Frame;

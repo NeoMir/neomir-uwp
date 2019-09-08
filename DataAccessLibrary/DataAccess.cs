@@ -43,6 +43,24 @@ namespace DataAccessLibrary
             return Database.Instance.Db.Table<EntityType>().ToList();
         }
 
+        public static void DeleteEntity<EntityType>(EntityType entity)
+            where EntityType : IEntity, new()
+        {
+            Database.Instance.Db.Delete(entity);
+        }
+
+        public static void DropTable<EntityType>()
+            where EntityType : IEntity, new()
+        {
+            Database.Instance.Db.DropTable<EntityType>();
+        }
+
+        public static void DeleteTableEntries<EntityType>()
+           where EntityType : IEntity, new()
+        {
+            Database.Instance.Db.DeleteAll<EntityType>();
+        }
+
         public static Miror GetMiror()
         {
             List<Miror> query = Database.Instance.Db.Table<Miror>().ToList();

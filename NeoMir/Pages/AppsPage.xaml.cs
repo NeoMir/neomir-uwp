@@ -14,6 +14,10 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
+using DataAccessLibrary;
+using DataAccessLibrary.Entitites;
+using NeoMir.Helpers;
+using NeoMir.UserManagment;
 
 namespace NeoMir.Pages
 {
@@ -33,11 +37,12 @@ namespace NeoMir.Pages
         public static Thickness ImageMargin;
         private static int textMargin;
         private static int scrollViewerMargin;
-        private string textRowName = "Pré-configuration ";
+        private string textRowName = "Mes Applications";
         private static int ConfNumber;
-        private ItemsControl OpenAppsControl;
+        private ItemsControl openAppsControl;
         private int lag = 300;
         private int transitionHorizontaloffset = 200;
+        private ItemsControl installedAppControl;
         GestureCollector gestureCollector;
         bool isLock;
 
@@ -52,10 +57,12 @@ namespace NeoMir.Pages
             this.InitializeComponent();
             this.InitializeVariables();
             isLock = false;
-            ListOpenApps();
+            //ListOpenApps();
+            InitInstalledAppsLayout();
             GestureSetup();
+            GetAllInstalledApplication();
+            UserManager.Instance.ProfileChanged += LoadProfilApps;
         }
-
         //
         // METHODS
         //
@@ -72,40 +79,43 @@ namespace NeoMir.Pages
             textMargin = 300;
             scrollViewerMargin = 350;
             ConfNumber = 0;
-            OpenAppsControl = CreateOpenAppsList();
+            openAppsControl = CreateOpenAppsList();
         }
 
-        private async void getApplication()
+        private async Task GetAllInstalledApplication()
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            var mirorId = DataAccess.GetMiror().Id;
+            Classes.FrameManager.InstalledApps.Clear();
+            foreach (UserApp app in DataAccess.GetEntities<UserApp>())
             {
-                var id = "";
-                var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
-                using (var inputStream = await file.OpenReadAsync())
-                using (var classicStream = inputStream.AsStreamForRead())
-                using (var streamReader = new StreamReader(classicStream))
-                {
-                    id = streamReader.ReadToEnd();
-                }
-                var http = new HttpClient();
-                //var url = String.Format("http://www.martinbaud.com/V1/getAppInfo.php?id_mirror=" + id);
-                var url = String.Format("http://www.martinbaud.com/V1/getAppListFromProfil.php?email=test@test.com&id_profil=2");
-                var response = await http.GetAsync(url);
-                var result = await response.Content.ReadAsStringAsync();
-                string[] links = result.Split(' ');
-                Classes.FrameManager.InstalledApps.Clear();
+                FrameManager.CreateInstalledApp(app);
+            }
+            //var id = "";
+            //var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
+            //using (var inputStream = await file.OpenReadAsync())
+            //using (var classicStream = inputStream.AsStreamForRead())
+            //using (var streamReader = new StreamReader(classicStream))
+            //{
+            //    id = streamReader.ReadToEnd();
+            //}
+            //var http = new HttpClient();
+            ////var url = String.Format("http://www.martinbaud.com/V1/getAppInfo.php?id_mirror=" + id);
+            //var url = String.Format("http://www.martinbaud.com/V1/getAppListFromProfil.php?email=test@test.com&id_profil=2");
+            //var response = await http.GetAsync(url);
+            //var result = await response.Content.ReadAsStringAsync();
+            //string[] links = result.Split(' ');
+            //Classes.FrameManager.InstalledApps.Clear();
 
-                foreach (string link in links)
-                {
-                    if (link != "")
-                    {
-                        FrameManager.CreateInstalledApp(link);
-                    }
-                }
-            });
+            //foreach (string link in links)
+            //{
+            //    if (link != "")
+            //    {
+            //        FrameManager.CreateInstalledApp(link);
+            //    }
+            //}
         }
 
-    
+
         /// <summary>
         /// Display the open apps in the AppsPage
         /// </summary>
@@ -114,7 +124,7 @@ namespace NeoMir.Pages
             try
             {
                 // Clear the first row
-                OpenAppsControl.Items.Clear();
+                openAppsControl.Items.Clear();
                 int numberOfApps = Classes.FrameManager.Apps.Count;
 
                 if (numberOfApps == 0)
@@ -125,19 +135,19 @@ namespace NeoMir.Pages
                 {
                     // Ajout de chaque applications ouvertes dans la liste crée
                     NoOpenedAppsTitle.Visibility = Visibility.Collapsed;
-                    for (int i = 0; i < numberOfApps; i++)
+                    foreach (Classes.App app in FrameManager.Apps)
                     {
-                        Image image = new Image();
-                        image.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple.png"));
-                        image.Tag = i;
-                        image.Height = ImageSize;
-                        image.Width = ImageSize;
-                        image.Margin = ImageMargin;
-                        image.PointerEntered += new PointerEventHandler(image_PointerEntered);
-                        image.PointerExited += new PointerEventHandler(image_PointerExited);
-                        image.Tapped += new TappedEventHandler(image_Tapped);
+                        Image img = new Image();
+                        img.Source = new BitmapImage(new Uri(app.UserApp.AppIconLink));
+                        img.Height = ImageSize;
+                        img.Width = ImageSize;
+                        img.Margin = ImageMargin;
+                        img.PointerEntered += new PointerEventHandler(image_PointerEntered);
+                        img.PointerExited += new PointerEventHandler(image_PointerExited);
+                        img.Tapped += new TappedEventHandler(OpenAppTaped);
+                        img.Tag = app;
 
-                        OpenAppsControl.Items.Add(image);
+                        openAppsControl.Items.Add(img);
                     }
                 }
             }
@@ -157,18 +167,17 @@ namespace NeoMir.Pages
             itemsControl.Items.Clear();
             int numberOfApps = Classes.FrameManager.Apps.Count;
 
-            for (int i = 0; i < numberOfApps; i++)
+            foreach (Classes.App app in FrameManager.Apps)
             {
                 Image img = new Image();
-                img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple1.png"));
-                img.Tag = Classes.FrameManager.Apps[i].Link;
-                img.Height = CloseAppImageSize;
-                img.Width = CloseAppImageSize;
+                img.Source = new BitmapImage(new Uri(app.UserApp.AppIconLink));
+                img.Height = ImageSize;
+                img.Width = ImageSize;
                 img.Margin = ImageMargin;
-                img.VerticalAlignment = VerticalAlignment.Top;
                 img.PointerEntered += new PointerEventHandler(image_PointerEntered);
                 img.PointerExited += new PointerEventHandler(image_PointerExited);
-                img.Tapped += new TappedEventHandler(image_Tapped3);
+                img.Tapped += new TappedEventHandler(CloseAppTapped);
+                img.Tag = app;
 
                 itemsControl.Items.Add(img);
             }
@@ -218,7 +227,7 @@ namespace NeoMir.Pages
         /// Display a dialog to prevent the user that he is about to close an app
         /// </summary>
         /// <param name="link">The link of the chosen app</param>
-        async private void DisplayCloseAppDialog(string link)
+        async private void DisplayCloseAppDialog(Classes.App app)
         {
             ContentDialog contentDialog = new ContentDialog
             {
@@ -234,9 +243,9 @@ namespace NeoMir.Pages
             if (result == ContentDialogResult.Primary)
             {
                 // Close the chosen app
-                foreach (Classes.App app in Classes.FrameManager.Apps)
+                foreach (Classes.App appli in Classes.FrameManager.Apps)
                 {
-                    if (app.Link == link)
+                    if (appli == app)
                     {
                         Classes.FrameManager.Apps.Remove(app);
                         backgroundCloseApp.Visibility = Visibility.Collapsed;
@@ -294,99 +303,24 @@ namespace NeoMir.Pages
         // [Test] Fonction qui remplie des lignes d'applications avec de fausses applications
         private void FillApps(ItemsControl itemsControl)
         {
-            //itemsControl.Items.Clear();
-            //Classes.AppManager.InstalledApps.Clear();
-            int numberOfApps = 20;
-
-            // test for images
-            int numberImage = 0;
-            
-            //getApplication();
-            foreach (Classes.App app in Classes.FrameManager.InstalledApps)
+            itemsControl.Items.Clear();
+            foreach (Classes.App app in FrameManager.InstalledApps)
             {
-                Image img = new Image();
-                img.Tag = app;
+                if (app.UserApp.ProfileId == 0 || app.UserApp.ProfileId == UserManager.Instance.CurrentProfile.Id)
+                {
+                    Image img = new Image();
+                    img.Source = new BitmapImage(new Uri(app.UserApp.AppIconLink));
+                    img.Height = ImageSize;
+                    img.Width = ImageSize;
+                    img.Margin = ImageMargin;
+                    img.PointerEntered += new PointerEventHandler(image_PointerEntered);
+                    img.PointerExited += new PointerEventHandler(image_PointerExited);
+                    img.Tapped += new TappedEventHandler(InstaledAppTaped);
+                    img.Tag = app;
 
-               
-                if (numberImage == 0)
-                {
-                    img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple.png"));
-                   
-                    numberImage++;
+                    itemsControl.Items.Add(img);
                 }
-                else if (numberImage == 1)
-                {
-                    img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple1.png"));
-                    
-                    numberImage++;
-                }
-                else if (numberImage == 2)
-                {
-                    img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple2.png"));
-                    
-                    numberImage++;
-                }
-                else if (numberImage == 3)
-                {
-                    img.Source = new BitmapImage(new Uri("ms-appx:///Assets/AppsPage/exemple3.png"));
-                    
-                    numberImage = 0;
-                }
-                img.Height = ImageSize;
-                img.Width = ImageSize;
-                img.Margin = ImageMargin;
-                img.PointerEntered += new PointerEventHandler(image_PointerEntered);
-                img.PointerExited += new PointerEventHandler(image_PointerExited);
-                img.Tapped += new TappedEventHandler(image_Tapped2);
-
-                itemsControl.Items.Add(img);
             }
-        }
-
-        // [Test] Fonction qui rajoute de manière automatique les différentes lignes de fausses configurations d'applications
-        private void AddRowButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            getApplication();
-            Task.Delay(2000);
-            ItemsControl itemsControl = new ItemsControl();
-            TextBlock textBlock = new TextBlock();
-            ScrollViewer scrollViewer = new ScrollViewer();
-
-            TransitionCollection transitions = new TransitionCollection();
-            EntranceThemeTransition entranceThemeTransition = new EntranceThemeTransition();
-
-            // TextBlock Configuration
-            textBlock.Text = textRowName + ConfNumber;
-            textBlock.FontSize = 25;
-            textBlock.FontStyle = Windows.UI.Text.FontStyle.Italic;
-            textBlock.Margin = new Thickness(20, textMargin, 0, 0);
-            textBlock.VerticalAlignment = VerticalAlignment.Top;
-            textBlock.HorizontalAlignment = HorizontalAlignment.Left;
-            ConfNumber++;
-            textMargin += lag;
-
-            // ScrollViewer Configuration
-            scrollViewer.HorizontalScrollMode = ScrollMode.Enabled;
-            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            scrollViewer.VerticalScrollMode = ScrollMode.Disabled;
-            scrollViewer.VerticalAlignment = VerticalAlignment.Top;
-            scrollViewer.Margin = new Thickness(0, scrollViewerMargin, 0, 0);
-            scrollViewerMargin += lag;
-
-            entranceThemeTransition.FromHorizontalOffset = transitionHorizontaloffset;
-            entranceThemeTransition.IsStaggeringEnabled = true;
-            transitions.Add(entranceThemeTransition);
-            itemsControl.ItemContainerTransitions = transitions;
-            itemsControl.ItemsPanel = CreateTemplate();
-
-            scrollViewer.Content = itemsControl;
-
-            // Add all to the grid
-            AppsRows.Children.Add(textBlock);
-            AppsRows.Children.Add(scrollViewer);
-
-            FillApps(itemsControl);
-
         }
 
         private void GestureSetup()
@@ -403,12 +337,7 @@ namespace NeoMir.Pages
                 {
                     if (this == Classes.FrameManager.GetCurrentPage() && !isLock)
                     {
-                        if (gesture.Name == "Validate" && !gesture.IsConsumed)
-                        {
-                            AddRowButton_Tapped(null, null);
-                            gesture.IsConsumed = true;
-                        }
-                        else if (gesture.Name == "Next Left" && !gesture.IsConsumed)
+                        if (gesture.Name == "Next Left" && !gesture.IsConsumed)
                         {
                             BackButton_Tapped(null, null);
                             gesture.IsConsumed = true;
@@ -438,12 +367,12 @@ namespace NeoMir.Pages
             Classes.FrameManager.LaunchApp(Classes.FrameManager.Apps[(int)img.Tag]);
         }
 
-        private void image_Tapped2(object sender, TappedRoutedEventArgs e)
+        private void InstaledAppTaped(object sender, TappedRoutedEventArgs e)
         {
             Image img = (Image)sender;
             if (Classes.FrameManager.Apps.Count < Classes.FrameManager.MaxApp)
             {
-                
+
                 Classes.FrameManager.LaunchInstalledApp((Classes.App)img.Tag);
                 ListOpenApps();
             }
@@ -451,10 +380,18 @@ namespace NeoMir.Pages
             {
                 Classes.App app = (Classes.App)img.Tag;
                 // Maximum apps reached, ask the user confirmation to replace one.
-                Classes.FrameManager.PendingApp = app.Link;
+                Classes.FrameManager.PendingApp = app.UserApp.AppLink;
                 DisplayMaximumAppDialog();
             }
         }
+
+        private void OpenAppTaped(object sender, TappedRoutedEventArgs e)
+        {
+            Image img = (Image)sender;
+            Classes.FrameManager.LaunchInstalledApp((Classes.App)img.Tag);
+        }
+
+
 
         private void OpenAppWithGesture()
         {
@@ -473,10 +410,10 @@ namespace NeoMir.Pages
         }
 
         // For the close process
-        private void image_Tapped3(object sender, TappedRoutedEventArgs e)
+        private void CloseAppTapped(object sender, TappedRoutedEventArgs e)
         {
             Image img = (Image)sender;
-            DisplayCloseAppDialog(img.Tag as string);
+            DisplayCloseAppDialog(img.Tag as Classes.App);
         }
 
         private void image_PointerExited(object sender, PointerRoutedEventArgs e)
@@ -521,7 +458,56 @@ namespace NeoMir.Pages
 
         private void SynchronizeButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            //TODO call API to get profile apps again
+        }
 
+        private void LoadProfilApps()
+        {
+            FrameManager.Apps.Clear();
+            openAppsControl.Items.Clear();
+            FillApps(installedAppControl);
+        }
+
+        /// <summary>
+        /// Init the scroolviewer for display all installed apps
+        /// </summary>
+        private void InitInstalledAppsLayout()
+        {
+            TextBlock textBlock = new TextBlock();
+            ScrollViewer scrollViewer = new ScrollViewer();
+            installedAppControl = new ItemsControl();
+            TransitionCollection transitions = new TransitionCollection();
+            EntranceThemeTransition entranceThemeTransition = new EntranceThemeTransition();
+
+            // TextBlock Configuration
+            textBlock.Text = textRowName;
+            textBlock.FontSize = 25;
+            textBlock.FontStyle = Windows.UI.Text.FontStyle.Italic;
+            textBlock.Margin = new Thickness(20, textMargin, 0, 0);
+            textBlock.VerticalAlignment = VerticalAlignment.Top;
+            textBlock.HorizontalAlignment = HorizontalAlignment.Left;
+            ConfNumber++;
+            textMargin += lag;
+
+            // ScrollViewer Configuration
+            scrollViewer.HorizontalScrollMode = ScrollMode.Enabled;
+            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            scrollViewer.VerticalScrollMode = ScrollMode.Disabled;
+            scrollViewer.VerticalAlignment = VerticalAlignment.Top;
+            scrollViewer.Margin = new Thickness(0, scrollViewerMargin, 0, 0);
+            scrollViewerMargin += lag;
+
+            entranceThemeTransition.FromHorizontalOffset = transitionHorizontaloffset;
+            entranceThemeTransition.IsStaggeringEnabled = true;
+            transitions.Add(entranceThemeTransition);
+            installedAppControl.ItemContainerTransitions = transitions;
+            installedAppControl.ItemsPanel = CreateTemplate();
+
+            scrollViewer.Content = installedAppControl;
+
+            // Add all to the grid
+            AppsRows.Children.Add(textBlock);
+            AppsRows.Children.Add(scrollViewer);
         }
     }
 }

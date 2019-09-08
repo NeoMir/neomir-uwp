@@ -38,9 +38,6 @@
         <!-- No Opened Apps title -->
         <TextBlock Grid.ColumnSpan="8" Grid.Row="0" x:Name="NoOpenedAppsTitle" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize= "30" Text="Aucune application ouverte" ></TextBlock >
 
-        <!--Add row button (development function) -->
-        <Image Grid.Column= "7" Grid.Row= "8" Grid.ColumnSpan= "1" x:Name="AddRowButton" Source= "/Assets/AppsPage/plus.png"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height= "70" Tapped= "AddRowButton_Tapped" />
-        
         <!-- Remove app button -->
         <Image Grid.Column= "6" Grid.Row= "7" Grid.ColumnSpan= "1" x:Name="RemoveAppButton" Source= "/Assets/AppsPage/trash.png"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height= "70" Tapped="RemoveAppButton_Tapped" />
 

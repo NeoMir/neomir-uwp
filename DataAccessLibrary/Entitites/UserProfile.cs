@@ -13,5 +13,6 @@ namespace DataAccessLibrary.Entitites
         public int Id { get; set; }
         public string Name { get; set; }
         public byte[] Face { get; set; }
+        public string FaceLink { get; set; }
     }
 }

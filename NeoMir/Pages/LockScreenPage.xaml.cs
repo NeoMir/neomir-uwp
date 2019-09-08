@@ -1,5 +1,7 @@
-﻿using NeoMir.Classes.Com;
+﻿using DataAccessLibrary.Entitites;
+using NeoMir.Classes.Com;
 using NeoMir.Classes.Communication;
+using NeoMir.UserManagment;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -43,10 +45,6 @@ namespace NeoMir.Pages
         {
             this.InitializeComponent();
             StartBackgroundMedia();
-            Classes.UserManager.Users.Clear();
-            Classes.UserManager.Users.Add(new Classes.User("Robin", "DACALOR"));
-            Classes.UserManager.Users.Add(new Classes.User("Ambroise", "DAMIER"));
-            Classes.UserManager.Users.Add(new Classes.User("Martin", "BAUD"));
             CollectorSetup();
         }
 
@@ -73,14 +71,11 @@ namespace NeoMir.Pages
 
         private void ListUsers()
         {
-            int numberOfUsers = Classes.UserManager.Users.Count;
-
-            for (int i = 0; i < numberOfUsers; i++)
+            foreach (UserProfile profile in UserManager.Instance.Profiles)
             {
                 Button button = new Button();
-
-                button.Content = Classes.UserManager.Users[i].FirstName + ' ' + Classes.UserManager.Users[i].LastName;
-                button.Tag = Classes.UserManager.Users[i];
+                button.Content = profile.Name;
+                button.Tag = profile;
                 button.FontSize = 50;
                 button.FontStyle = Windows.UI.Text.FontStyle.Italic;
                 button.FontWeight = Windows.UI.Text.FontWeights.Bold;
@@ -104,7 +99,7 @@ namespace NeoMir.Pages
         private void button_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Button button = (Button)sender;
-            Classes.UserManager.currentUser = (Classes.User)button.Tag;
+            UserManager.Instance.CurrentProfile = (UserProfile)button.Tag;
             IsShowed = false;
             MainScroll.Visibility = Visibility.Collapsed;
             Users.Items.Clear();

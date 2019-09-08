@@ -1,6 +1,8 @@
-﻿using System;
+﻿using DataAccessLibrary.Entitites;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -53,17 +55,15 @@ namespace NeoMir.Classes
         /// <param name="link">The link of the app</param>
         public static void CreateApp(string link)
         {
-            App app = new App(link);
-            Apps.Add(app);
+            Apps.Add(InstalledApps.Where((app) => app.UserApp.AppLink == link).FirstOrDefault());
             AppPosition = Apps.Count;
-            Apps[AppPosition - 1].Frame.Navigate(typeof(Pages.AppPage), Apps[AppPosition - 1].Link);
+            Apps[AppPosition - 1].Frame.Navigate(typeof(Pages.AppPage), Apps[AppPosition - 1].UserApp.AppLink);
             LaunchApp(Apps[AppPosition - 1]);
         }
 
-        public static void CreateInstalledApp(string link)
+        public static void CreateInstalledApp(UserApp app)
         {
-            App app = new App(link);
-            InstalledApps.Add(app);
+            InstalledApps.Add(new App(app));
         }
 
         /// <summary>
@@ -78,8 +78,11 @@ namespace NeoMir.Classes
 
         public static void LaunchInstalledApp(App app)
         {
-            app.Frame.Navigate(typeof(Pages.AppPage), app.Link);
-            Apps.Add(app);
+            if (!Apps.Contains(app))
+            {
+                app.Frame.Navigate(typeof(Pages.AppPage), app.UserApp.AppLink);
+                Apps.Add(app);
+            }
             Window.Current.Content = app.Frame;
             Window.Current.Activate();
         }
@@ -149,10 +152,6 @@ namespace NeoMir.Classes
         public static void GetCurrentUserInstalledApps()
         {
             //TODO: API Request
-            CreateInstalledApp("https://electronjs.org/");
-            CreateInstalledApp("https://unity3d.com/fr");
-            CreateInstalledApp("https://ionicframework.com/");
-            CreateInstalledApp("https://electronjs.org/");
         }
         #endregion
     }

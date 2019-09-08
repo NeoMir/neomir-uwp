@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using DataAccessLibrary.Entitites;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -10,16 +11,15 @@ namespace NeoMir.Classes
 
         // Frame of the app
         public Frame Frame { get; private set; }
-        // Link of the app
-        public string Link { get; private set; }
-        // Preview of the app
-        public BitmapSource Preview { get; set; }
+       
+        //Database app representation
+        public UserApp UserApp { get; set; }
 
         // CONSTRUCTOR
-        public App(string _link)
+        public App(UserApp app)
         {
             Frame = new Frame();
-            Link = _link;
+            UserApp = app;
         }
 
         // METHODS

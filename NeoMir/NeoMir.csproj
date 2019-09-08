@@ -92,7 +92,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="API\APIManager.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -106,17 +105,15 @@
     <Compile Include="Classes\Config.cs" />
     <Compile Include="Classes\App.cs" />
     <Compile Include="Classes\GlobalStatusManager.cs" />
-    <Compile Include="Classes\User.cs" />
-    <Compile Include="Classes\UserManager.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
+    <Compile Include="Helpers\AsyncHelper.cs" />
+    <Compile Include="Helpers\ImagingHelper.cs" />
+    <Compile Include="Helpers\MemoryRandomAccessStream.cs" />
     <Compile Include="Pages\AppPage.xaml.cs">
       <DependentUpon>AppPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\AppsPage.xaml.cs">
       <DependentUpon>AppsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ChooseUserPage.xaml.cs">
-      <DependentUpon>ChooseUserPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\LockScreenPage.xaml.cs">
       <DependentUpon>LockScreenPage.xaml</DependentUpon>
@@ -129,6 +126,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Wheather.cs" />
+    <Compile Include="UserManagment\User.cs" />
+    <Compile Include="UserManagment\UserAppsManager.cs" />
+    <Compile Include="UserManagment\UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -136,26 +136,63 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\2020_logo_neomir.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\2020_logo_neomir.altform-unplated_targetsize-24.png" />
+    <Content Include="Assets\2020_logo_neomir.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\2020_logo_neomir.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\2020_logo_neomir.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\2020_logo_neomir.png" />
+    <Content Include="Assets\2020_logo_neomir.scale-100.png" />
+    <Content Include="Assets\2020_logo_neomir.scale-125.png" />
+    <Content Include="Assets\2020_logo_neomir.scale-150.png" />
+    <Content Include="Assets\2020_logo_neomir.scale-200.png" />
+    <Content Include="Assets\2020_logo_neomir.scale-400.png" />
+    <Content Include="Assets\2020_logo_neomir.targetsize-16.png" />
+    <Content Include="Assets\2020_logo_neomir.targetsize-24.png" />
+    <Content Include="Assets\2020_logo_neomir.targetsize-256.png" />
+    <Content Include="Assets\2020_logo_neomir.targetsize-32.png" />
+    <Content Include="Assets\2020_logo_neomir.targetsize-48.png" />
     <Content Include="Assets\AppPage\home.png" />
     <Content Include="Assets\AppPage\menu.png" />
+    <Content Include="Assets\AppsPage\epitechIcon.png" />
     <Content Include="Assets\AppsPage\exemple1.png" />
     <Content Include="Assets\AppsPage\exemple.png" />
     <Content Include="Assets\AppsPage\exemple2.png" />
     <Content Include="Assets\AppsPage\exemple3.png" />
+    <Content Include="Assets\AppsPage\facebookIcon.png" />
+    <Content Include="Assets\AppsPage\gmailIcon.png" />
+    <Content Include="Assets\AppsPage\mapsIcon.png" />
     <Content Include="Assets\AppsPage\plus.png" />
     <Content Include="Assets\AppsPage\synchronize.png" />
+    <Content Include="Assets\AppsPage\trainIcon.png" />
     <Content Include="Assets\AppsPage\trash.png" />
-    <Content Include="Assets\BadgeLogo.scale-100.png" />
-    <Content Include="Assets\BadgeLogo.scale-125.png" />
-    <Content Include="Assets\BadgeLogo.scale-150.png" />
-    <Content Include="Assets\BadgeLogo.scale-200.png" />
-    <Content Include="Assets\BadgeLogo.scale-400.png" />
+    <Content Include="Assets\AppsPage\YoutubeIcon.png" />
+    <Content Include="Assets\badge.scale-100.png" />
+    <Content Include="Assets\badge.scale-125.png" />
+    <Content Include="Assets\badge.scale-150.png" />
+    <Content Include="Assets\badge.scale-200.png" />
+    <Content Include="Assets\badge.scale-400.png" />
     <Content Include="Assets\CloseAppPage\left-arrow.png" />
-    <Content Include="Assets\LargeTile.scale-100.png" />
-    <Content Include="Assets\LargeTile.scale-125.png" />
-    <Content Include="Assets\LargeTile.scale-150.png" />
-    <Content Include="Assets\LargeTile.scale-200.png" />
-    <Content Include="Assets\LargeTile.scale-400.png" />
+    <Content Include="Assets\demarage.scale-100.png" />
+    <Content Include="Assets\demarage.scale-125.png" />
+    <Content Include="Assets\demarage.scale-150.png" />
+    <Content Include="Assets\demarage.scale-200.png" />
+    <Content Include="Assets\demarage.scale-400.png" />
+    <Content Include="Assets\icone.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\icone.altform-unplated_targetsize-24.png" />
+    <Content Include="Assets\icone.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\icone.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\icone.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\icone.scale-100.png" />
+    <Content Include="Assets\icone.scale-125.png" />
+    <Content Include="Assets\icone.scale-150.png" />
+    <Content Include="Assets\icone.scale-200.png" />
+    <Content Include="Assets\icone.scale-400.png" />
+    <Content Include="Assets\icone.targetsize-16.png" />
+    <Content Include="Assets\icone.targetsize-24.png" />
+    <Content Include="Assets\icone.targetsize-256.png" />
+    <Content Include="Assets\icone.targetsize-32.png" />
+    <Content Include="Assets\icone.targetsize-48.png" />
     <Content Include="Assets\MainPage\lock.png" />
     <Content Include="Assets\MainPage\numero1.png" />
     <Content Include="Assets\MainPage\numero2.png" />
@@ -165,38 +202,17 @@
     <Content Include="Assets\MainPage\signleft.png" />
     <Content Include="Assets\MainPage\signright.png" />
     <Content Include="Assets\MainPage\smoke.mp4" />
-    <Content Include="Assets\SmallTile.scale-100.png" />
-    <Content Include="Assets\SmallTile.scale-125.png" />
-    <Content Include="Assets\SmallTile.scale-150.png" />
-    <Content Include="Assets\SmallTile.scale-200.png" />
-    <Content Include="Assets\SmallTile.scale-400.png" />
-    <Content Include="Assets\SplashScreen.scale-100.png" />
-    <Content Include="Assets\SplashScreen.scale-125.png" />
-    <Content Include="Assets\SplashScreen.scale-150.png" />
-    <Content Include="Assets\SplashScreen.scale-400.png" />
-    <Content Include="Assets\Square150x150Logo.scale-100.png" />
-    <Content Include="Assets\Square150x150Logo.scale-125.png" />
-    <Content Include="Assets\Square150x150Logo.scale-150.png" />
-    <Content Include="Assets\Square150x150Logo.scale-400.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-16.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-256.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-32.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-48.png" />
-    <Content Include="Assets\Square44x44Logo.scale-100.png" />
-    <Content Include="Assets\Square44x44Logo.scale-125.png" />
-    <Content Include="Assets\Square44x44Logo.scale-150.png" />
-    <Content Include="Assets\Square44x44Logo.scale-400.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
-    <Content Include="Assets\StoreLogo.scale-100.png" />
-    <Content Include="Assets\StoreLogo.scale-125.png" />
-    <Content Include="Assets\StoreLogo.scale-150.png" />
-    <Content Include="Assets\StoreLogo.scale-200.png" />
-    <Content Include="Assets\StoreLogo.scale-400.png" />
     <Content Include="Assets\MainPage\cube.png" />
+    <Content Include="Assets\package.scale-100.png" />
+    <Content Include="Assets\package.scale-125.png" />
+    <Content Include="Assets\package.scale-150.png" />
+    <Content Include="Assets\package.scale-200.png" />
+    <Content Include="Assets\package.scale-400.png" />
+    <Content Include="Assets\vignette.scale-100.png" />
+    <Content Include="Assets\vignette.scale-125.png" />
+    <Content Include="Assets\vignette.scale-150.png" />
+    <Content Include="Assets\vignette.scale-200.png" />
+    <Content Include="Assets\vignette.scale-400.png" />
     <Content Include="Assets\weather-icons\foggy-day.png" />
     <Content Include="Assets\weather-icons\crescent-moon.png" />
     <Content Include="Assets\weather-icons\cloud-and-half-moon.png" />
@@ -209,18 +225,8 @@
     <Content Include="Assets\weather-icons\rainy-cloud-outline.png" />
     <Content Include="Assets\weather-icons\thunderstorm.png" />
     <Content Include="Assets\weather-icons\sunny-day.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="id\id.txt" />
     <Content Include="Properties\Default.rd.xml" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\SplashScreen.scale-200.png" />
-    <Content Include="Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -232,10 +238,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\AppsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\ChooseUserPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
