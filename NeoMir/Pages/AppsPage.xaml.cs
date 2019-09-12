@@ -333,26 +333,24 @@ namespace NeoMir.Pages
         {
             if (!gesture.IsConsumed)
             {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+
+                if (this == Classes.FrameManager.GetCurrentPage() && !isLock)
                 {
-                    if (this == Classes.FrameManager.GetCurrentPage() && !isLock)
+                    if (gesture.Name == "Next Left" && !gesture.IsConsumed)
                     {
-                        if (gesture.Name == "Next Left" && !gesture.IsConsumed)
-                        {
-                            BackButton_Tapped(null, null);
-                            gesture.IsConsumed = true;
-                        }
-                        else if (gesture.Name == "Next Right" && ConfNumber >= 1)
-                        {
-                            OpenAppWithGesture();
-                            gesture.IsConsumed = true;
-                        }
+                        BackButton_Tapped(null, null);
+                        gesture.IsConsumed = true;
                     }
-                    if (gesture.Name == "Lock")
+                    else if (gesture.Name == "Validate" && ConfNumber >= 1)
                     {
-                        isLock = !isLock;
+                        OpenAppWithGesture();
+                        gesture.IsConsumed = true;
                     }
-                });
+                }
+                if (gesture.Name == "Lock")
+                {
+                    isLock = !isLock;
+                }
             }
         }
 
@@ -395,18 +393,7 @@ namespace NeoMir.Pages
 
         private void OpenAppWithGesture()
         {
-            string tag = "https://unity3d.com/fr";
-            if (Classes.FrameManager.Apps.Count < Classes.FrameManager.MaxApp)
-            {
-                Classes.FrameManager.CreateApp(tag);
-                ListOpenApps();
-            }
-            else
-            {
-                // Maximum apps reached, ask the user confirmation to replace one.
-                Classes.FrameManager.PendingApp = tag;
-                DisplayMaximumAppDialog();
-            }
+            Classes.FrameManager.LaunchInstalledApp(Classes.FrameManager.InstalledApps[0]);
         }
 
         // For the close process

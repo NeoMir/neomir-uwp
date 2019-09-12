@@ -154,6 +154,7 @@
     <Content Include="Assets\2020_logo_neomir.targetsize-48.png" />
     <Content Include="Assets\AppPage\home.png" />
     <Content Include="Assets\AppPage\menu.png" />
+    <Content Include="Assets\AppsPage\brosse.jpg" />
     <Content Include="Assets\AppsPage\epitechIcon.png" />
     <Content Include="Assets\AppsPage\exemple1.png" />
     <Content Include="Assets\AppsPage\exemple.png" />
@@ -257,6 +258,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.9</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.2</Version>
     </PackageReference>
     <PackageReference Include="sqlite-net">
       <Version>1.0.8</Version>

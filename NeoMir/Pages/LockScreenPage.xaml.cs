@@ -4,19 +4,14 @@ using NeoMir.Classes.Communication;
 using NeoMir.UserManagment;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -31,12 +26,8 @@ namespace NeoMir.Pages
 
         public static int HoverSize = 20;
         public static Thickness BoxMargin = new Thickness(10);
-        public static bool IsShowed = false;
         private GestureCollector gestureCollector;
         private FaceCollector faceCollector;
-        private List<string> owners = new List<string>() { "Marwin", "Quentin", "Ambroise", "Ambroise" };
-
-
 
         //
         // CONSTRUCTOR
@@ -46,6 +37,7 @@ namespace NeoMir.Pages
             this.InitializeComponent();
             StartBackgroundMedia();
             CollectorSetup();
+            ListUsers();
         }
 
         //
@@ -71,6 +63,7 @@ namespace NeoMir.Pages
 
         private void ListUsers()
         {
+            Users.Items.Clear();
             foreach (UserProfile profile in UserManager.Instance.Profiles)
             {
                 Button button = new Button();
@@ -89,7 +82,6 @@ namespace NeoMir.Pages
 
                 Users.Items.Add(button);
             }
-
         }
 
         //
@@ -100,9 +92,6 @@ namespace NeoMir.Pages
         {
             Button button = (Button)sender;
             UserManager.Instance.CurrentProfile = (UserProfile)button.Tag;
-            IsShowed = false;
-            MainScroll.Visibility = Visibility.Collapsed;
-            Users.Items.Clear();
             Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
         }
 
@@ -120,33 +109,23 @@ namespace NeoMir.Pages
             button.Width -= HoverSize;
         }
 
-        private void _mediaPlayerElement_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            MainScroll.Visibility = Visibility.Visible;
-            if (!IsShowed)
-                ListUsers();
-            IsShowed = true;
-
-        }
-
         private async void ApplyGesture(Gesture gesture)
         {
             if (!gesture.IsConsumed)
             {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                if (this == Classes.FrameManager.GetCurrentPage())
                 {
-                    if (this == Classes.FrameManager.GetCurrentPage())
+                    if (gesture.Name == "Lock" && !gesture.IsConsumed)
                     {
-                        if (gesture.Name == "Lock" && !gesture.IsConsumed)
+                        if (UserManager.Instance.CurrentProfile == null)
                         {
-                            IsShowed = false;
-                            MainScroll.Visibility = Visibility.Collapsed;
-                            Users.Items.Clear();
-                            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
-                            gesture.IsConsumed = true;
+                            UserManager.Instance.CurrentProfile = UserManager.Instance.Profiles[0];
                         }
+                        Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
+                        gesture.IsConsumed = true;
+
                     }
-                });
+                }
             }
         }
 
@@ -154,30 +133,29 @@ namespace NeoMir.Pages
         {
             if (!face.IsConsumed)
             {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+
+                if (this == Classes.FrameManager.GetCurrentPage())
                 {
-                    if (this == Classes.FrameManager.GetCurrentPage())
+                    UserProfile profile = UserManager.Instance.Profiles.Where((u) => u.Name == face.Name).FirstOrDefault();
+                    if (profile != null)
                     {
-                       if (owners.Contains(face.Name))
-                        {
-                            this.DetectedMessage.Text = string.Format("{0} has been detected", face.Name);
-                            await Task.Delay(2000);
-                            this.DetectedMessage.Text = string.Empty;
-                            MainScroll.Visibility = Visibility.Collapsed;
-                            Users.Items.Clear();
-                            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
-                            face.IsConsumed = true;
-                        }
-                       else
-                        {
-                            this.DetectedMessage.Foreground = new SolidColorBrush(Colors.Red);
-                            this.DetectedMessage.Text = string.Format("{0} is not a valid user", face.Name);
-                            await Task.Delay(2000);
-                            this.DetectedMessage.Text = string.Empty;
-                            this.DetectedMessage.Foreground = new SolidColorBrush(Colors.ForestGreen);
-                        }
+                        this.DetectedMessage.Text = string.Format("{0} has been detected", face.Name);
+                        this.DetectedMessage.Text = string.Empty;
+                        //MainScroll.Visibility = Visibility.Collapsed;
+                        UserManager.Instance.CurrentProfile = profile;
+                        face.IsConsumed = true;
+                        await Task.Delay(2000);
+                        Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
                     }
-                });
+                    else
+                    {
+                        this.DetectedMessage.Foreground = new SolidColorBrush(Colors.Red);
+                        this.DetectedMessage.Text = string.Format("{0} is not a valid user", face.Name);
+                        await Task.Delay(2000);
+                        this.DetectedMessage.Text = string.Empty;
+                        this.DetectedMessage.Foreground = new SolidColorBrush(Colors.ForestGreen);
+                    }
+                }
             }
         }
     }

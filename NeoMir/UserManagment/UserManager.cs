@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary;
+using DataAccessLibrary.API;
 using DataAccessLibrary.Entitites;
 using NeoMir.Classes;
 using System;
@@ -14,6 +15,7 @@ namespace NeoMir.UserManagment
         private static object syncRoot = new object();
         private static volatile UserManager instance;
         private UserProfile currentProfile;
+
 
         /// <summary>
         /// Gets an Instance of the classe if the it's already existing
@@ -64,7 +66,7 @@ namespace NeoMir.UserManagment
             }
         }
 
-        public void Init()
+        public async Task Init()
         {
             if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.FirstLaunch)
             {
@@ -72,7 +74,12 @@ namespace NeoMir.UserManagment
             }
             else
             {
-                //TODO : Call API to get profile linked to this miror
+                List<string> list = await APIManager.GetUserProfiles(DataAccess.GetMiror().Usermail);
+                DataAccess.DeleteTableEntries<UserProfile>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    DataAccess.AddEntity(new UserProfile() { Id = i, Name = list[i] });
+                }
             }
         }
 

@@ -71,7 +71,7 @@ namespace NeoMir.Pages
         // METHODS
         //
 
-        
+
         /// <summary>
         /// Recupère le profil de l'utilisateur actuellement connécté
         /// </summary>
@@ -167,32 +167,29 @@ namespace NeoMir.Pages
         {
             if (!gesture.IsConsumed)
             {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                if (this == Classes.FrameManager.GetCurrentPage())
                 {
-                    if (this == Classes.FrameManager.GetCurrentPage())
+                    if (gesture.Name == "Next Right" && !gesture.IsConsumed)
                     {
-                        if (gesture.Name == "Next Right" && !gesture.IsConsumed)
-                        {
-                            NextAppButton_Tapped(null, null);
-                            gesture.IsConsumed = true;
-                        }
-                        else if (gesture.Name == "Validate" && !gesture.IsConsumed) 
-                        {
-                            LaunchAppButton_Tapped(null, null);
-                            gesture.IsConsumed = true;
-                        }
-                        else if (gesture.Name == "Back" && !gesture.IsConsumed)
-                        {
-                            PrevAppButton_Tapped(null, null);
-                            gesture.IsConsumed = true;
-                        }
-                        else if (gesture.Name == "Lock" && !gesture.IsConsumed)
-                        {
-                            LockButton_Tapped(null, null);
-                            gesture.IsConsumed = true;
-                        }
+                        NextAppButton_Tapped(null, null);
+                        gesture.IsConsumed = true;
                     }
-                });
+                    else if (gesture.Name == "Validate" && !gesture.IsConsumed)
+                    {
+                        LaunchAppButton_Tapped(null, null);
+                        gesture.IsConsumed = true;
+                    }
+                    else if (gesture.Name == "Back" && !gesture.IsConsumed)
+                    {
+                        PrevAppButton_Tapped(null, null);
+                        gesture.IsConsumed = true;
+                    }
+                    else if (gesture.Name == "Lock" && !gesture.IsConsumed)
+                    {
+                        LockButton_Tapped(null, null);
+                        gesture.IsConsumed = true;
+                    }
+                }
             }
         }
 
@@ -220,7 +217,7 @@ namespace NeoMir.Pages
         {
             Classes.FrameManager.GoTo(Classes.FrameManager.LockPageFrame);
         }
-        
+
         private void ApiPage_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Classes.FrameManager.GoTo(Classes.FrameManager.PairPageFrame);

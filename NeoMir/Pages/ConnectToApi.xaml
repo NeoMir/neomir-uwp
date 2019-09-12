@@ -18,6 +18,7 @@
             <TextBlock x:Name="MirorID" FontSize="50" Margin="5"/>
         </StackPanel>
         <StackPanel Grid.Row="1">
+            <Image Name="Logo" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Center"/>
             <TextBlock Text="Entrez l'ID miroir sur votre appliacation mobile afin de lier votre miroir à votre compte" 
                    FontSize="25"
                    HorizontalAlignment="Center"></TextBlock>

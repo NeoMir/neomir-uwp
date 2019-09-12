@@ -11,6 +11,7 @@ using DataAccessLibrary.Entitites;
 using DataAccessLibrary.API;
 using NeoMir.UserManagment;
 using NeoMir.Helpers;
+using System.Threading.Tasks;
 
 namespace NeoMir
 {
@@ -34,10 +35,10 @@ namespace NeoMir
         /// seront utilisés par exemple au moment du lancement de l'application pour l'ouverture d'un fichier spécifique.
         /// </summary>
         /// <param name="e">Détails concernant la requête et le processus de lancement.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
-            SetStatus();
-            UserManager.Instance.Init();
+            await SetStatus();
+            await UserManager.Instance.Init();
             UserAppsManager.Instance.Init();
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
 
@@ -119,7 +120,7 @@ namespace NeoMir
             deferral.Complete();
         }
 
-        private async void SetStatus()
+        private async Task SetStatus()
         {
             Miror miror = DataAccess.GetMiror();
             if (miror != null && miror.IsPaired)

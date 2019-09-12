@@ -28,8 +28,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <MediaPlayerElement x:Name="_mediaPlayerElement" AreTransportControlsEnabled="False" HorizontalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="0" Grid.RowSpan="7" Tapped="_mediaPlayerElement_Tapped"/>
-        <ScrollViewer x:Name="MainScroll" Visibility="Collapsed" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7" Grid.RowSpan="5" HorizontalScrollMode = "Disabled" VerticalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+        <MediaPlayerElement x:Name="_mediaPlayerElement" AreTransportControlsEnabled="False" HorizontalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="0" Grid.RowSpan="7"/>
+        <ScrollViewer x:Name="MainScroll" Visibility="Visible" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7" Grid.RowSpan="5" HorizontalScrollMode = "Disabled" VerticalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
             <ItemsControl HorizontalAlignment="Center" x:Name= "Users">
                 <ItemsControl.ItemContainerTransitions>
                     <TransitionCollection>

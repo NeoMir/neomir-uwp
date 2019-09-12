@@ -68,32 +68,28 @@ namespace NeoMir.Pages
 
         private async void ApplyGesture(Gesture gesture)
         {
-
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            if (this == Classes.FrameManager.GetCurrentPage() && !isLock)
             {
-                if (this == Classes.FrameManager.GetCurrentPage() && !isLock)
+                if (gesture.Name == "Next Right" && !gesture.IsConsumed)
                 {
-                    if (gesture.Name == "Next Right" && !gesture.IsConsumed)
-                    {
-                        NextAppButton_Tapped(null, null);
-                        gesture.IsConsumed = true;
-                    }
-                    else if (gesture.Name == "Back" && !gesture.IsConsumed)
-                    {
-                        PrevAppButton_Tapped(null, null);
-                        gesture.IsConsumed = true;
-                    }
-                    else if (gesture.Name == "Validate" && !gesture.IsConsumed)
-                    {
-                        HomeButton_Tapped(null, null);
-                        gesture.IsConsumed = true;
-                    }
+                    NextAppButton_Tapped(null, null);
+                    gesture.IsConsumed = true;
                 }
-                if (gesture.Name == "Lock")
+                else if (gesture.Name == "Back" && !gesture.IsConsumed)
                 {
-                    isLock = !isLock;
+                    PrevAppButton_Tapped(null, null);
+                    gesture.IsConsumed = true;
                 }
-            });
+                else if (gesture.Name == "Validate" && !gesture.IsConsumed)
+                {
+                    HomeButton_Tapped(null, null);
+                    gesture.IsConsumed = true;
+                }
+            }
+            if (gesture.Name == "Lock")
+            {
+                isLock = !isLock;
+            }
         }
 
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)

@@ -60,7 +60,7 @@ namespace NeoMir.Classes.Com
                 try
                 {
                     await GetFace(null, null);
-                    await Task.Delay(100);
+                    await Task.Delay(1000);
                 }
                 catch
                 {

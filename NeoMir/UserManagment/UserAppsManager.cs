@@ -44,10 +44,10 @@ namespace NeoMir.UserManagment
 
         public void Init()
         {
-            if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.FirstLaunch)
-            {
+            //if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.FirstLaunch)
+            //{
                 GetDefaultApps();
-            }
+            //
         }
 
        /// <summary>
@@ -60,15 +60,6 @@ namespace NeoMir.UserManagment
             DataAccess.AddEntity(new UserApp()
             {
                 AppId = 0,
-                AppIconLink = "ms-appx:///Assets/AppsPage/YoutubeIcon.png",
-                AppLink = "https://www.youtube.com/",
-                ProfileId = 0,
-                AppName = "Youtube"
-            });
-
-            DataAccess.AddEntity(new UserApp()
-            {
-                AppId = 1,
                 AppIconLink = "ms-appx:///Assets/AppsPage/mapsIcon.png",
                 AppLink = "https://www.google.fr/maps/preview",
                 ProfileId = 0,
@@ -77,7 +68,7 @@ namespace NeoMir.UserManagment
 
             DataAccess.AddEntity(new UserApp()
             {
-                AppId = 2,
+                AppId = 1,
                 AppIconLink = "ms-appx:///Assets/AppsPage/gmailIcon.png",
                 AppLink = "https://mail.google.com",
                 ProfileId = 0,
@@ -86,11 +77,20 @@ namespace NeoMir.UserManagment
 
             DataAccess.AddEntity(new UserApp()
             {
-                AppId = 3,
+                AppId = 2,
                 AppIconLink = "ms-appx:///Assets/AppsPage/trainIcon.png",
                 AppLink = "http://ec2-108-128-227-127.eu-west-1.compute.amazonaws.com",
                 ProfileId = 0,
                 AppName = "Trains"
+            });
+
+            DataAccess.AddEntity(new UserApp()
+            {
+                AppId = 3,
+                AppIconLink = "ms-appx:///Assets/AppsPage/brosse.jpg",
+                AppLink = "http://martinbaud.com/V1/EasyBrush.php",
+                ProfileId = 0,
+                AppName = "Brosse"
             });
 
             DataAccess.AddEntity(new UserApp()

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -138,9 +139,12 @@ namespace NeoMir.Classes
         /// <param name="destination">The frame you would like to go.</param>
         public static void GoTo(Frame destination)
         {
-            AppPosition = 0;
-            Window.Current.Content = destination;
-            Window.Current.Activate();
+            if (destination != Window.Current.Content)
+            {
+                AppPosition = 0;
+                Window.Current.Content = destination;
+                Window.Current.Activate();
+            }
         }
 
         public static Page GetCurrentPage()

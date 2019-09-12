@@ -20,7 +20,7 @@ namespace NeoMir.Classes
         // PROPERTIES
 
         // Interval of time (in seconds) which we want to lock the app if the user doesn't have any recent activity
-        private static int Period = 20;
+        private static int Period = 20000;
         // Same as above but for the detection loop
         private TimeSpan PeriodToLock;
         // The periodic timer for the loop detection
