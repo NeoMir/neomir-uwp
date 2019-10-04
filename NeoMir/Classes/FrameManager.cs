@@ -46,6 +46,9 @@ namespace NeoMir.Classes
         // The temporary pending app when we reach the maximum of app
         public static string PendingApp { get; set; }
         // Return the current window
+        public delegate void NavigateToEventHnadler(Page page);
+
+        public static event NavigateToEventHnadler NavigatedEvent;
 
 
         #region Methods
@@ -144,6 +147,7 @@ namespace NeoMir.Classes
                 AppPosition = 0;
                 Window.Current.Content = destination;
                 Window.Current.Activate();
+                NavigatedEvent?.Invoke(GetCurrentPage());
             }
         }
 

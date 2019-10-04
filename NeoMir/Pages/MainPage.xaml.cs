@@ -140,7 +140,7 @@ namespace NeoMir.Pages
 
                 // Use or Open Wheather API to get Wheather Information of a location
                 var http = new HttpClient();
-                var url = String.Format("http://api.openweathermap.org/data/2.5/weather?APPID={0}&units=metric&lang=fr&lat=16.265&lon=-61.551", Classes.Config.openWheatherAPIKey);
+                var url = String.Format("http://api.openweathermap.org/data/2.5/weather?APPID={0}&units=metric&lang=fr&lat=48.856613&lon=2.352222", Classes.Config.openWheatherAPIKey);
                 var response = await http.GetAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
                 var serializer = new DataContractJsonSerializer(typeof(Classes.RootObject));

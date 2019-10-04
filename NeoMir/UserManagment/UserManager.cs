@@ -75,10 +75,13 @@ namespace NeoMir.UserManagment
             else
             {
                 List<string> list = await APIManager.GetUserProfiles(DataAccess.GetMiror().Usermail);
-                DataAccess.DeleteTableEntries<UserProfile>();
-                for (int i = 0; i < list.Count; i++)
+                if (list.Count > 0)
                 {
-                    DataAccess.AddEntity(new UserProfile() { Id = i, Name = list[i] });
+                    DataAccess.DeleteTableEntries<UserProfile>();
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        DataAccess.AddEntity(new UserProfile() { Id = i + 1, Name = list[i] });
+                    }
                 }
             }
         }

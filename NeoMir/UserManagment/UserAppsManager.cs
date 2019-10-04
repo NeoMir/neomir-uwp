@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary;
+using DataAccessLibrary.API;
 using DataAccessLibrary.Entitites;
 using NeoMir.Classes;
 using NeoMir.Helpers;
@@ -40,74 +41,91 @@ namespace NeoMir.UserManagment
 
         private UserAppsManager()
         {
+            UserManager.Instance.ProfileChanged += ProfileChanged;
+        }
+
+        private async void ProfileChanged()
+        {
+            //GetDefaultApps();
+            await GetAppsForProfil();
+        }
+
+        private async Task GetAppsForProfil()
+        {
+            foreach (var app in await APIManager.GetProfileApps(DataAccess.GetMiror().Usermail, UserManager.Instance.CurrentProfile.Id))
+            {
+                app.AppId = DataAccess.GetEntities<UserApp>().Count;
+                app.ProfileId = UserManager.Instance.CurrentProfile.Id;
+                DataAccess.AddEntity(app);
+            }
         }
 
         public void Init()
         {
             //if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.FirstLaunch)
             //{
-                GetDefaultApps();
+            GetDefaultApps();
             //
         }
 
-       /// <summary>
-       /// Gets apps that are installled by default
-       /// </summary>
-       /// <returns></returns>
+        /// <summary>
+        /// Gets apps that are installled by default
+        /// </summary>
+        /// <returns></returns>
         private void GetDefaultApps()
         {
             DataAccess.DeleteTableEntries<UserApp>();
-            DataAccess.AddEntity(new UserApp()
-            {
-                AppId = 0,
-                AppIconLink = "ms-appx:///Assets/AppsPage/mapsIcon.png",
-                AppLink = "https://www.google.fr/maps/preview",
-                ProfileId = 0,
-                AppName = "Maps"
-            });
+            //DataAccess.AddEntity(new UserApp()
+            //{
+            //    AppId = 0,
+            //    AppIconLink = "ms-appx:///Assets/AppsPage/Maps.png",
+            //    AppLink = "https://www.google.fr/maps/preview",
+            //    ProfileId = 0,
+            //    AppName = "Maps"
+            //});
 
-            DataAccess.AddEntity(new UserApp()
-            {
-                AppId = 1,
-                AppIconLink = "ms-appx:///Assets/AppsPage/gmailIcon.png",
-                AppLink = "https://mail.google.com",
-                ProfileId = 0,
-                AppName = "Gmail"
-            });
+            //DataAccess.AddEntity(new UserApp()
+            //{
+            //    AppId = 1,
+            //    AppIconLink = "ms-appx:///Assets/AppsPage/Gmail.png",
+            //    AppLink = "https://mail.google.com",
+            //    ProfileId = 0,
+            //    AppName = "Gmail"
+            //});
 
-            DataAccess.AddEntity(new UserApp()
-            {
-                AppId = 2,
-                AppIconLink = "ms-appx:///Assets/AppsPage/trainIcon.png",
-                AppLink = "http://ec2-108-128-227-127.eu-west-1.compute.amazonaws.com",
-                ProfileId = 0,
-                AppName = "Trains"
-            });
+            //DataAccess.AddEntity(new UserApp()
+            //{
+            //    AppId = 2,
+            //    AppIconLink = "ms-appx:///Assets/AppsPage/NeoMirTransport.png",
+            //    AppLink = "http://ec2-108-128-227-127.eu-west-1.compute.amazonaws.com",
+            //    ProfileId = 0,
+            //    AppName = "Trains"
+            //});
 
-            DataAccess.AddEntity(new UserApp()
-            {
-                AppId = 3,
-                AppIconLink = "ms-appx:///Assets/AppsPage/brosse.jpg",
-                AppLink = "http://martinbaud.com/V1/EasyBrush.php",
-                ProfileId = 0,
-                AppName = "Brosse"
-            });
+            //DataAccess.AddEntity(new UserApp()
+            //{
+            //    AppId = 3,
+            //    AppIconLink = "ms-appx:///Assets/AppsPage/EasyBrush.png",
+            //    AppLink = "http://martinbaud.com/V1/EasyBrush.php",
+            //    ProfileId = 0,
+            //    AppName = "Brosse"
+            //});
 
-            DataAccess.AddEntity(new UserApp()
-            {
-                AppId = 4,
-                AppIconLink = "ms-appx:///Assets/AppsPage/facebookIcon.png",
-                AppLink = "http://facebook.com",
-                ProfileId = 1,
-                AppName = "FaceBook"
-            });
+            //DataAccess.AddEntity(new UserApp()
+            //{
+            //    AppId = 4,
+            //    AppIconLink = "ms-appx:///Assets/AppsPage/Facebook.png",
+            //    AppLink = "http://facebook.com",
+            //    ProfileId = 1,
+            //    AppName = "FaceBook"
+            //});
 
             DataAccess.AddEntity(new UserApp()
             {
                 AppId = 5,
-                AppIconLink = "ms-appx:///Assets/AppsPage/epitechIcon.png",
+                AppIconLink = "ms-appx:///Assets/AppsPage/Epitech.png",
                 AppLink = "https://intra.epitech.eu",
-                ProfileId = 2,
+                ProfileId = 0,
                 AppName = "Epitech"
             });
         }

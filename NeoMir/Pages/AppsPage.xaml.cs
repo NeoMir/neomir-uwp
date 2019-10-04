@@ -18,6 +18,7 @@ using DataAccessLibrary;
 using DataAccessLibrary.Entitites;
 using NeoMir.Helpers;
 using NeoMir.UserManagment;
+using System.Linq;
 
 namespace NeoMir.Pages
 {
@@ -43,6 +44,7 @@ namespace NeoMir.Pages
         private int lag = 300;
         private int transitionHorizontaloffset = 200;
         private ItemsControl installedAppControl;
+        private bool DoinitApp;
         GestureCollector gestureCollector;
         bool isLock;
 
@@ -61,8 +63,16 @@ namespace NeoMir.Pages
             InitInstalledAppsLayout();
             GestureSetup();
             GetAllInstalledApplication();
-            UserManager.Instance.ProfileChanged += LoadProfilApps;
+            UserManager.Instance.ProfileChanged += ProfileChanged;
+            FrameManager.NavigatedEvent += NavigateOn;
         }
+
+        private void ProfileChanged()
+        {
+            Classes.FrameManager.InstalledApps.Clear();
+            DoinitApp = true;
+        }
+
         //
         // METHODS
         //
@@ -82,13 +92,15 @@ namespace NeoMir.Pages
             openAppsControl = CreateOpenAppsList();
         }
 
-        private async Task GetAllInstalledApplication()
+        private void GetAllInstalledApplication()
         {
             var mirorId = DataAccess.GetMiror().Id;
-            Classes.FrameManager.InstalledApps.Clear();
             foreach (UserApp app in DataAccess.GetEntities<UserApp>())
             {
-                FrameManager.CreateInstalledApp(app);
+                if (FrameManager.InstalledApps.Where((a) => a.UserApp.AppName == app.AppName).FirstOrDefault() == null)
+                {
+                    FrameManager.CreateInstalledApp(app);
+                }
             }
             //var id = "";
             //var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
@@ -450,9 +462,22 @@ namespace NeoMir.Pages
 
         private void LoadProfilApps()
         {
-            FrameManager.Apps.Clear();
-            openAppsControl.Items.Clear();
-            FillApps(installedAppControl);
+            if (DoinitApp)
+            {
+                FrameManager.Apps.Clear();
+                openAppsControl.Items.Clear();
+                GetAllInstalledApplication();
+                FillApps(installedAppControl);
+                DoinitApp = false;
+            }
+        }
+
+        private async void NavigateOn(Page page)
+        {
+            if (page == this)
+            {
+                LoadProfilApps();
+            }
         }
 
         /// <summary>

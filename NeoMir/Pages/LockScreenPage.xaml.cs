@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Entitites;
+using NeoMir.Classes;
 using NeoMir.Classes.Com;
 using NeoMir.Classes.Communication;
 using NeoMir.UserManagment;
@@ -35,9 +36,21 @@ namespace NeoMir.Pages
         public LockScreenPage()
         {
             this.InitializeComponent();
+            FrameManager.NavigatedEvent += NavigateOn;
             StartBackgroundMedia();
             CollectorSetup();
-            ListUsers();
+            //ListUsers();
+        }
+
+        private async void NavigateOn(Page page)
+        {
+            if (page == this)
+            {
+                MainScroll.Visibility = Visibility.Collapsed;
+                await UserManager.Instance.Init();
+                ListUsers();
+                MainScroll.Visibility = Visibility.Visible;
+            }
         }
 
         //
