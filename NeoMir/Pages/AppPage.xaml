@@ -10,9 +10,12 @@
 
     <Grid>
         <WebView x:Name="AppView" Margin="0,0,0,0"/>
-        <Image x:Name= "NextAppButton" Source="/Assets/MainPage/signright.png"  HorizontalAlignment= "Right" VerticalAlignment= "Center" Height= "70" Margin= "0,0,20,0" Tapped="NextAppButton_Tapped"/>
-        <Image x:Name= "PrevAppButton" Source="/Assets/MainPage/signleft.png"  HorizontalAlignment= "Left" VerticalAlignment= "Center" Height= "70" Margin= "20,0,0,0" Tapped="PrevAppButton_Tapped"/>
-        <Image x:Name= "HomeButton" Source="/Assets/AppPage/home.png"  HorizontalAlignment= "Center" VerticalAlignment= "Top" Height= "70" Margin= "0,20,200,0" Tapped="HomeButton_Tapped"/>
-        <Image x:Name= "AppsButton" Source="/Assets/AppPage/menu.png"  HorizontalAlignment= "Center" VerticalAlignment= "Top" Height= "70" Margin= "200,20,0,0" Tapped="AppsButton_Tapped"/>
+        <Ellipse HorizontalAlignment="Center" Height="190" Margin="0,-100,0,0" VerticalAlignment="Top" Width="280" Fill="Black"/>
+        <Ellipse HorizontalAlignment="Left" Height="150" Margin="-120,0,0,0" VerticalAlignment="Center" Width="200" Fill="Black"/>
+        <Ellipse HorizontalAlignment="Right" Height="150" Margin="0,0,-120,0" VerticalAlignment="Center" Width="200" Fill="Black"/>
+        <Button x:Name= "NextAppButton" FontFamily="Segoe MDL2 Assets" Content="&#xE974;"  HorizontalAlignment= "Right" VerticalAlignment= "Center" Height="70" Width="70" FontSize="50" Margin= "0,0,0,0" Tapped="NextAppButton_Tapped" Background="{x:Null}"/>
+        <Button x:Name= "PrevAppButton" FontFamily="Segoe MDL2 Assets" Content="&#xE973;"  HorizontalAlignment= "Left" VerticalAlignment= "Center" Height="70" Width="70" FontSize="50" Margin= "0,0,0,0" Tapped="PrevAppButton_Tapped" Background="{x:Null}"/>
+        <Button x:Name= "HomeButton" FontFamily="Segoe MDL2 Assets" Content="&#xEA8A;"  HorizontalAlignment= "Center" VerticalAlignment= "Top" Height="70" Width="70" FontSize="50" Margin= "0,0,100,0" Tapped="HomeButton_Tapped" Background="{x:Null}"/>
+        <Button x:Name= "AppsButton" FontFamily="Segoe MDL2 Assets" Content="&#xE81E;"  HorizontalAlignment= "Center" VerticalAlignment= "Top" Height="70" Width="70" FontSize="50" Margin= "100,0,0,0" Tapped="AppsButton_Tapped" Background="{x:Null}"/>
     </Grid>
 </Page>

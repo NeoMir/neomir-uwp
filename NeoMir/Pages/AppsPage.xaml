@@ -32,16 +32,16 @@
         </Grid.RowDefinitions>
 
         <!-- Return Button & Text -->
-        <Image Grid.Column="3" Grid.Row= "8" Grid.ColumnSpan= "2" x:Name= "BackButton" Source= "/Assets/MainPage/signinverse.png"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height= "70" Tapped= "BackButton_Tapped" Margin= "0,20,0,0" />
+        <Button Grid.Column="3" Grid.Row= "8" Grid.ColumnSpan= "2" x:Name= "BackButton" FontFamily="Segoe MDL2 Assets" Content="&#xE972;"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height="70" Width="70" FontSize="50" Tapped= "BackButton_Tapped" Margin= "0,20,0,0" Background="{x:Null}" />
         <TextBlock Grid.Column= "3" Grid.Row= "8" Grid.ColumnSpan= "2" x:Name= "BackButtonName" HorizontalAlignment= "Center" VerticalAlignment= "Center" FontSize= "20" FontStyle= "Italic" Text= "Ecran principal" Margin= "0,0,0,100" ></TextBlock >
         
         <!-- No Opened Apps title -->
         <TextBlock Grid.ColumnSpan="8" Grid.Row="0" x:Name="NoOpenedAppsTitle" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize= "30" Text="Aucune application ouverte" ></TextBlock >
 
         <!-- Remove app button -->
-        <Image Grid.Column= "6" Grid.Row= "7" Grid.ColumnSpan= "1" x:Name="RemoveAppButton" Source= "/Assets/AppsPage/trash.png"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height= "70" Tapped="RemoveAppButton_Tapped" />
+        <Button Grid.Column= "7" Grid.Row= "7" Grid.ColumnSpan= "1" x:Name="RemoveAppButton" FontFamily="Segoe MDL2 Assets" Content="&#xE74D;"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height="70" Width="70" FontSize="50" Tapped="RemoveAppButton_Tapped" Background="{x:Null}" />
 
-        <Image Grid.Column= "0" Grid.Row= "7" Grid.ColumnSpan= "1" x:Name="SynchronizeButton" Source= "/Assets/AppsPage/synchronize.png"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height= "70" Tapped="SynchronizeButton_Tapped" />
+        <Button Grid.Column= "0" Grid.Row= "7" Grid.ColumnSpan= "1" x:Name="SynchronizeButton" FontFamily="Segoe MDL2 Assets" Content="&#xE72C;"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height="70" Width="70" FontSize="50" Tapped="SynchronizeButton_Tapped" Background="{x:Null}" />
 
 
         <!--Wrapper of all apps rows -->

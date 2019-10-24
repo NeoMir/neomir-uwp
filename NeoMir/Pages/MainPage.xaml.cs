@@ -10,14 +10,10 @@ using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.Toolkit.Uwp.UI.Animations;
 
 namespace NeoMir.Pages
 {
@@ -61,6 +57,7 @@ namespace NeoMir.Pages
         public MainPage()
         {
             this.InitializeComponent();
+            
             timerDateTime = new Timer(new TimerCallback((obj) => this.refreshDateTime()), null, 0, 1000);
             timerWeather = new Timer(new TimerCallback((obj) => this.refreshWeather()), null, 0, 900000);
             GestureSetup();
@@ -163,7 +160,7 @@ namespace NeoMir.Pages
             gestureCollector.RegisterToGestures(this, ApplyGesture);
         }
 
-        private async void ApplyGesture(Gesture gesture)
+        private void ApplyGesture(Gesture gesture)
         {
             if (!gesture.IsConsumed)
             {
@@ -204,7 +201,6 @@ namespace NeoMir.Pages
 
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-
             Classes.FrameManager.NextApp();
         }
 
