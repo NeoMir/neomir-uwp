@@ -19,6 +19,7 @@ using DataAccessLibrary.Entitites;
 using NeoMir.Helpers;
 using NeoMir.UserManagment;
 using System.Linq;
+using NeoMir.Classes;
 
 namespace NeoMir.Pages
 {
@@ -47,9 +48,9 @@ namespace NeoMir.Pages
         private bool DoinitApp;
         GestureCollector gestureCollector;
         bool isLock;
-
         private static bool flag = false;
         //private static ItemsControl itemsControl = new ItemsControl();
+
         //
         // CONSTRUCTOR
         //
@@ -63,8 +64,20 @@ namespace NeoMir.Pages
             InitInstalledAppsLayout();
             GestureSetup();
             GetAllInstalledApplication();
+            StartAnimations();
             UserManager.Instance.ProfileChanged += ProfileChanged;
             FrameManager.NavigatedEvent += NavigateOn;
+        }
+
+        //
+        // METHODS
+        //
+
+        private void StartAnimations()
+        {
+            new Animation(SynchronizeButton, 5000);
+            new Animation(BackButton, 5000);
+            new Animation(RemoveAppButton, 5000);
         }
 
         private void ProfileChanged()
@@ -72,10 +85,6 @@ namespace NeoMir.Pages
             Classes.FrameManager.InstalledApps.Clear();
             DoinitApp = true;
         }
-
-        //
-        // METHODS
-        //
 
         /// <summary>
         /// Initialize the variables

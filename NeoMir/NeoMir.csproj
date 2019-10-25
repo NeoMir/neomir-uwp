@@ -96,6 +96,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\ActivityDetector.cs" />
+    <Compile Include="Classes\Animation.cs" />
     <Compile Include="Classes\FrameManager.cs" />
     <Compile Include="Classes\Communicate.cs" />
     <Compile Include="Classes\Com\Face.cs" />

@@ -9,17 +9,18 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using NeoMir.Classes;
 
 namespace NeoMir.Pages
 {
     public sealed partial class AppPage : Page
     {
-        private GestureCollector gestureCollector;
-        private bool isLock;
         //
         // PROPERTIES
         //
 
+        private GestureCollector gestureCollector;
+        private bool isLock;
         public string Link { get; private set; }
 
         //
@@ -28,10 +29,11 @@ namespace NeoMir.Pages
 
         public AppPage()
         {
-            isLock = false;
             this.InitializeComponent();
+            isLock = false;
             AppView.ScriptNotify += Classes.Communicate.ScriptNotify;
             AppView.NavigationCompleted += AppView_NavigationCompleted;
+            StartAnimations();
             GestureSetup();
         }
 
@@ -39,25 +41,12 @@ namespace NeoMir.Pages
         // METHODS
         //
 
-        // Nothing for the moment //
-
-        //
-        // EVENTS
-        //
-
-        private void AppView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        private void StartAnimations()
         {
-            //Classes.Communicate.CallFunction(sender, "Hello", null);
-            //Classes.Communicate.InjectContent(sender, "document.getElementById('usernametest').innerHTML = 'Injection I. !!' ;");
-            //Classes.Communicate.InjectContent(sender, "document.getElementById('passwordtest').innerHTML = 'Injection II. !!' ;");
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            this.Link = (string)e.Parameter;
-            Uri uri = new Uri(this.Link);
-            AppView.Source = uri;
+            new Animation(NextAppButton, 5000);
+            new Animation(HomeButton, 5000);
+            new Animation(AppsButton, 5000);
+            new Animation(PrevAppButton, 5000);
         }
 
         private void GestureSetup()
@@ -90,6 +79,25 @@ namespace NeoMir.Pages
             {
                 isLock = !isLock;
             }
+        }
+
+        //
+        // EVENTS
+        //
+
+        private void AppView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            //Classes.Communicate.CallFunction(sender, "Hello", null);
+            //Classes.Communicate.InjectContent(sender, "document.getElementById('usernametest').innerHTML = 'Injection I. !!' ;");
+            //Classes.Communicate.InjectContent(sender, "document.getElementById('passwordtest').innerHTML = 'Injection II. !!' ;");
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            this.Link = (string)e.Parameter;
+            Uri uri = new Uri(this.Link);
+            AppView.Source = uri;
         }
 
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)

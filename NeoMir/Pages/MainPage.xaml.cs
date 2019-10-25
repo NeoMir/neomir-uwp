@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Microsoft.Toolkit.Uwp.UI.Animations;
+using Windows.UI.Xaml;
+using NeoMir.Classes;
 
 namespace NeoMir.Pages
 {
@@ -25,6 +27,7 @@ namespace NeoMir.Pages
 
         Timer timerDateTime;
         Timer timerWeather;
+
         GestureCollector gestureCollector;
 
         Dictionary<string, string> weatherCodesIcons = new Dictionary<string, string>()
@@ -57,9 +60,8 @@ namespace NeoMir.Pages
         public MainPage()
         {
             this.InitializeComponent();
-            
-            timerDateTime = new Timer(new TimerCallback((obj) => this.refreshDateTime()), null, 0, 1000);
-            timerWeather = new Timer(new TimerCallback((obj) => this.refreshWeather()), null, 0, 900000);
+            SetTimers();
+            StartAnimations();
             GestureSetup();
             UserManager.Instance.ProfileChanged += GetProfile;
         }
@@ -68,6 +70,19 @@ namespace NeoMir.Pages
         // METHODS
         //
 
+        private void StartAnimations()
+        {
+            new Animation(LaunchAppButton, 5000);
+            new Animation(NextAppButton, 5000);
+            new Animation(PrevAppButton, 5000);
+            new Animation(LockButton, 5000);
+        }
+
+        private void SetTimers()
+        {
+            timerDateTime = new Timer(new TimerCallback((obj) => this.refreshDateTime()), null, 0, 1000);
+            timerWeather = new Timer(new TimerCallback((obj) => this.refreshWeather()), null, 0, 900000);
+        }
 
         /// <summary>
         /// Recupère le profil de l'utilisateur actuellement connécté
@@ -96,6 +111,11 @@ namespace NeoMir.Pages
             //    await Task.Delay(1000);
             //}
             msgWelcome.Text = "Bienvenue " + UserManager.Instance.CurrentProfile.Name;
+
+            // Défini un offset pour que le message descende de manière proportionnelle à la taille de l'ecran.
+            float offset = (float)((Frame)Window.Current.Content).ActualHeight * 0.35f;
+            // Animation du message
+            msgWelcome.Offset(offsetX: 0, offsetY: offset, duration: 2500, delay: 500, easingType: EasingType.Default).Start();
         }
 
         /// <summary>
