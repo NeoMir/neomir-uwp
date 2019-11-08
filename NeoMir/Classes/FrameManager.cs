@@ -14,8 +14,6 @@ namespace NeoMir.Classes
     /// </summary>
     public class FrameManager
     {
-        private static List<App> installedApps;
-
         // PROPERTIES
         // The Frame where we can find the MainPage
         public static Frame MainPageFrame { get; set; }
@@ -27,18 +25,6 @@ namespace NeoMir.Classes
         public static Frame PairPageFrame { get; set; }
         // List of the apps
         public static List<App> Apps = new List<App>();
-        // List of installed Apps
-        public static List<App> InstalledApps
-        {
-            get
-            {
-                if (installedApps == null)
-                {
-                    installedApps = new List<App>();
-                }
-                return installedApps;
-            }
-        }
         // Maximum allowed of opened apps
         public static int MaxApp = 3;
         // The actual position of the navigation is the list of apps
@@ -53,47 +39,22 @@ namespace NeoMir.Classes
 
         #region Methods
 
-        /// <summary>
-        /// Creates & open the new application
-        /// </summary>
-        /// <param name="link">The link of the app</param>
-        public static void CreateApp(string link)
+        // Crée une application
+        public static void CreateApp(UserApp userApp)
         {
-            Apps.Add(InstalledApps.Where((app) => app.UserApp.AppLink == link).FirstOrDefault());
+            Apps.Add(new App(userApp));
             AppPosition = Apps.Count;
-            Apps[AppPosition - 1].Frame.Navigate(typeof(Pages.AppPage), Apps[AppPosition - 1].UserApp.AppLink);
-            LaunchApp(Apps[AppPosition - 1]);
         }
 
-        public static void CreateInstalledApp(UserApp app)
-        {
-            InstalledApps.Add(new App(app));
-        }
-
-        /// <summary>
-        /// Navigate to an app directly from its instance
-        /// </summary>
-        /// <param name="app">The app we want navigate to</param>
+        // Ouvre une application
         public static void LaunchApp(App app)
         {
+            app.Frame.Navigate(typeof(Pages.AppPage), app.UserApp.AppLink);
             Window.Current.Content = app.Frame;
             Window.Current.Activate();
         }
 
-        public static void LaunchInstalledApp(App app)
-        {
-            if (!Apps.Contains(app))
-            {
-                app.Frame.Navigate(typeof(Pages.AppPage), app.UserApp.AppLink);
-                Apps.Add(app);
-            }
-            Window.Current.Content = app.Frame;
-            Window.Current.Activate();
-        }
-
-        /// <summary>
-        /// Reach the next app in the navigation
-        /// </summary>
+        // Naviguer vers l'application suivante.
         public static void NextApp()
         {
             if (Apps.Count == 0)
@@ -102,7 +63,7 @@ namespace NeoMir.Classes
             }
             else if (AppPosition == Apps.Count)
             {
-                Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
+                GoTo(MainPageFrame);
             }
             else
             {
@@ -111,9 +72,7 @@ namespace NeoMir.Classes
             }
         }
 
-        /// <summary>
-        /// Reach the previous app in the navigation
-        /// </summary>
+        // Naviguer ver l'application précédente.
         public static void PrevApp()
         {
             if (Apps.Count == 0)
@@ -127,7 +86,7 @@ namespace NeoMir.Classes
             }
             else if (AppPosition == 1)
             {
-                Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
+                GoTo(MainPageFrame);
             }
             else
             {
@@ -136,10 +95,7 @@ namespace NeoMir.Classes
             }
         }
 
-        /// <summary>
-        /// Go to the destination frame
-        /// </summary>
-        /// <param name="destination">The frame you would like to go.</param>
+        // Naviguer vers une Frame spécifique.
         public static void GoTo(Frame destination)
         {
             if (destination != Window.Current.Content)
@@ -161,6 +117,7 @@ namespace NeoMir.Classes
         {
             //TODO: API Request
         }
+
         #endregion
     }
 }

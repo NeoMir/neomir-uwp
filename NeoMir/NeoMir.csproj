@@ -153,28 +153,18 @@
     <Content Include="Assets\2020_logo_neomir.targetsize-256.png" />
     <Content Include="Assets\2020_logo_neomir.targetsize-32.png" />
     <Content Include="Assets\2020_logo_neomir.targetsize-48.png" />
-    <Content Include="Assets\AppPage\home.png" />
-    <Content Include="Assets\AppPage\menu.png" />
     <Content Include="Assets\AppsPage\EasyBrush.png" />
-    <Content Include="Assets\AppsPage\Epitech.png" />
-    <Content Include="Assets\AppsPage\exemple1.png" />
-    <Content Include="Assets\AppsPage\exemple.png" />
-    <Content Include="Assets\AppsPage\exemple2.png" />
-    <Content Include="Assets\AppsPage\exemple3.png" />
+    <Content Include="Assets\AppsPage\Epitech.jpg" />
     <Content Include="Assets\AppsPage\Facebook.png" />
-    <Content Include="Assets\AppsPage\Gmail.png" />
-    <Content Include="Assets\AppsPage\Maps.png" />
-    <Content Include="Assets\AppsPage\NeoMirTransport.png" />
-    <Content Include="Assets\AppsPage\plus.png" />
-    <Content Include="Assets\AppsPage\synchronize.png" />
-    <Content Include="Assets\AppsPage\trash.png" />
+    <Content Include="Assets\AppsPage\gmail.png" />
+    <Content Include="Assets\AppsPage\maps.jpg" />
+    <Content Include="Assets\AppsPage\train.jpg" />
     <Content Include="Assets\AppsPage\Youtube.png" />
     <Content Include="Assets\badge.scale-100.png" />
     <Content Include="Assets\badge.scale-125.png" />
     <Content Include="Assets\badge.scale-150.png" />
     <Content Include="Assets\badge.scale-200.png" />
     <Content Include="Assets\badge.scale-400.png" />
-    <Content Include="Assets\CloseAppPage\left-arrow.png" />
     <Content Include="Assets\demarage.scale-100.png" />
     <Content Include="Assets\demarage.scale-125.png" />
     <Content Include="Assets\demarage.scale-150.png" />
@@ -195,16 +185,7 @@
     <Content Include="Assets\icone.targetsize-256.png" />
     <Content Include="Assets\icone.targetsize-32.png" />
     <Content Include="Assets\icone.targetsize-48.png" />
-    <Content Include="Assets\MainPage\lock.png" />
-    <Content Include="Assets\MainPage\numero1.png" />
-    <Content Include="Assets\MainPage\numero2.png" />
-    <Content Include="Assets\MainPage\numero3.png" />
-    <Content Include="Assets\MainPage\sign.png" />
-    <Content Include="Assets\MainPage\signinverse.png" />
-    <Content Include="Assets\MainPage\signleft.png" />
-    <Content Include="Assets\MainPage\signright.png" />
-    <Content Include="Assets\MainPage\smoke.mp4" />
-    <Content Include="Assets\MainPage\cube.png" />
+    <Content Include="Assets\LockPage\smoke.mp4" />
     <Content Include="Assets\package.scale-100.png" />
     <Content Include="Assets\package.scale-125.png" />
     <Content Include="Assets\package.scale-150.png" />
@@ -261,6 +242,9 @@
       <Version>6.2.9</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Animations">
+      <Version>5.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
       <Version>5.1.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">

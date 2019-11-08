@@ -69,7 +69,7 @@ namespace NeoMir.Pages
         {
             var mediaPlayer = new MediaPlayer();
             mediaPlayer.IsLoopingEnabled = true;
-            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/MainPage/smoke.mp4"));
+            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/LockPage/smoke.mp4"));
             _mediaPlayerElement.SetMediaPlayer(mediaPlayer);
             mediaPlayer.Play();
         }

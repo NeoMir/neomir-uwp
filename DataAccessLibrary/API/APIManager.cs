@@ -2,9 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Data.Json;
 
@@ -12,6 +10,10 @@ namespace DataAccessLibrary.API
 {
     public static class APIManager
     {
+        /// <summary>
+        /// Recevoir l'identifiant du miroir
+        /// </summary>
+        /// <returns></returns>
         public static async Task<string> GetMirorId()
         {
             string result = string.Empty;
@@ -30,6 +32,11 @@ namespace DataAccessLibrary.API
             return result;
         }
 
+        /// <summary>
+        /// Recevoir si l'identifiant est déjà lié ou non
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static async Task<Tuple<bool, string>> GetIsLinked(string id)
         {
             try
@@ -48,6 +55,11 @@ namespace DataAccessLibrary.API
             }
         }
 
+        /// <summary>
+        /// Recevoir les profils 
+        /// </summary>
+        /// <param name="userMail"></param>
+        /// <returns></returns>
         public static async Task<List<string>> GetUserProfiles(string userMail)
         {
             List<string> ret = new List<string>();
@@ -76,6 +88,12 @@ namespace DataAccessLibrary.API
             return ret;
         }
 
+        /// <summary>
+        /// Recevoir les applications d'un profil
+        /// </summary>
+        /// <param name="userMail"></param>
+        /// <param name="profilId"></param>
+        /// <returns></returns>
         public static async Task<List<UserApp>> GetProfileApps(string userMail, int profilId)
         {
             List<UserApp> ret = new List<UserApp>();
@@ -107,6 +125,5 @@ namespace DataAccessLibrary.API
             }
             return ret;
         }
-
     }
 }

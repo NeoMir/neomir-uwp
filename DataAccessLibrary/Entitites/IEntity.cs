@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace DataAccessLibrary.Entitites
 {
-    public interface IEntity
-    {
-    }
+    public interface IEntity { }
 }

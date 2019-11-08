@@ -21,9 +21,7 @@ namespace NeoMir.Pages
 {
     public sealed partial class MainPage : Page
     {
-        //
-        // PROPERTIES
-        //
+        #region PROPERTIES
 
         Timer timerDateTime;
         Timer timerWeather;
@@ -53,9 +51,9 @@ namespace NeoMir.Pages
 
         };
 
-        //
-        // CONSTRUCTOR
-        //
+        #endregion
+
+        #region CONSTRUCTOR
 
         public MainPage()
         {
@@ -66,10 +64,11 @@ namespace NeoMir.Pages
             UserManager.Instance.ProfileChanged += GetProfile;
         }
 
-        //
-        // METHODS
-        //
+        #endregion
 
+        #region METHODS
+
+        // Débute les animations
         private void StartAnimations()
         {
             new Animation(LaunchAppButton, 5000);
@@ -78,15 +77,14 @@ namespace NeoMir.Pages
             new Animation(LockButton, 5000);
         }
 
+        // Débute les timers
         private void SetTimers()
         {
             timerDateTime = new Timer(new TimerCallback((obj) => this.refreshDateTime()), null, 0, 1000);
             timerWeather = new Timer(new TimerCallback((obj) => this.refreshWeather()), null, 0, 900000);
         }
 
-        /// <summary>
-        /// Recupère le profil de l'utilisateur actuellement connécté
-        /// </summary>
+        // Recupère le profil de l'utilisateur actuellement connecté
         private void GetProfile()
         {
             //while (true)
@@ -118,9 +116,7 @@ namespace NeoMir.Pages
             msgWelcome.Offset(offsetX: 0, offsetY: offset, duration: 2500, delay: 500, easingType: EasingType.Default).Start();
         }
 
-        /// <summary>
-        /// Actualize the datetime
-        /// </summary>
+        // Actualise la date et l'heure
         private async void refreshDateTime()
         {
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
@@ -146,9 +142,7 @@ namespace NeoMir.Pages
             });
         }
 
-        /// <summary>
-        /// Actualize the wheather
-        /// </summary>
+        // Actualise la météo
         private async void refreshWeather()
         {
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
@@ -174,12 +168,14 @@ namespace NeoMir.Pages
             });
         }
 
+        // Setup des gestes
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
             gestureCollector.RegisterToGestures(this, ApplyGesture);
         }
 
+        // Applique les gestes
         private void ApplyGesture(Gesture gesture)
         {
             if (!gesture.IsConsumed)
@@ -210,9 +206,9 @@ namespace NeoMir.Pages
             }
         }
 
-        //
-        // EVENTS
-        //
+        #endregion
+
+        #region EVENTS
 
         private void LaunchAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
@@ -238,5 +234,7 @@ namespace NeoMir.Pages
         {
             Classes.FrameManager.GoTo(Classes.FrameManager.PairPageFrame);
         }
+
+        #endregion
     }
 }

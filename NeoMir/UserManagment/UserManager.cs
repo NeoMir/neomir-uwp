@@ -74,6 +74,7 @@ namespace NeoMir.UserManagment
             }
             else
             {
+                var lol = DataAccess.GetMiror();
                 List<string> list = await APIManager.GetUserProfiles(DataAccess.GetMiror().Usermail);
                 if (list.Count > 0)
                 {
@@ -100,7 +101,7 @@ namespace NeoMir.UserManagment
                 Name = "Robin"
             });
 
-            DataAccess.AddEntity(new UserProfile()
+            /*DataAccess.AddEntity(new UserProfile()
             {
                 Id = 3,
                 Name = "Quentin"
@@ -110,7 +111,7 @@ namespace NeoMir.UserManagment
             {
                 Id = 4,
                 Name = "Ambroise"
-            });
+            });*/
         }
     }
 }

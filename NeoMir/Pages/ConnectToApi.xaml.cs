@@ -118,11 +118,11 @@ namespace NeoMir.Pages
         {
             if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.FirstLaunch)
             {
-                Classes.FrameManager.GoTo(Classes.FrameManager.LockPageFrame);
+                FrameManager.GoTo(FrameManager.LockPageFrame);
             }
             else
             {
-                Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
+                FrameManager.GoTo(FrameManager.MainPageFrame);
             }
         }
     }

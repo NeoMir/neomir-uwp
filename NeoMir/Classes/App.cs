@@ -12,7 +12,7 @@ namespace NeoMir.Classes
         // Frame of the app
         public Frame Frame { get; private set; }
        
-        //Database app representation
+        // Database app representation
         public UserApp UserApp { get; set; }
 
         // CONSTRUCTOR

@@ -2,355 +2,134 @@
 using NeoMir.Classes.Communication;
 using NeoMir.Classes;
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Net.Http;
-using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Markup;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
-using System.Threading.Tasks;
 using DataAccessLibrary;
 using DataAccessLibrary.Entitites;
-using NeoMir.Helpers;
 using NeoMir.UserManagment;
 using System.Linq;
-using NeoMir.Classes;
+using Microsoft.Toolkit.Uwp.UI.Controls;
+using Windows.UI.Xaml.Shapes;
+using Windows.UI.Xaml.Media;
+using Windows.UI;
 
 namespace NeoMir.Pages
 {
-    /// <summary>
-    /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
-    /// </summary>
-    /// 
     public sealed partial class AppsPage : Page
     {
-        //
-        // PROPERTIES
-        //
+        #region PROPERTIES
 
-        public static int ImageSize;
-        public static int CloseAppImageSize;
-        public static int ImageHoverSize;
-        public static Thickness ImageMargin;
-        private static int textMargin;
-        private static int scrollViewerMargin;
-        private string textRowName = "Mes Applications";
         private static int ConfNumber;
-        private ItemsControl openAppsControl;
-        private int lag = 300;
-        private int transitionHorizontaloffset = 200;
-        private ItemsControl installedAppControl;
         private bool DoinitApp;
+        private bool isLock;
         GestureCollector gestureCollector;
-        bool isLock;
-        private static bool flag = false;
-        //private static ItemsControl itemsControl = new ItemsControl();
 
-        //
-        // CONSTRUCTOR
-        //
+        #endregion
 
+        #region CONSTRUCTORS
+
+        // Constructeur de la page
         public AppsPage()
         {
             this.InitializeComponent();
             this.InitializeVariables();
-            isLock = false;
-            //ListOpenApps();
-            InitInstalledAppsLayout();
-            GestureSetup();
-            GetAllInstalledApplication();
-            StartAnimations();
             UserManager.Instance.ProfileChanged += ProfileChanged;
             FrameManager.NavigatedEvent += NavigateOn;
+            GestureSetup();
+            StartAnimations();
         }
 
-        //
-        // METHODS
-        //
+        #endregion
 
+        #region METHODS
+
+        // Débute les animations de la page
         private void StartAnimations()
         {
-            new Animation(SynchronizeButton, 5000);
             new Animation(BackButton, 5000);
-            new Animation(RemoveAppButton, 5000);
         }
 
+        // Détecte s'il y a un changement de profil
         private void ProfileChanged()
         {
-            Classes.FrameManager.InstalledApps.Clear();
+            FrameManager.Apps.Clear();
             DoinitApp = true;
         }
 
-        /// <summary>
-        /// Initialize the variables
-        /// </summary>
+        // Initialise les variables
         private void InitializeVariables()
         {
-            ImageSize = 210;
-            CloseAppImageSize = 500;
-            ImageHoverSize = 20;
-            ImageMargin = new Thickness(10);
-            textMargin = 300;
-            scrollViewerMargin = 350;
             ConfNumber = 0;
-            openAppsControl = CreateOpenAppsList();
+            isLock = false;
         }
 
+        // Récupère toutes les applications installées
         private void GetAllInstalledApplication()
         {
             var mirorId = DataAccess.GetMiror().Id;
             foreach (UserApp app in DataAccess.GetEntities<UserApp>())
             {
-                if (FrameManager.InstalledApps.Where((a) => a.UserApp.AppName == app.AppName).FirstOrDefault() == null)
+                if (FrameManager.Apps.Where((a) => a.UserApp.AppName == app.AppName).FirstOrDefault() == null)
                 {
-                    FrameManager.CreateInstalledApp(app);
+                    FrameManager.CreateApp(app);
                 }
             }
-            //var id = "";
-            //var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
-            //using (var inputStream = await file.OpenReadAsync())
-            //using (var classicStream = inputStream.AsStreamForRead())
-            //using (var streamReader = new StreamReader(classicStream))
-            //{
-            //    id = streamReader.ReadToEnd();
-            //}
-            //var http = new HttpClient();
-            ////var url = String.Format("http://www.martinbaud.com/V1/getAppInfo.php?id_mirror=" + id);
-            //var url = String.Format("http://www.martinbaud.com/V1/getAppListFromProfil.php?email=test@test.com&id_profil=2");
-            //var response = await http.GetAsync(url);
-            //var result = await response.Content.ReadAsStringAsync();
-            //string[] links = result.Split(' ');
-            //Classes.FrameManager.InstalledApps.Clear();
-
-            //foreach (string link in links)
-            //{
-            //    if (link != "")
-            //    {
-            //        FrameManager.CreateInstalledApp(link);
-            //    }
-            //}
         }
 
-
-        /// <summary>
-        /// Display the open apps in the AppsPage
-        /// </summary>
-        private void ListOpenApps()
+        // Affiche les applications
+        private void DisplayApps()
         {
-            try
+            int numberOfApps = FrameManager.Apps.Count;
+            Carousel carousel = new Carousel();
+
+            carousel.InvertPositive = false;
+            carousel.ItemDepth = 400;
+            carousel.ItemMargin = 0;
+            carousel.ItemRotationX = 0;
+            carousel.ItemRotationY = 0;
+            carousel.ItemRotationZ = 0;
+            carousel.SelectedIndex = 0;
+            carousel.Orientation = Orientation.Horizontal;
+
+            if (numberOfApps == 0)
             {
-                // Clear the first row
-                openAppsControl.Items.Clear();
-                int numberOfApps = Classes.FrameManager.Apps.Count;
-
-                if (numberOfApps == 0)
-                {
-                    NoOpenedAppsTitle.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    // Ajout de chaque applications ouvertes dans la liste crée
-                    NoOpenedAppsTitle.Visibility = Visibility.Collapsed;
-                    foreach (Classes.App app in FrameManager.Apps)
-                    {
-                        Image img = new Image();
-                        img.Source = new BitmapImage(new Uri(app.UserApp.AppIconLink));
-                        img.Height = ImageSize;
-                        img.Width = ImageSize;
-                        img.Margin = ImageMargin;
-                        img.PointerEntered += new PointerEventHandler(image_PointerEntered);
-                        img.PointerExited += new PointerEventHandler(image_PointerExited);
-                        img.Tapped += new TappedEventHandler(OpenAppTaped);
-                        img.Tag = app;
-
-                        openAppsControl.Items.Add(img);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-
-        }
-
-        /// <summary>
-        /// List the open apps for the close process
-        /// </summary>
-        /// <param name="itemsControl">The XAML Controls that receives the apps for display</param>
-        private void ListOpenApps(ItemsControl itemsControl)
-        {
-            itemsControl.Items.Clear();
-            int numberOfApps = Classes.FrameManager.Apps.Count;
-
-            foreach (Classes.App app in FrameManager.Apps)
-            {
-                Image img = new Image();
-                img.Source = new BitmapImage(new Uri(app.UserApp.AppIconLink));
-                img.Height = ImageSize;
-                img.Width = ImageSize;
-                img.Margin = ImageMargin;
-                img.PointerEntered += new PointerEventHandler(image_PointerEntered);
-                img.PointerExited += new PointerEventHandler(image_PointerExited);
-                img.Tapped += new TappedEventHandler(CloseAppTapped);
-                img.Tag = app;
-
-                itemsControl.Items.Add(img);
-            }
-        }
-
-        /// <summary>
-        /// Create the controls for the open apps
-        /// </summary>
-        /// <returns></returns>
-        private ItemsControl CreateOpenAppsList()
-        {
-            ScrollViewer scrollViewer = new ScrollViewer();
-            ItemsControl itemsControl = new ItemsControl();
-            TransitionCollection transitions = new TransitionCollection();
-            EntranceThemeTransition entranceThemeTransition = new EntranceThemeTransition();
-
-            // ScrollViewer Configuration
-            scrollViewer.HorizontalScrollMode = ScrollMode.Enabled;
-            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            scrollViewer.VerticalScrollMode = ScrollMode.Disabled;
-            scrollViewer.VerticalAlignment = VerticalAlignment.Top;
-            scrollViewer.Margin = new Thickness(0, 50, 0, 0);
-
-            entranceThemeTransition.FromHorizontalOffset = transitionHorizontaloffset;
-            entranceThemeTransition.IsStaggeringEnabled = true;
-            transitions.Add(entranceThemeTransition);
-            itemsControl.ItemContainerTransitions = transitions;
-            itemsControl.ItemsPanel = CreateTemplate();
-
-            scrollViewer.Content = itemsControl;
-            AppsRows.Children.Add(scrollViewer);
-
-            return ((ItemsControl)scrollViewer.Content);
-        }
-
-        /// <summary>
-        /// [Important] For the good display of the applications (Trick)
-        /// </summary>
-        /// <returns></returns>
-        private ItemsPanelTemplate CreateTemplate()
-        {
-            string xaml = "<ItemsPanelTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'><WrapGrid Height='250'/></ItemsPanelTemplate>";
-            return XamlReader.Load(xaml) as ItemsPanelTemplate;
-        }
-
-        /// <summary>
-        /// Display a dialog to prevent the user that he is about to close an app
-        /// </summary>
-        /// <param name="link">The link of the chosen app</param>
-        async private void DisplayCloseAppDialog(Classes.App app)
-        {
-            ContentDialog contentDialog = new ContentDialog
-            {
-                Title = "Fermer l'application",
-                Content = "Voulez-vous vraiment fermer cette application ?",
-                PrimaryButtonText = "Oui",
-                CloseButtonText = "Non"
-            };
-
-            ContentDialogResult result = await contentDialog.ShowAsync();
-
-            // Display to the user that he is about to close an app
-            if (result == ContentDialogResult.Primary)
-            {
-                // Close the chosen app
-                foreach (Classes.App appli in Classes.FrameManager.Apps)
-                {
-                    if (appli == app)
-                    {
-                        Classes.FrameManager.Apps.Remove(app);
-                        backgroundCloseApp.Visibility = Visibility.Collapsed;
-                        cancelButtonCloseApp.Visibility = Visibility.Collapsed;
-                        titleCloseApp.Visibility = Visibility.Collapsed;
-                        scrollviewerCloseApp.Visibility = Visibility.Collapsed;
-                        if (Classes.FrameManager.PendingApp != "None")
-                        {
-                            Classes.FrameManager.CreateApp(Classes.FrameManager.PendingApp);
-                        }
-                        ListOpenApps();
-                        break;
-                    }
-                }
+                NoAppsTitle.Visibility = Visibility.Visible;
             }
             else
             {
-                // DO nothing, the use pressed Cancel Button.
-            }
-        }
-
-        /// <summary>
-        /// When we reach the maximum of opened apps, display a dialog to ask the user to close or not an existing
-        /// to be able to open a new one
-        /// </summary>
-        private async void DisplayMaximumAppDialog()
-        {
-            ContentDialog contentDialog = new ContentDialog
-            {
-                Title = "Maximum d'application ouvertes atteint !",
-                Content = "Vous avez atteint le maximum d'applications ouvertes simultanément, vous devez choisir quelle application vous voulez fermer.",
-                PrimaryButtonText = "Continuer",
-                CloseButtonText = "Pas maintenant"
-            };
-
-            ContentDialogResult result = await contentDialog.ShowAsync();
-
-            // Annonce à l'utilisateur qu'il doit choisir une application à fermer.
-            /// Ne rien faire sinon.
-            if (result == ContentDialogResult.Primary)
-            {
-                // Afficher les applications pour que l'utilisateur puisse choisir.
-                backgroundCloseApp.Visibility = Visibility.Visible;
-                cancelButtonCloseApp.Visibility = Visibility.Visible;
-                titleCloseApp.Visibility = Visibility.Visible;
-                scrollviewerCloseApp.Visibility = Visibility.Visible;
-                ListOpenApps(itemsControlCloseApp);
-            }
-            else
-            {
-                // Ne rien faire, l'utilisateur à pressé sur le boutton CloseButton.
-            }
-        }
-
-        // [Test] Fonction qui remplie des lignes d'applications avec de fausses applications
-        private void FillApps(ItemsControl itemsControl)
-        {
-            itemsControl.Items.Clear();
-            foreach (Classes.App app in FrameManager.InstalledApps)
-            {
-                if (app.UserApp.ProfileId == 0 || app.UserApp.ProfileId == UserManager.Instance.CurrentProfile.Id)
+                NoAppsTitle.Visibility = Visibility.Collapsed;
+                foreach (Classes.App app in FrameManager.Apps)
                 {
-                    Image img = new Image();
-                    img.Source = new BitmapImage(new Uri(app.UserApp.AppIconLink));
-                    img.Height = ImageSize;
-                    img.Width = ImageSize;
-                    img.Margin = ImageMargin;
-                    img.PointerEntered += new PointerEventHandler(image_PointerEntered);
-                    img.PointerExited += new PointerEventHandler(image_PointerExited);
-                    img.Tapped += new TappedEventHandler(InstaledAppTaped);
-                    img.Tag = app;
+                    Ellipse ellipse = new Ellipse();
+                    ImageBrush imageBrush = new ImageBrush();
 
-                    itemsControl.Items.Add(img);
+                    ellipse.Height = 700;
+                    ellipse.Width = 700;
+                    imageBrush.ImageSource = new BitmapImage(new Uri(app.UserApp.AppIconLink));
+                    ellipse.Fill = imageBrush;
+                    ellipse.Tapped += new TappedEventHandler(OpenAppTapped);
+                    ellipse.Tag = app;
+                    /*ellipse.Stroke = new SolidColorBrush(Colors.White);
+                    ellipse.Stroke.Opacity = 0.8;
+                    ellipse.StrokeThickness = 5;*/
+                    carousel.Items.Add(ellipse);
                 }
             }
+            AppsCarousel.Children.Clear();
+            AppsCarousel.Children.Add(carousel);
         }
 
+        // Crétation d'une instance de collection de gestes
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
             gestureCollector.RegisterToGestures(this, ApplyGesture);
         }
 
-        private async void ApplyGesture(Gesture gesture)
+        // Appliquer un geste
+        private void ApplyGesture(Gesture gesture)
         {
             if (!gesture.IsConsumed)
             {
@@ -375,160 +154,50 @@ namespace NeoMir.Pages
             }
         }
 
-        //
-        // EVENTS
-        //
-
-        private void image_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Image img = (Image)sender;
-            Classes.FrameManager.AppPosition = (int)img.Tag + 1;
-            Classes.FrameManager.LaunchApp(Classes.FrameManager.Apps[(int)img.Tag]);
-        }
-
-        private void InstaledAppTaped(object sender, TappedRoutedEventArgs e)
-        {
-            Image img = (Image)sender;
-            if (Classes.FrameManager.Apps.Count < Classes.FrameManager.MaxApp)
-            {
-
-                Classes.FrameManager.LaunchInstalledApp((Classes.App)img.Tag);
-                ListOpenApps();
-            }
-            else
-            {
-                Classes.App app = (Classes.App)img.Tag;
-                // Maximum apps reached, ask the user confirmation to replace one.
-                Classes.FrameManager.PendingApp = app.UserApp.AppLink;
-                DisplayMaximumAppDialog();
-            }
-        }
-
-        private void OpenAppTaped(object sender, TappedRoutedEventArgs e)
-        {
-            Image img = (Image)sender;
-            Classes.FrameManager.LaunchInstalledApp((Classes.App)img.Tag);
-        }
-
-
-
-        private void OpenAppWithGesture()
-        {
-            Classes.FrameManager.LaunchInstalledApp(Classes.FrameManager.InstalledApps[0]);
-        }
-
-        // For the close process
-        private void CloseAppTapped(object sender, TappedRoutedEventArgs e)
-        {
-            Image img = (Image)sender;
-            DisplayCloseAppDialog(img.Tag as Classes.App);
-        }
-
-        private void image_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            Image img = (Image)sender;
-            img.Height += ImageHoverSize;
-            img.Width += ImageHoverSize;
-        }
-
-        private void image_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            Image img = (Image)sender;
-            img.Height -= ImageHoverSize;
-            img.Width -= ImageHoverSize;
-        }
-
-        private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
-        }
-
-        private void RemoveAppButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            if (Classes.FrameManager.Apps.Count > 0)
-            {
-                Classes.FrameManager.PendingApp = "None";
-                backgroundCloseApp.Visibility = Visibility.Visible;
-                cancelButtonCloseApp.Visibility = Visibility.Visible;
-                titleCloseApp.Visibility = Visibility.Visible;
-                scrollviewerCloseApp.Visibility = Visibility.Visible;
-                ListOpenApps(itemsControlCloseApp);
-            }
-        }
-
-        private void CancelButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            backgroundCloseApp.Visibility = Visibility.Collapsed;
-            cancelButtonCloseApp.Visibility = Visibility.Collapsed;
-            titleCloseApp.Visibility = Visibility.Collapsed;
-            scrollviewerCloseApp.Visibility = Visibility.Collapsed;
-        }
-
-        private void SynchronizeButton_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            //TODO call API to get profile apps again
-        }
-
+        // Charge les applications du profil
         private void LoadProfilApps()
         {
             if (DoinitApp)
             {
                 FrameManager.Apps.Clear();
-                openAppsControl.Items.Clear();
                 GetAllInstalledApplication();
-                FillApps(installedAppControl);
                 DoinitApp = false;
             }
         }
 
-        private async void NavigateOn(Page page)
+        // Ouvre l'application avec des gestes
+        private void OpenAppWithGesture()
+        {
+            FrameManager.LaunchApp(FrameManager.Apps[0]);
+        }
+
+        #endregion
+
+        #region EVENTS
+
+        // Evenement pour ouvrir une application
+        private void OpenAppTapped(object sender, TappedRoutedEventArgs e)
+        {
+            Ellipse img = (Ellipse)sender;
+            FrameManager.LaunchApp((Classes.App)img.Tag);
+        }
+
+        // Evenement pour retourner sur la page d'accueil
+        private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FrameManager.GoTo(FrameManager.MainPageFrame);
+        }
+
+        // Evenement de navigation
+        private void NavigateOn(Page page)
         {
             if (page == this)
             {
                 LoadProfilApps();
+                DisplayApps();
             }
         }
 
-        /// <summary>
-        /// Init the scroolviewer for display all installed apps
-        /// </summary>
-        private void InitInstalledAppsLayout()
-        {
-            TextBlock textBlock = new TextBlock();
-            ScrollViewer scrollViewer = new ScrollViewer();
-            installedAppControl = new ItemsControl();
-            TransitionCollection transitions = new TransitionCollection();
-            EntranceThemeTransition entranceThemeTransition = new EntranceThemeTransition();
-
-            // TextBlock Configuration
-            textBlock.Text = textRowName;
-            textBlock.FontSize = 25;
-            textBlock.FontStyle = Windows.UI.Text.FontStyle.Italic;
-            textBlock.Margin = new Thickness(20, textMargin, 0, 0);
-            textBlock.VerticalAlignment = VerticalAlignment.Top;
-            textBlock.HorizontalAlignment = HorizontalAlignment.Left;
-            ConfNumber++;
-            textMargin += lag;
-
-            // ScrollViewer Configuration
-            scrollViewer.HorizontalScrollMode = ScrollMode.Enabled;
-            scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            scrollViewer.VerticalScrollMode = ScrollMode.Disabled;
-            scrollViewer.VerticalAlignment = VerticalAlignment.Top;
-            scrollViewer.Margin = new Thickness(0, scrollViewerMargin, 0, 0);
-            scrollViewerMargin += lag;
-
-            entranceThemeTransition.FromHorizontalOffset = transitionHorizontaloffset;
-            entranceThemeTransition.IsStaggeringEnabled = true;
-            transitions.Add(entranceThemeTransition);
-            installedAppControl.ItemContainerTransitions = transitions;
-            installedAppControl.ItemsPanel = CreateTemplate();
-
-            scrollViewer.Content = installedAppControl;
-
-            // Add all to the grid
-            AppsRows.Children.Add(textBlock);
-            AppsRows.Children.Add(scrollViewer);
-        }
+        #endregion
     }
 }
