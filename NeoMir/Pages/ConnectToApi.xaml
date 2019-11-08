@@ -11,9 +11,8 @@
     <Grid>
 
         <Image x:Name="AskId" Source="/Assets/MainPage/signright.png" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="500,0,400,0" Tapped="AskId_Tapped"/>
-        <TextBlock x:Name="ID" FontSize= "40" FontStyle= "Italic" Text= "" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="700,0,00,0"/>
-        <TextBlock x:Name="msgconnexion" FontSize= "40" FontStyle= "Italic" Text= "" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="500,150,50,0"/>
-        <TextBlock x:Name="time" FontSize= "40" FontStyle= "Italic" Text= "" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="800,300,50,0"/>
+        <TextBlock x:Name="txtResults" FontSize= "40" FontStyle= "Italic" Text= "" HorizontalAlignment="Left" VerticalAlignment="Center" Height="70" Margin="700,0,00,0"/>
+     
 
         <Image x:Name= "HomeButton" Source="/Assets/AppPage/home.png"  HorizontalAlignment= "Center" VerticalAlignment= "Bottom" Height= "70" Margin= "0,0,0,50" Tapped="HomeButton_Tapped"/>
 

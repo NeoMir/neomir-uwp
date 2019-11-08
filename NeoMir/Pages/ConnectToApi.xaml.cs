@@ -13,11 +13,14 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Media.SpeechRecognition;
+using System.Text;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace NeoMir.Pages
 {
+
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
@@ -32,23 +35,53 @@ namespace NeoMir.Pages
             this.Frame.Navigate(typeof(MainPage));
         }
 
-        private void AskId_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void AskId_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            getID();
+            OnListenAsync(sender, e);
         }
-
-        private async void getID()
+        async void OnListenAsync(object sender, RoutedEventArgs e)
         {
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            this.recognizer = new SpeechRecognizer();
+            await this.recognizer.CompileConstraintsAsync();
+
+            this.recognizer.Timeouts.InitialSilenceTimeout = TimeSpan.FromSeconds(5);
+            this.recognizer.Timeouts.EndSilenceTimeout = TimeSpan.FromSeconds(20);
+
+            this.recognizer.UIOptions.AudiblePrompt = "Say whatever you like, I'm listening";
+            this.recognizer.UIOptions.ShowConfirmation = true;
+            this.recognizer.UIOptions.IsReadBackEnabled = true;
+            this.recognizer.Timeouts.BabbleTimeout = TimeSpan.FromSeconds(5);
+
+            var result = await this.recognizer.RecognizeWithUIAsync();
+
+            if (result != null)
             {
-                var http = new HttpClient();
-                var url = String.Format("http://www.martinbaud.com/V1/gid.php?id");
-                var response = await http.GetAsync(url);
-                var result = await response.Content.ReadAsStringAsync();
-                ID.Text = result.ToString();
-                msgconnexion.Text = "En attente de connexion";
+                this.txtResults.Text = result.Text.ToString();
+                /*StringBuilder builder = new StringBuilder();
 
-            });
+                builder.AppendLine(
+                  $"I have {result.Confidence} confidence that you said [{result.Text}] " +
+                  $"and it took {result.PhraseDuration.TotalSeconds} seconds to say it " +
+                  $"starting at {result.PhraseStartTime:g}");
+
+                var alternates = result.GetAlternates(10);
+
+                builder.AppendLine(
+                  $"There were {alternates?.Count} alternates - listed below (if any)");
+
+                if (alternates != null)
+                {
+                    foreach (var alternate in alternates)
+                    {
+                        builder.AppendLine(
+                          $"Alternate {alternate.Confidence} confident you said [{alternate.Text}]");
+                    }
+                }
+                this.txtResults.Text = builder.ToString();*/
+            }
         }
+        SpeechRecognizer recognizer;
+
     }
 }
+
