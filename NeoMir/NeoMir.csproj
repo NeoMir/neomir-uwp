@@ -137,22 +137,6 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\2020_logo_neomir.altform-unplated_targetsize-16.png" />
-    <Content Include="Assets\2020_logo_neomir.altform-unplated_targetsize-24.png" />
-    <Content Include="Assets\2020_logo_neomir.altform-unplated_targetsize-256.png" />
-    <Content Include="Assets\2020_logo_neomir.altform-unplated_targetsize-32.png" />
-    <Content Include="Assets\2020_logo_neomir.altform-unplated_targetsize-48.png" />
-    <Content Include="Assets\2020_logo_neomir.png" />
-    <Content Include="Assets\2020_logo_neomir.scale-100.png" />
-    <Content Include="Assets\2020_logo_neomir.scale-125.png" />
-    <Content Include="Assets\2020_logo_neomir.scale-150.png" />
-    <Content Include="Assets\2020_logo_neomir.scale-200.png" />
-    <Content Include="Assets\2020_logo_neomir.scale-400.png" />
-    <Content Include="Assets\2020_logo_neomir.targetsize-16.png" />
-    <Content Include="Assets\2020_logo_neomir.targetsize-24.png" />
-    <Content Include="Assets\2020_logo_neomir.targetsize-256.png" />
-    <Content Include="Assets\2020_logo_neomir.targetsize-32.png" />
-    <Content Include="Assets\2020_logo_neomir.targetsize-48.png" />
     <Content Include="Assets\AppsPage\EasyBrush.png" />
     <Content Include="Assets\AppsPage\Epitech.jpg" />
     <Content Include="Assets\AppsPage\Facebook.png" />
@@ -191,6 +175,16 @@
     <Content Include="Assets\package.scale-150.png" />
     <Content Include="Assets\package.scale-200.png" />
     <Content Include="Assets\package.scale-400.png" />
+    <Content Include="Assets\SmallTile.scale-100.png" />
+    <Content Include="Assets\SmallTile.scale-125.png" />
+    <Content Include="Assets\SmallTile.scale-150.png" />
+    <Content Include="Assets\SmallTile.scale-200.png" />
+    <Content Include="Assets\SmallTile.scale-400.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
     <Content Include="Assets\vignette.scale-100.png" />
     <Content Include="Assets\vignette.scale-125.png" />
     <Content Include="Assets\vignette.scale-150.png" />
@@ -208,6 +202,11 @@
     <Content Include="Assets\weather-icons\rainy-cloud-outline.png" />
     <Content Include="Assets\weather-icons\thunderstorm.png" />
     <Content Include="Assets\weather-icons\sunny-day.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="id\id.txt" />
     <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
