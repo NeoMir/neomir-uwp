@@ -23,7 +23,10 @@ namespace NeoMir.Classes
         }
 
         // METHODS
-
+        public void Reset()
+        {
+            Frame = new Frame();
+        }
     }
 }
 

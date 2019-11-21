@@ -54,7 +54,7 @@ namespace NeoMir.Pages
         // Détecte s'il y a un changement de profil
         private void ProfileChanged()
         {
-            FrameManager.Apps.Clear();
+            FrameManager.InstalledApps.Clear();
             DoinitApp = true;
         }
 
@@ -71,7 +71,7 @@ namespace NeoMir.Pages
             var mirorId = DataAccess.GetMiror().Id;
             foreach (UserApp app in DataAccess.GetEntities<UserApp>())
             {
-                if (FrameManager.Apps.Where((a) => a.UserApp.AppName == app.AppName).FirstOrDefault() == null)
+                if (FrameManager.InstalledApps.Where((a) => a.UserApp.AppName == app.AppName).FirstOrDefault() == null)
                 {
                     FrameManager.CreateApp(app);
                 }
@@ -81,7 +81,7 @@ namespace NeoMir.Pages
         // Affiche les applications
         private void DisplayApps()
         {
-            int numberOfApps = FrameManager.Apps.Count;
+            int numberOfApps = FrameManager.InstalledApps.Count;
             Carousel carousel = new Carousel();
 
             carousel.InvertPositive = false;
@@ -100,7 +100,7 @@ namespace NeoMir.Pages
             else
             {
                 NoAppsTitle.Visibility = Visibility.Collapsed;
-                foreach (Classes.App app in FrameManager.Apps)
+                foreach (Classes.App app in FrameManager.InstalledApps)
                 {
                     Ellipse ellipse = new Ellipse();
                     ImageBrush imageBrush = new ImageBrush();
@@ -159,7 +159,7 @@ namespace NeoMir.Pages
         {
             if (DoinitApp)
             {
-                FrameManager.Apps.Clear();
+                FrameManager.InstalledApps.Clear();
                 GetAllInstalledApplication();
                 DoinitApp = false;
             }
@@ -168,7 +168,7 @@ namespace NeoMir.Pages
         // Ouvre l'application avec des gestes
         private void OpenAppWithGesture()
         {
-            FrameManager.LaunchApp(FrameManager.Apps[0]);
+            FrameManager.LaunchApp(FrameManager.InstalledApps[0]);
         }
 
         #endregion
