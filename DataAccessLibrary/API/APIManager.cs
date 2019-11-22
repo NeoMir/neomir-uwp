@@ -10,10 +10,9 @@ namespace DataAccessLibrary.API
 {
     public static class APIManager
     {
-        /// <summary>
-        /// Recevoir l'identifiant du miroir
-        /// </summary>
-        /// <returns></returns>
+        #region FONCTIONS
+
+        // Recevoir l'identifiant du miroir
         public static async Task<string> GetMirorId()
         {
             string result = string.Empty;
@@ -32,11 +31,7 @@ namespace DataAccessLibrary.API
             return result;
         }
 
-        /// <summary>
-        /// Recevoir si l'identifiant est déjà lié ou non
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        // Recevoir si l'identifiant est déjà lié ou non
         public static async Task<Tuple<bool, string>> GetIsLinked(string id)
         {
             try
@@ -55,11 +50,7 @@ namespace DataAccessLibrary.API
             }
         }
 
-        /// <summary>
-        /// Recevoir les profils 
-        /// </summary>
-        /// <param name="userMail"></param>
-        /// <returns></returns>
+        // Recevoir les profils 
         public static async Task<List<string>> GetUserProfiles(string userMail)
         {
             List<string> ret = new List<string>();
@@ -88,12 +79,7 @@ namespace DataAccessLibrary.API
             return ret;
         }
 
-        /// <summary>
-        /// Recevoir les applications d'un profil
-        /// </summary>
-        /// <param name="userMail"></param>
-        /// <param name="profilId"></param>
-        /// <returns></returns>
+        // Recevoir les applications d'un profil
         public static async Task<List<UserApp>> GetProfileApps(string userMail, int profilId)
         {
             List<UserApp> ret = new List<UserApp>();
@@ -125,5 +111,7 @@ namespace DataAccessLibrary.API
             }
             return ret;
         }
+
+        #endregion
     }
 }

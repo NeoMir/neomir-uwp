@@ -7,26 +7,34 @@ namespace NeoMir.Classes
 {
     public class App
     {
-        // PROPERTIES
+        #region PROPERTIES
 
-        // Frame of the app
+        // Frame l'application
         public Frame Frame { get; private set; }
        
-        // Database app representation
+        // Données de l'application de l'utilisateur depuis la base de données
         public UserApp UserApp { get; set; }
 
-        // CONSTRUCTOR
+        #endregion
+
+        #region CONSTRUCTOR
+
         public App(UserApp app)
         {
             Frame = new Frame();
             UserApp = app;
         }
 
-        // METHODS
+        #endregion
+
+        #region METHODS
+
         public void Reset()
         {
             Frame = new Frame();
         }
+
+        #endregion
     }
 }
 

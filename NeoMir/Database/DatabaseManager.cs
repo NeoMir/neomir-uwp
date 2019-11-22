@@ -8,13 +8,16 @@ namespace NeoMir.Database
 {
     public class DatabaseManager
     {
+        #region PROPERTIES
+
         private static object syncRoot = new object();
         private static volatile DatabaseManager instance;
 
-        /// <summary>
-        /// Gets an Instance of the classe if the it's already existing
-        /// </summary>
-        /// <value>LoggingHandler</value>
+        #endregion
+
+        #region CONSTRUCTOR
+
+        // Obtient une instance de la classe si elle existe déjà
         public static DatabaseManager Instance
         {
             get
@@ -37,5 +40,7 @@ namespace NeoMir.Database
         {
 
         }
+
+        #endregion
     }
 }

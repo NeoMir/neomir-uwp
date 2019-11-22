@@ -7,14 +7,14 @@ using Windows.UI.Xaml.Controls;
 
 namespace NeoMir.Classes
 {
-    /// <summary>
-    /// Class to Communicate with WebView's App content.
-    /// </summary>
+    // Classe pour communiquer avec le contenu de la vue Web
     public class Communicate
     {
-        //PROPERTIES
+        #region PROPERTIES
 
-        //METHODS
+        #endregion
+
+        #region METHODS
 
         /// <summary>
         /// Call an available function inside the webview.
@@ -57,5 +57,7 @@ namespace NeoMir.Classes
             else if (direction == "forward")
                 webView.GoForward();
         }
+
+        #endregion
     }
 }
