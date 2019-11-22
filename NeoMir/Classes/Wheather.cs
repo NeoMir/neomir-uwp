@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-// Class to receive the data from WeatherAPI
-
+// Classes pour recevoir les données de l'API Météo
 namespace NeoMir.Classes
 {
     [DataContract]

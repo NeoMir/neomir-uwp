@@ -13,7 +13,6 @@ using System.Linq;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Media;
-using Windows.UI;
 
 namespace NeoMir.Pages
 {

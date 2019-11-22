@@ -7,20 +7,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static NeoMir.Classes.GlobalStatusManager;
 
 namespace NeoMir.UserManagment
 {
     public class UserManager
     {
+        #region PROPERTIES
+
         private static object syncRoot = new object();
         private static volatile UserManager instance;
         private UserProfile currentProfile;
+        public event ProfileChangedHandler ProfileChanged;
 
+        #endregion
 
-        /// <summary>
-        /// Gets an Instance of the classe if the it's already existing
-        /// </summary>
-        /// <value>LoggingHandler</value>
+        #region CONSTRUCTOR
+
+        // Obtient une instance de la classe si elle existe déjà
         public static UserManager Instance
         {
             get
@@ -44,6 +48,10 @@ namespace NeoMir.UserManagment
             //TODO get list of user profile through the API
         }
 
+        #endregion
+
+        #region METHODS
+
         public List<UserProfile> Profiles
         {
             get { return DataAccess.GetEntities<UserProfile>(); }
@@ -51,11 +59,7 @@ namespace NeoMir.UserManagment
 
         public delegate void ProfileChangedHandler();
 
-        public event ProfileChangedHandler ProfileChanged;
-
-        /// <summary>
-        /// Current profile 
-        /// </summary>
+        // Profil actuel
         public UserProfile CurrentProfile
         {
             get { return currentProfile; }
@@ -123,5 +127,7 @@ namespace NeoMir.UserManagment
                 Name = "Ambroise"
             });*/
         }
+
+        #endregion
     }
 }
