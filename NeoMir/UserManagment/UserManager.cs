@@ -97,6 +97,14 @@ namespace NeoMir.UserManagment
                             DataAccess.AddEntity(new UserProfile() { Id = i + 1, Name = list[i], IsFaceLinked= false });
                         }
                     }
+                    List<UserProfile> profiles = Profiles;
+                    foreach(UserProfile profil in Profiles)
+                    {
+                        if (list.Where(p => p == profil.Name).FirstOrDefault() == null)
+                        {
+                            DataAccess.DeleteEntity(profil);
+                        }
+                    }
                 }
             }
         }
