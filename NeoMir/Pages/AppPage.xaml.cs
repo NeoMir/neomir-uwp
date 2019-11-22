@@ -1,13 +1,8 @@
 ﻿using NeoMir.Classes.Com;
 using NeoMir.Classes.Communication;
 using System;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Graphics.Imaging;
-using Windows.Storage.Streams;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using NeoMir.Classes;
 
