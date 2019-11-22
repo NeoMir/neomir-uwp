@@ -15,17 +15,15 @@ namespace NeoMir.Pages
 {
     public sealed partial class AppPage : Page
     {
-        //
-        // PROPERTIES
-        //
+        #region PROPERTIES
 
         private GestureCollector gestureCollector;
         private bool isLock;
         public string Link { get; private set; }
 
-        //
-        // CONSTRUCTOR
-        //
+        #endregion
+
+        #region CONSTRUCTOR
 
         public AppPage()
         {
@@ -37,9 +35,9 @@ namespace NeoMir.Pages
             GestureSetup();
         }
 
-        //
-        // METHODS
-        //
+        #endregion
+
+        #region METHODS
 
         private void StartAnimations()
         {
@@ -55,7 +53,7 @@ namespace NeoMir.Pages
             gestureCollector.RegisterToGestures(this, ApplyGesture);
         }
 
-        private async void ApplyGesture(Gesture gesture)
+        private void ApplyGesture(Gesture gesture)
         {
             if (this == Classes.FrameManager.GetCurrentPage() && !isLock)
             {
@@ -81,9 +79,9 @@ namespace NeoMir.Pages
             }
         }
 
-        //
-        // EVENTS
-        //
+        #endregion
+
+        #region EVENTS
 
         private void AppView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
@@ -119,5 +117,7 @@ namespace NeoMir.Pages
         {
             Classes.FrameManager.GoTo(Classes.FrameManager.AppsPageFrame);
         }
+
+        #endregion
     }
 }

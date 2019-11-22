@@ -1,4 +1,5 @@
 ﻿using DataAccessLibrary.Entitites;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using NeoMir.Classes;
 using NeoMir.Classes.Com;
 using NeoMir.Classes.Communication;
@@ -15,47 +16,47 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 
 namespace NeoMir.Pages
 {
     public sealed partial class LockScreenPage : Page
     {
-        //
-        // PROPERTIES
-        //
+        #region PROPERTIES
 
         public static int HoverSize = 20;
         public static Thickness BoxMargin = new Thickness(10);
         private GestureCollector gestureCollector;
         private FaceCollector faceCollector;
 
-        //
-        // CONSTRUCTOR
-        //
+        #endregion
+
+        #region CONSTRUCTOR
+
         public LockScreenPage()
         {
             this.InitializeComponent();
             FrameManager.NavigatedEvent += NavigateOn;
             StartBackgroundMedia();
             CollectorSetup();
-            //ListUsers();
         }
+
+        #endregion
+
+        #region METHODS
 
         private async void NavigateOn(Page page)
         {
             if (page == this)
             {
-                MainScroll.Visibility = Visibility.Collapsed;
+                Users.Visibility = Visibility.Collapsed;
                 await UserManager.Instance.Init();
-                ListUsers();
-                MainScroll.Visibility = Visibility.Visible;
+                DisplayUsers();
+                Users.Visibility = Visibility.Visible;
             }
         }
-
-        //
-        // METHODS
-        //
 
         private void CollectorSetup()
         {
@@ -74,9 +75,19 @@ namespace NeoMir.Pages
             mediaPlayer.Play();
         }
 
-        private void ListUsers()
+        private void DisplayUsers()
         {
-            Users.Items.Clear();
+            Carousel carousel = new Carousel();
+
+            carousel.InvertPositive = false;
+            carousel.ItemDepth = 400;
+            carousel.ItemMargin = 0;
+            carousel.ItemRotationX = 0;
+            carousel.ItemRotationY = 0;
+            carousel.ItemRotationZ = 0;
+            carousel.SelectedIndex = 0;
+            carousel.Orientation = Orientation.Horizontal;
+
             foreach (UserProfile profile in UserManager.Instance.Profiles)
             {
                 Button button = new Button();
@@ -85,44 +96,27 @@ namespace NeoMir.Pages
                 button.FontSize = 50;
                 button.FontStyle = Windows.UI.Text.FontStyle.Italic;
                 button.FontWeight = Windows.UI.Text.FontWeights.Bold;
-                button.Height = 200;
-                button.Width = 800;
-                button.Opacity = 1;
-                button.Margin = BoxMargin;
-                button.PointerEntered += new PointerEventHandler(button_PointerEntered);
-                button.PointerExited += new PointerEventHandler(button_PointerExited);
-                button.Tapped += new TappedEventHandler(button_Tapped);
-
-                Users.Items.Add(button);
+                button.Height = 300;
+                button.Width = 1000;
+                carousel.Items.Add(button);
             }
+
+            Users.Children.Clear();
+            Users.Children.Add(carousel);
         }
 
-        //
-        // EVENTS
-        //
+        #endregion
+
+        #region EVENTS
 
         private void button_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Button button = (Button)sender;
             UserManager.Instance.CurrentProfile = (UserProfile)button.Tag;
-            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
+            FrameManager.GoTo(FrameManager.MainPageFrame);
         }
 
-        private void button_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-            button.Height += HoverSize;
-            button.Width += HoverSize;
-        }
-
-        private void button_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-            button.Height -= HoverSize;
-            button.Width -= HoverSize;
-        }
-
-        private async void ApplyGesture(Gesture gesture)
+        private void ApplyGesture(Gesture gesture)
         {
             if (!gesture.IsConsumed)
             {
@@ -154,7 +148,6 @@ namespace NeoMir.Pages
                     {
                         this.DetectedMessage.Text = string.Format("{0} has been detected", face.Name);
                         this.DetectedMessage.Text = string.Empty;
-                        //MainScroll.Visibility = Visibility.Collapsed;
                         UserManager.Instance.CurrentProfile = profile;
                         face.IsConsumed = true;
                         await Task.Delay(2000);
@@ -171,5 +164,7 @@ namespace NeoMir.Pages
                 }
             }
         }
+
+        #endregion
     }
 }
