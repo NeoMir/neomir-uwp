@@ -17,6 +17,8 @@ using Microsoft.Toolkit.Uwp.UI.Animations;
 using Windows.UI.Xaml;
 using NeoMir.Classes;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Shapes;
+using NeoMir.Globals;
 
 namespace NeoMir.Pages
 {
@@ -63,6 +65,7 @@ namespace NeoMir.Pages
             StartAnimations();
             GestureSetup();
             UserManager.Instance.ProfileChanged += GetProfile;
+            GestureIcone.Content = new GestureIcone() { Icon = "Validate" };
         }
 
         #endregion

@@ -17,5 +17,6 @@
         <Button x:Name= "PrevAppButton" FontFamily="Segoe MDL2 Assets" Content="&#xE973;"  HorizontalAlignment= "Left" VerticalAlignment= "Center" Height="70" Width="70" FontSize="50" Margin= "0,0,0,0" Tapped="PrevAppButton_Tapped" Background="{x:Null}" Opacity="0.5"/>
         <Button x:Name= "HomeButton" FontFamily="Segoe MDL2 Assets" Content="&#xEA8A;"  HorizontalAlignment= "Center" VerticalAlignment= "Top" Height="70" Width="70" FontSize="50" Margin= "0,0,100,0" Tapped="HomeButton_Tapped" Background="{x:Null}" Opacity="0.5"/>
         <Button x:Name= "AppsButton" FontFamily="Segoe MDL2 Assets" Content="&#xE81E;"  HorizontalAlignment= "Center" VerticalAlignment= "Top" Height="70" Width="70" FontSize="50" Margin= "100,0,0,0" Tapped="AppsButton_Tapped" Background="{x:Null}" Opacity="0.5"/>
+        <ContentControl x:Name="GestureIcone" Grid.ColumnSpan="10" Grid.RowSpan="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50"/>
     </Grid>
 </Page>
