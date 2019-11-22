@@ -97,7 +97,7 @@
     </Compile>
     <Compile Include="Classes\ActivityDetector.cs" />
     <Compile Include="Classes\Animation.cs" />
-    <Compile Include="Classes\Com\GlobalMessageCollector.cs" />
+    <Compile Include="Classes\Com\GlobalMessageManager.cs" />
     <Compile Include="Classes\Com\Protocol.cs" />
     <Compile Include="Classes\FrameManager.cs" />
     <Compile Include="Classes\Communicate.cs" />

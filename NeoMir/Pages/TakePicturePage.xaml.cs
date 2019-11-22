@@ -44,7 +44,7 @@ namespace NeoMir.Pages
         {
             this.InitializeComponent();
             FrameManager.NavigatedEvent += NavigateOn;
-            GlobalMessageCollector.Instance.RegisterToGlobalMessage(this, PythonResponse);
+            GlobalMessageManager.Instance.RegisterToGlobalMessage(this, PythonResponse);
             InitDevices();
         }
 
@@ -125,10 +125,11 @@ namespace NeoMir.Pages
         /// <summary>
         /// Display the proccesing picture string when the photo has been taken
         /// </summary>
-        private void PhotoRegistred()
+        private async void PhotoRegistred()
         {
             LineGrid.Visibility = Visibility.Collapsed;
             PhotoTookGrid.Visibility = Visibility.Visible;
+            await GlobalMessageManager.Instance.SendMessageAsync(Protocol.RequiredFaceSave);
             PhotoTookMessage.Text = Globals.GlobalNames.PhotoTookProcessing;
         }
 

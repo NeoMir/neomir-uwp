@@ -11,11 +11,12 @@ using Windows.UI.Xaml.Controls;
 
 namespace NeoMir.Classes.Com
 {
-    public class GlobalMessageCollector
+    public class GlobalMessageManager
     {
-        private static volatile GlobalMessageCollector instance;
+        private static volatile GlobalMessageManager instance;
         private static object syncRoot = new object();
-        private StorageFile file;
+        private StorageFile p2cFile;
+        private StorageFile c2pFile;
         private StorageFileQueryResult query;
         private DateTimeOffset lastModification;
         public delegate void GestureCollectedHandler(Gesture gesture);
@@ -27,7 +28,7 @@ namespace NeoMir.Classes.Com
         /// Gets an Instance of the classe if the it's already existing
         /// </summary>
         /// <value>LoggingHandler</value>
-        public static GlobalMessageCollector Instance
+        public static GlobalMessageManager Instance
         {
             get
             {
@@ -37,7 +38,7 @@ namespace NeoMir.Classes.Com
                     {
                         if (instance == null)
                         {
-                            instance = new GlobalMessageCollector();
+                            instance = new GlobalMessageManager();
                         }
                     }
                 }
@@ -45,7 +46,7 @@ namespace NeoMir.Classes.Com
             }
         }
 
-        private GlobalMessageCollector()
+        private GlobalMessageManager()
         {
             pageEventDico = new Dictionary<Page, Action<string>>();
             GetQuery();
@@ -54,12 +55,12 @@ namespace NeoMir.Classes.Com
         private async Task GetQuery()
         {
             StorageFolder folder = KnownFolders.PicturesLibrary;
-            file = await folder.GetFileAsync(Protocol.ComFile);
+            p2cFile = await folder.CreateFileAsync(Protocol.P2CFile, Windows.Storage.CreationCollisionOption.OpenIfExists);
             while (true)
             {
                 try
                 {
-                    await GetMessage(null, null);
+                    await ReadMessageAsync(null, null);
                     await Task.Delay(1000);
                 }
                 catch
@@ -68,9 +69,9 @@ namespace NeoMir.Classes.Com
             };
         }
 
-        private async Task GetMessage(Windows.Storage.Search.IStorageQueryResultBase sender, object args)
+        private async Task ReadMessageAsync(Windows.Storage.Search.IStorageQueryResultBase sender, object args)
         {
-            string text = await FileIO.ReadTextAsync(file);
+            string text = await FileIO.ReadTextAsync(p2cFile);
             lastMessage = lastMessage == default(string) ? text : lastMessage;
             if (text != lastMessage)
             {
@@ -87,6 +88,13 @@ namespace NeoMir.Classes.Com
             }
         }
 
+        public async Task SendMessageAsync(string message)
+        {
+            StorageFolder folder = KnownFolders.PicturesLibrary;
+            c2pFile = await folder.CreateFileAsync(Protocol.C2PFile, Windows.Storage.CreationCollisionOption.OpenIfExists);
+            await FileIO.WriteTextAsync(c2pFile, message);
+        }
+
         private int GetTimeElapsed(DateTimeOffset current, DateTimeOffset last)
         {
             int currentMilli = current.Millisecond + (current.Second * 100) + (current.Minute * 60 * 100);
@@ -101,5 +109,7 @@ namespace NeoMir.Classes.Com
                 pageEventDico.Add(page, action);
             }
         }
+
+
     }
 }
