@@ -9,5 +9,6 @@ namespace DataAccessLibrary.Entitites
         public string Name { get; set; }
         public byte[] Face { get; set; }
         public string FaceLink { get; set; }
+        public bool IsFaceLinked { get; set; }
     }
 }

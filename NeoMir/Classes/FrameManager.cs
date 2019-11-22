@@ -22,6 +22,8 @@ namespace NeoMir.Classes
         public static Frame LockPageFrame { get; set; }
         // La Frame de la page PairPage
         public static Frame PairPageFrame { get; set; }
+        // Frame de la page de capture photo
+        public static Frame CapturePage { get; set; }
         // Liste des applications installées
         public static List<App> InstalledApps = new List<App>();
         // Liste des applications ouvertes

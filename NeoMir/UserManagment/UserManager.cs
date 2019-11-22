@@ -66,6 +66,15 @@ namespace NeoMir.UserManagment
             }
         }
 
+        /// <summary>
+        /// To call when a modification to the current profil properties has changed
+        /// </summary>
+        public void CurrentProfilUpdated()
+        {
+            DataAccess.UpdateEntity(UserManager.Instance.CurrentProfile);
+            ProfileChanged?.Invoke();
+        }
+
         public async Task Init()
         {
             if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.FirstLaunch)
@@ -74,14 +83,15 @@ namespace NeoMir.UserManagment
             }
             else
             {
-                var lol = DataAccess.GetMiror();
                 List<string> list = await APIManager.GetUserProfiles(DataAccess.GetMiror().Usermail);
                 if (list.Count > 0)
                 {
-                    DataAccess.DeleteTableEntries<UserProfile>();
                     for (int i = 0; i < list.Count; i++)
                     {
-                        DataAccess.AddEntity(new UserProfile() { Id = i + 1, Name = list[i] });
+                        if (Profiles.Where(p => p.Name == list[i]).FirstOrDefault() == null)
+                        {
+                            DataAccess.AddEntity(new UserProfile() { Id = i + 1, Name = list[i], IsFaceLinked= false });
+                        }
                     }
                 }
             }
@@ -92,14 +102,14 @@ namespace NeoMir.UserManagment
             DataAccess.AddEntity(new UserProfile()
             {
                 Id = 1,
-                Name = "Marwin"
+                Name = "Admin"
             });
 
-            DataAccess.AddEntity(new UserProfile()
-            {
-                Id = 2,
-                Name = "Robin"
-            });
+            //DataAccess.AddEntity(new UserProfile()
+            //{
+            //    Id = 2,
+            //    Name = "Robin"
+            //});
 
             /*DataAccess.AddEntity(new UserProfile()
             {

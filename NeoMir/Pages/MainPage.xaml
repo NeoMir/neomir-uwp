@@ -62,5 +62,9 @@
         <Button Grid.RowSpan="2" Grid.Column="0" Grid.Row="1" x:Name= "PrevAppButton" FontFamily="Segoe MDL2 Assets" Content="&#xE973;"  HorizontalAlignment= "Left" VerticalAlignment= "Center" Height="70" Width="70" FontSize="50" Tapped= "PrevAppButton_Tapped" Margin= "20,0,0,0" Background="{x:Null}" Opacity="0.5"/>
         <!--<Image Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="1" x:Name="ApiPage"  Source= "/Assets/MainPage/sign.png"  HorizontalAlignment="Center" VerticalAlignment="center" Height="70" Tapped="ApiPage_Tapped" Margin="0,0,0,100"/>-->
         <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" Grid.RowSpan="5" x:Name="msgWelcome"  FontSize= "40" FontStyle= "Italic" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
+ 
+        <Button Grid.Column="0" Grid.Row="3" Height="100" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Foreground="Beige" Margin="0 0 0 35" Click="Capture_Button_Click">
+            <Ellipse Width="50" Height="50" Fill="AliceBlue" Opacity="0.3"></Ellipse>
+        </Button>
     </Grid>
 </Page>
