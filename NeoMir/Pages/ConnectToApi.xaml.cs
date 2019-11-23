@@ -62,7 +62,7 @@ namespace NeoMir.Pages
             while (true)
             {
                 Tuple<bool, string> status = await APIManager.GetIsLinked(DataAccess.GetMiror().Id);
-                if (status.Item1)
+                if (status.Item1 && !string.IsNullOrEmpty(status.Item2))
                 {
                     //BackHomePanel.Visibility = Visibility.Visible;
                     LinkDone.Visibility = Visibility.Visible;
