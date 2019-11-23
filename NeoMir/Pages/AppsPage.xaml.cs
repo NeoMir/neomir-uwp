@@ -13,6 +13,8 @@ using System.Linq;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Media;
+using Windows.UI;
+using System.Collections.Generic;
 
 namespace NeoMir.Pages
 {
@@ -24,6 +26,8 @@ namespace NeoMir.Pages
         private bool DoinitApp;
         private bool isLock;
         GestureCollector gestureCollector;
+        private Dictionary<EGestures, Action> gestActions;
+        private Carousel carousel;
 
         #endregion
 
@@ -81,7 +85,7 @@ namespace NeoMir.Pages
         private void DisplayApps()
         {
             int numberOfApps = FrameManager.InstalledApps.Count;
-            Carousel carousel = new Carousel();
+            carousel = new Carousel();
 
             carousel.InvertPositive = false;
             carousel.ItemDepth = 400;
@@ -125,31 +129,27 @@ namespace NeoMir.Pages
         {
             gestureCollector = GestureCollector.Instance;
             gestureCollector.RegisterToGestures(this, ApplyGesture);
+            InitGestureBehavior();
         }
 
-        // Appliquer un geste
+        // Initialise un dictionnaire d'action qui serontt invoqué selon le geste détécté 
+        private void InitGestureBehavior()
+        {
+            gestActions = new Dictionary<EGestures, Action>();
+            gestActions.Add(EGestures.NextLeft, () => PreviousApp());
+            gestActions.Add(EGestures.NextRight, () => NextApp());
+            gestActions.Add(EGestures.Back, () => BackButton_Tapped(null, null));
+            gestActions.Add(EGestures.Lock, () => GoToLockPage());
+            gestActions.Add(EGestures.Validate, () => OpenApp());
+        }
+
+        // Applique les gestes
         private void ApplyGesture(Gesture gesture)
         {
-            if (!gesture.IsConsumed)
+            EGestures eg = (EGestures)Enum.Parse(typeof(EGestures), gesture.Name);
+            if (gestActions.ContainsKey(eg))
             {
-
-                if (this == Classes.FrameManager.GetCurrentPage() && !isLock)
-                {
-                    if (gesture.Name == "Next Left" && !gesture.IsConsumed)
-                    {
-                        BackButton_Tapped(null, null);
-                        gesture.IsConsumed = true;
-                    }
-                    else if (gesture.Name == "Validate" && ConfNumber >= 1)
-                    {
-                        OpenAppWithGesture();
-                        gesture.IsConsumed = true;
-                    }
-                }
-                if (gesture.Name == "Lock")
-                {
-                    isLock = !isLock;
-                }
+                gestActions[eg].Invoke();
             }
         }
 
@@ -162,12 +162,6 @@ namespace NeoMir.Pages
                 GetAllInstalledApplication();
                 DoinitApp = false;
             }
-        }
-
-        // Ouvre l'application avec des gestes
-        private void OpenAppWithGesture()
-        {
-            FrameManager.LaunchApp(FrameManager.InstalledApps[0]);
         }
 
         #endregion
@@ -184,7 +178,7 @@ namespace NeoMir.Pages
         // Evenement pour retourner sur la page d'accueil
         private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            FrameManager.GoTo(FrameManager.MainPageFrame);
+            FrameManager.GoTo(FrameManager.MainPageFrame); 
         }
 
         // Evenement de navigation
@@ -197,6 +191,30 @@ namespace NeoMir.Pages
             }
         }
 
+
+        // Va a la page de verouillage
+        private void GoToLockPage()
+        {
+            FrameManager.GoTo(FrameManager.LockPageFrame);
+        }
+
+
+        private void NextApp()
+        {
+            carousel.SelectedIndex = (carousel.SelectedIndex + 1) % carousel.Items.Count;
+        }
+
+        private void PreviousApp()
+        {
+            carousel.SelectedIndex = (carousel.SelectedIndex - 1) % carousel.Items.Count;
+        }
+
+
+        private void OpenApp()
+        {
+            Ellipse img = (Ellipse)carousel.SelectedItem;
+           FrameManager.LaunchApp((Classes.App)img.Tag);
+        }
         #endregion
     }
 }
