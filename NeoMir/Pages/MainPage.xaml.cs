@@ -1,5 +1,6 @@
 ﻿using NeoMir.Classes.Com;
 using NeoMir.Classes.Communication;
+using NeoMir.UserManagment;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,25 +10,26 @@ using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.Toolkit.Uwp.UI.Animations;
+using Windows.UI.Xaml;
+using NeoMir.Classes;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Shapes;
+using NeoMir.Globals;
 
 namespace NeoMir.Pages
 {
     public sealed partial class MainPage : Page
     {
-        //
-        // PROPERTIES
-        //
+        #region PROPERTIES
 
         Timer timerDateTime;
         Timer timerWeather;
+        Dictionary<EGestures, Action> gestActions;
+
         GestureCollector gestureCollector;
 
         Dictionary<string, string> weatherCodesIcons = new Dictionary<string, string>()
@@ -53,51 +55,62 @@ namespace NeoMir.Pages
 
         };
 
-        //
-        // CONSTRUCTOR
-        //
+        #endregion
+
+        #region CONSTRUCTOR
 
         public MainPage()
         {
             this.InitializeComponent();
+            SetTimers();
+            StartAnimations();
+            GestureSetup();
+            UserManager.Instance.ProfileChanged += GetProfile;
+            GestureIcone.Content = new GestureIcone() { Icon = "Validate" };
+        }
+
+        #endregion
+
+        #region METHODS
+
+        // Débute les animations
+        private void StartAnimations()
+        {
+            new Animation(LaunchAppButton, 5000);
+            new Animation(NextAppButton, 5000);
+            new Animation(PrevAppButton, 5000);
+            new Animation(LockButton, 5000);
+        }
+
+        // Débute les timers
+        private void SetTimers()
+        {
             timerDateTime = new Timer(new TimerCallback((obj) => this.refreshDateTime()), null, 0, 1000);
             timerWeather = new Timer(new TimerCallback((obj) => this.refreshWeather()), null, 0, 900000);
-            getProfile();
-            GestureSetup();
         }
 
-        //
-        // METHODS
-        //
-
-        private async Task getProfile()
+        // Recupère le profil de l'utilisateur actuellement connecté
+        private async void GetProfile()
         {
-            while (true)
+            if (UserManager.Instance.CurrentProfile.IsFaceLinked)
             {
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
-                {
-                    var id = "";
-                    var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
-                    using (var inputStream = await file.OpenReadAsync())
-                    using (var classicStream = inputStream.AsStreamForRead())
-                    using (var streamReader = new StreamReader(classicStream))
-                    {
-                        id = streamReader.ReadToEnd();
-                    }
+                msgWelcome.Text = "Bienvenue " + UserManager.Instance.CurrentProfile.Name;
 
-                    var http = new HttpClient();
-                    var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
-                    var response = await http.GetAsync(url);
-                    var result = await response.Content.ReadAsStringAsync();
-                    msgWelcome.Text = "Welcome " + result;
-                });
-                await Task.Delay(1000);
+                // Défini un offset pour que le message descende de manière proportionnelle à la taille de l'ecran.
+                float offset = (float)((Frame)Window.Current.Content).ActualHeight * 0.35f;
+                // Animation du message
+                msgWelcome.Offset(offsetX: 0, offsetY: offset, duration: 2500, delay: 500, easingType: EasingType.Default).Start();
             }
+            else
+            {
+                msgWelcome.Text = Globals.GlobalNames.PhotoRequired;
+                await Task.Delay(3000);
+                FrameManager.GoTo(FrameManager.CapturePage);
+            }
+
         }
 
-        /// <summary>
-        /// Actualize the datetime
-        /// </summary>
+        // Actualise la date et l'heure
         private async void refreshDateTime()
         {
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
@@ -123,9 +136,7 @@ namespace NeoMir.Pages
             });
         }
 
-        /// <summary>
-        /// Actualize the wheather
-        /// </summary>
+        // Actualise la météo
         private async void refreshWeather()
         {
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
@@ -134,7 +145,7 @@ namespace NeoMir.Pages
 
                 // Use or Open Wheather API to get Wheather Information of a location
                 var http = new HttpClient();
-                var url = String.Format("http://api.openweathermap.org/data/2.5/weather?APPID={0}&units=metric&lang=fr&lat=16.265&lon=-61.551", Classes.Config.openWheatherAPIKey);
+                var url = String.Format("http://api.openweathermap.org/data/2.5/weather?APPID={0}&units=metric&lang=fr&lat=48.856613&lon=2.352222", Classes.Config.openWheatherAPIKey);
                 var response = await http.GetAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
                 var serializer = new DataContractJsonSerializer(typeof(Classes.RootObject));
@@ -151,73 +162,69 @@ namespace NeoMir.Pages
             });
         }
 
+        // Setup des gestes
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
+            InitGestureBehavior();
             gestureCollector.RegisterToGestures(this, ApplyGesture);
+
         }
 
-        private async void ApplyGesture(Gesture gesture)
+        // Initialise un dictionnaire d'action qui serontt invoqué selon le geste détécté 
+        private void InitGestureBehavior()
         {
-            if (!gesture.IsConsumed)
+            gestActions = new Dictionary<EGestures, Action>();
+            gestActions.Add(EGestures.NextLeft, () => PrevAppButton_Tapped(null, null));
+            gestActions.Add(EGestures.NextRight, () => NextAppButton_Tapped(null, null));
+            gestActions.Add(EGestures.Lock, () => LockButton_Tapped(null, null));
+            gestActions.Add(EGestures.Validate, () => LaunchAppButton_Tapped(null, null));
+        }
+
+        // Applique les gestes
+        private void ApplyGesture(Gesture gesture)
+        {
+            EGestures eg = (EGestures)Enum.Parse(typeof(EGestures), gesture.Name);
+            if (gestActions.ContainsKey(eg))
             {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                {
-                    if (this == Classes.AppManager.GetCurrentPage())
-                    {
-                        if (gesture.Name == "Next Right" && !gesture.IsConsumed)
-                        {
-                            NextAppButton_Tapped(null, null);
-                            gesture.IsConsumed = true;
-                        }
-                        else if (gesture.Name == "Validate" && !gesture.IsConsumed) 
-                        {
-                            LaunchAppButton_Tapped(null, null);
-                            gesture.IsConsumed = true;
-                        }
-                        else if (gesture.Name == "Back" && !gesture.IsConsumed)
-                        {
-                            PrevAppButton_Tapped(null, null);
-                            gesture.IsConsumed = true;
-                        }
-                        else if (gesture.Name == "Lock" && !gesture.IsConsumed)
-                        {
-                            LockButton_Tapped(null, null);
-                            gesture.IsConsumed = true;
-                        }
-                    }
-                });
+                gestActions[eg].Invoke();
             }
         }
 
-        //
-        // EVENTS
-        //
+        #endregion
+
+        #region EVENTS
+
+        private void Capture_Button_Click(object sender, RoutedEventArgs e)
+        {
+            FrameManager.GoTo(FrameManager.CapturePage, false);
+        }
 
         private void LaunchAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoTo(Classes.AppManager.AppsPageFrame);
+            Classes.FrameManager.GoTo(Classes.FrameManager.AppsPageFrame);
         }
 
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-
-            Classes.AppManager.NextApp();
+            Classes.FrameManager.NextApp();
         }
 
         private void PrevAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.PrevApp();
+            Classes.FrameManager.PrevApp();
         }
 
         private void LockButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoTo(Classes.AppManager.LockPageFrame);
+            Classes.FrameManager.GoTo(Classes.FrameManager.LockPageFrame);
         }
-        
+
         private void ApiPage_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ConnectToApi));
+            Classes.FrameManager.GoTo(Classes.FrameManager.PairPageFrame);
         }
+
+        #endregion
     }
 }

@@ -155,12 +155,6 @@
       <Version>6.2.7</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Communication\Communication.csproj">
-      <Project>{387ab523-99b3-40ad-8190-6d8fc74905a3}</Project>
-      <Name>Communication</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

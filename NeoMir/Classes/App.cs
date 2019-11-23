@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using DataAccessLibrary.Entitites;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -6,24 +7,34 @@ namespace NeoMir.Classes
 {
     public class App
     {
-        // PROPERTIES
+        #region PROPERTIES
 
-        // Frame of the app
+        // Frame l'application
         public Frame Frame { get; private set; }
-        // Link of the app
-        public string Link { get; private set; }
-        // Preview of the app
-        public BitmapSource Preview { get; set; }
+       
+        // Données de l'application de l'utilisateur depuis la base de données
+        public UserApp UserApp { get; set; }
 
-        // CONSTRUCTOR
-        public App(string _link)
+        #endregion
+
+        #region CONSTRUCTOR
+
+        public App(UserApp app)
         {
             Frame = new Frame();
-            Link = _link;
+            UserApp = app;
         }
 
-        // METHODS
+        #endregion
 
+        #region METHODS
+
+        public void Reset()
+        {
+            Frame = new Frame();
+        }
+
+        #endregion
     }
 }
 

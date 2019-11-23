@@ -1,0 +1,35 @@
+﻿<Page
+    x:Class="NeoMir.Pages.TakePicturePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NeoMir.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Name="MainGrid">
+        <CaptureElement Name="Capture"></CaptureElement>
+        <Grid Name="LineGrid">
+            <Line Fill="White" X1="0" X2="{Binding ElementName=MainGrid, Path=ActualWidth}" VerticalAlignment="Center" StrokeThickness="2" Stroke="White" StrokeDashArray="2 2" Opacity="0.5"></Line>
+            <Line Fill="White" Y1="0" Y2="{Binding ElementName=MainGrid, Path=ActualHeight}" HorizontalAlignment="Center" StrokeThickness="2" Stroke="White" StrokeDashArray="2 2" Opacity="0.5"></Line>
+        </Grid>
+        <Grid Name="PhotoTookGrid" Visibility="Collapsed">
+            <TextBlock Name="PhotoTookMessage" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="25" />
+        </Grid>
+        <Border BorderThickness="5" BorderBrush="White" />
+        <Image Name="PhotoTook"/>
+        <Button x:Name= "HomeButton" FontFamily="Segoe MDL2 Assets" Content="&#xEA8A;"  HorizontalAlignment= "Center" VerticalAlignment= "Top" Height="70" Width="70" FontSize="50" Tapped="HomeButton_Tapped" Background="{x:Null}" Opacity="0.5"/>
+        <Button Height="100" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Foreground="Beige" Click="Button_Click">
+            <Ellipse Name="EllipseButton" Width="50" Height="50" Fill="AliceBlue"></Ellipse>
+        </Button>
+        <Grid Name="CountDownGrid">
+            <StackPanel>
+                <TextBlock Text="Placez vous au centre du miroir, la photo sera prise dans :" HorizontalAlignment="Center" FontSize="50" Foreground="White"/>
+                <TextBlock Name="CountDown" HorizontalAlignment="Center" FontSize="80" Foreground="White"></TextBlock>
+            </StackPanel>    
+        </Grid>
+        
+              
+    </Grid>
+</Page>

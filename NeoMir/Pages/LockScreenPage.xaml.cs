@@ -1,58 +1,59 @@
-﻿using NeoMir.Classes.Com;
+﻿using DataAccessLibrary.Entitites;
+using Microsoft.Toolkit.Uwp.UI.Controls;
+using NeoMir.Classes;
+using NeoMir.Classes.Com;
 using NeoMir.Classes.Communication;
+using NeoMir.UserManagment;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 namespace NeoMir.Pages
 {
     public sealed partial class LockScreenPage : Page
     {
-        //
-        // PROPERTIES
-        //
+        #region PROPERTIES
 
         public static int HoverSize = 20;
         public static Thickness BoxMargin = new Thickness(10);
-        public static bool IsShowed = false;
         private GestureCollector gestureCollector;
         private FaceCollector faceCollector;
-        private List<string> owners = new List<string>() { "Marwin", "Quentin", "Ambroise", "Ambroise" };
 
+        #endregion
 
+        #region CONSTRUCTOR
 
-        //
-        // CONSTRUCTOR
-        //
         public LockScreenPage()
         {
             this.InitializeComponent();
+            FrameManager.NavigatedEvent += NavigateOn;
             StartBackgroundMedia();
-            Classes.UserManager.Users.Clear();
-            Classes.UserManager.Users.Add(new Classes.User("Robin", "DACALOR"));
-            Classes.UserManager.Users.Add(new Classes.User("Ambroise", "DAMIER"));
-            Classes.UserManager.Users.Add(new Classes.User("Martin", "BAUD"));
             CollectorSetup();
         }
 
-        //
-        // METHODS
-        //
+        #endregion
+
+        #region METHODS
+
+        private async void NavigateOn(Page page)
+        {
+            if (page == this)
+            {
+                Users.Visibility = Visibility.Collapsed;
+                await UserManager.Instance.Init();
+                DisplayUsers();
+                Users.Visibility = Visibility.Visible;
+            }
+        }
 
         private void CollectorSetup()
         {
@@ -66,92 +67,70 @@ namespace NeoMir.Pages
         {
             var mediaPlayer = new MediaPlayer();
             mediaPlayer.IsLoopingEnabled = true;
-            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/MainPage/smoke.mp4"));
+            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/LockPage/smoke.mp4"));
             _mediaPlayerElement.SetMediaPlayer(mediaPlayer);
             mediaPlayer.Play();
         }
 
-        private void ListUsers()
+        private void DisplayUsers()
         {
-            int numberOfUsers = Classes.UserManager.Users.Count;
+            Carousel carousel = new Carousel();
 
-            for (int i = 0; i < numberOfUsers; i++)
+            carousel.InvertPositive = false;
+            carousel.ItemDepth = 400;
+            carousel.ItemMargin = 0;
+            carousel.ItemRotationX = 0;
+            carousel.ItemRotationY = 0;
+            carousel.ItemRotationZ = 0;
+            carousel.SelectedIndex = 0;
+            carousel.Orientation = Orientation.Horizontal;
+
+            foreach (UserProfile profile in UserManager.Instance.Profiles)
             {
                 Button button = new Button();
-
-                button.Content = Classes.UserManager.Users[i].FirstName + ' ' + Classes.UserManager.Users[i].LastName;
-                button.Tag = Classes.UserManager.Users[i];
+                button.Content = profile.Name;
+                button.Tag = profile;
                 button.FontSize = 50;
                 button.FontStyle = Windows.UI.Text.FontStyle.Italic;
                 button.FontWeight = Windows.UI.Text.FontWeights.Bold;
-                button.Height = 200;
-                button.Width = 800;
-                button.Opacity = 1;
-                button.Margin = BoxMargin;
-                button.PointerEntered += new PointerEventHandler(button_PointerEntered);
-                button.PointerExited += new PointerEventHandler(button_PointerExited);
                 button.Tapped += new TappedEventHandler(button_Tapped);
-
-                Users.Items.Add(button);
+                button.Height = 300;
+                button.Width = 1000;
+                carousel.Items.Add(button);
             }
 
+            Users.Children.Clear();
+            Users.Children.Add(carousel);
         }
 
-        //
-        // EVENTS
-        //
+        #endregion
+
+        #region EVENTS
 
         private void button_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Button button = (Button)sender;
-            Classes.UserManager.currentUser = (Classes.User)button.Tag;
-            IsShowed = false;
-            MainScroll.Visibility = Visibility.Collapsed;
-            Users.Items.Clear();
-            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
+            UserManager.Instance.CurrentProfile = (UserProfile)button.Tag;
+            FrameManager.GoTo(FrameManager.MainPageFrame);
         }
 
-        private void button_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-            button.Height += HoverSize;
-            button.Width += HoverSize;
-        }
-
-        private void button_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-            button.Height -= HoverSize;
-            button.Width -= HoverSize;
-        }
-
-        private void _mediaPlayerElement_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            MainScroll.Visibility = Visibility.Visible;
-            if (!IsShowed)
-                ListUsers();
-            IsShowed = true;
-
-        }
-
-        private async void ApplyGesture(Gesture gesture)
+        private void ApplyGesture(Gesture gesture)
         {
             if (!gesture.IsConsumed)
             {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                if (this == Classes.FrameManager.GetCurrentPage())
                 {
-                    if (this == Classes.AppManager.GetCurrentPage())
+                    if (gesture.Name == "Lock" && !gesture.IsConsumed)
                     {
-                        if (gesture.Name == "Lock" && !gesture.IsConsumed)
+                        if (UserManager.Instance.CurrentProfile == null)
                         {
-                            IsShowed = false;
-                            MainScroll.Visibility = Visibility.Collapsed;
-                            Users.Items.Clear();
-                            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
-                            gesture.IsConsumed = true;
+                            UserManager.Instance.CurrentProfile = UserManager.Instance.Profiles[0];
                         }
+                        Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
+                        gesture.IsConsumed = true;
+
                     }
-                });
+                }
             }
         }
 
@@ -159,31 +138,31 @@ namespace NeoMir.Pages
         {
             if (!face.IsConsumed)
             {
-                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+
+                if (this == Classes.FrameManager.GetCurrentPage())
                 {
-                    if (this == Classes.AppManager.GetCurrentPage())
+                    UserProfile profile = UserManager.Instance.Profiles.Where((u) => u.Name == face.Name).FirstOrDefault();
+                    if (profile != null)
                     {
-                       if (owners.Contains(face.Name))
-                        {
-                            this.DetectedMessage.Text = string.Format("{0} has been detected", face.Name);
-                            await Task.Delay(2000);
-                            this.DetectedMessage.Text = string.Empty;
-                            MainScroll.Visibility = Visibility.Collapsed;
-                            Users.Items.Clear();
-                            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
-                            face.IsConsumed = true;
-                        }
-                       else
-                        {
-                            this.DetectedMessage.Foreground = new SolidColorBrush(Colors.Red);
-                            this.DetectedMessage.Text = string.Format("{0} is not a valid user", face.Name);
-                            await Task.Delay(2000);
-                            this.DetectedMessage.Text = string.Empty;
-                            this.DetectedMessage.Foreground = new SolidColorBrush(Colors.ForestGreen);
-                        }
+                        this.DetectedMessage.Text = string.Format("{0} has been detected", face.Name);
+                        this.DetectedMessage.Text = string.Empty;
+                        UserManager.Instance.CurrentProfile = profile;
+                        face.IsConsumed = true;
+                        await Task.Delay(2000);
+                        Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
                     }
-                });
+                    else
+                    {
+                        this.DetectedMessage.Foreground = new SolidColorBrush(Colors.Red);
+                        this.DetectedMessage.Text = string.Format("{0} is not a valid user", face.Name);
+                        await Task.Delay(2000);
+                        this.DetectedMessage.Text = string.Empty;
+                        this.DetectedMessage.Foreground = new SolidColorBrush(Colors.ForestGreen);
+                    }
+                }
             }
         }
+
+        #endregion
     }
 }

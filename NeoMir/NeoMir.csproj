@@ -12,7 +12,7 @@
     <DefaultLanguage>fr-FR</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17134.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -96,7 +96,11 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\ActivityDetector.cs" />
-    <Compile Include="Classes\AppManager.cs" />
+    <Compile Include="Classes\Animation.cs" />
+    <Compile Include="Classes\Com\GlobalMessageManager.cs" />
+    <Compile Include="Classes\Com\Protocol.cs" />
+    <Compile Include="Classes\Com\EGestures.cs" />
+    <Compile Include="Classes\FrameManager.cs" />
     <Compile Include="Classes\Communicate.cs" />
     <Compile Include="Classes\Com\Face.cs" />
     <Compile Include="Classes\Com\FaceCollector.cs" />
@@ -104,16 +108,20 @@
     <Compile Include="Classes\Com\GestureCollector.cs" />
     <Compile Include="Classes\Config.cs" />
     <Compile Include="Classes\App.cs" />
-    <Compile Include="Classes\User.cs" />
-    <Compile Include="Classes\UserManager.cs" />
+    <Compile Include="Classes\GlobalStatusManager.cs" />
+    <Compile Include="Database\DatabaseManager.cs" />
+    <Compile Include="Globals\GestureIcone.xaml.cs">
+      <DependentUpon>GestureIcone.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Globals\GlobalNames.cs" />
+    <Compile Include="Helpers\AsyncHelper.cs" />
+    <Compile Include="Helpers\ImagingHelper.cs" />
+    <Compile Include="Helpers\MemoryRandomAccessStream.cs" />
     <Compile Include="Pages\AppPage.xaml.cs">
       <DependentUpon>AppPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\AppsPage.xaml.cs">
       <DependentUpon>AppsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ChooseUserPage.xaml.cs">
-      <DependentUpon>ChooseUserPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\LockScreenPage.xaml.cs">
       <DependentUpon>LockScreenPage.xaml</DependentUpon>
@@ -124,8 +132,14 @@
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\TakePicturePage.xaml.cs">
+      <DependentUpon>TakePicturePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Wheather.cs" />
+    <Compile Include="UserManagment\User.cs" />
+    <Compile Include="UserManagment\UserAppsManager.cs" />
+    <Compile Include="UserManagment\UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -133,67 +147,64 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\AppPage\home.png" />
-    <Content Include="Assets\AppPage\menu.png" />
-    <Content Include="Assets\AppsPage\exemple1.png" />
-    <Content Include="Assets\AppsPage\exemple.png" />
-    <Content Include="Assets\AppsPage\exemple2.png" />
-    <Content Include="Assets\AppsPage\exemple3.png" />
-    <Content Include="Assets\AppsPage\plus.png" />
-    <Content Include="Assets\AppsPage\synchronize.png" />
-    <Content Include="Assets\AppsPage\trash.png" />
-    <Content Include="Assets\BadgeLogo.scale-100.png" />
-    <Content Include="Assets\BadgeLogo.scale-125.png" />
-    <Content Include="Assets\BadgeLogo.scale-150.png" />
-    <Content Include="Assets\BadgeLogo.scale-200.png" />
-    <Content Include="Assets\BadgeLogo.scale-400.png" />
-    <Content Include="Assets\CloseAppPage\left-arrow.png" />
-    <Content Include="Assets\LargeTile.scale-100.png" />
-    <Content Include="Assets\LargeTile.scale-125.png" />
-    <Content Include="Assets\LargeTile.scale-150.png" />
-    <Content Include="Assets\LargeTile.scale-200.png" />
-    <Content Include="Assets\LargeTile.scale-400.png" />
-    <Content Include="Assets\MainPage\lock.png" />
-    <Content Include="Assets\MainPage\numero1.png" />
-    <Content Include="Assets\MainPage\numero2.png" />
-    <Content Include="Assets\MainPage\numero3.png" />
-    <Content Include="Assets\MainPage\sign.png" />
-    <Content Include="Assets\MainPage\signinverse.png" />
-    <Content Include="Assets\MainPage\signleft.png" />
-    <Content Include="Assets\MainPage\signright.png" />
-    <Content Include="Assets\MainPage\smoke.mp4" />
+    <Content Include="Assets\AppsPage\EasyBrush.png" />
+    <Content Include="Assets\AppsPage\Epitech.jpg" />
+    <Content Include="Assets\AppsPage\Facebook.png" />
+    <Content Include="Assets\AppsPage\gmail.png" />
+    <Content Include="Assets\AppsPage\maps.jpg" />
+    <Content Include="Assets\AppsPage\train.jpg" />
+    <Content Include="Assets\AppsPage\Youtube.png" />
+    <Content Include="Assets\badge.scale-100.png" />
+    <Content Include="Assets\badge.scale-125.png" />
+    <Content Include="Assets\badge.scale-150.png" />
+    <Content Include="Assets\badge.scale-200.png" />
+    <Content Include="Assets\badge.scale-400.png" />
+    <Content Include="Assets\demarage.scale-100.png" />
+    <Content Include="Assets\demarage.scale-125.png" />
+    <Content Include="Assets\demarage.scale-150.png" />
+    <Content Include="Assets\demarage.scale-200.png" />
+    <Content Include="Assets\demarage.scale-400.png" />
+    <Content Include="Assets\Gestures\Back.png" />
+    <Content Include="Assets\Gestures\Lock.png" />
+    <Content Include="Assets\Gestures\NextLeft.png" />
+    <Content Include="Assets\Gestures\NextRight.png" />
+    <Content Include="Assets\Gestures\Validate.png" />
+    <Content Include="Assets\icone.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\icone.altform-unplated_targetsize-24.png" />
+    <Content Include="Assets\icone.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\icone.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\icone.altform-unplated_targetsize-48.png" />
+    <Content Include="Assets\icone.scale-100.png" />
+    <Content Include="Assets\icone.scale-125.png" />
+    <Content Include="Assets\icone.scale-150.png" />
+    <Content Include="Assets\icone.scale-200.png" />
+    <Content Include="Assets\icone.scale-400.png" />
+    <Content Include="Assets\icone.targetsize-16.png" />
+    <Content Include="Assets\icone.targetsize-24.png" />
+    <Content Include="Assets\icone.targetsize-256.png" />
+    <Content Include="Assets\icone.targetsize-32.png" />
+    <Content Include="Assets\icone.targetsize-48.png" />
+    <Content Include="Assets\LockPage\smoke.mp4" />
+    <Content Include="Assets\package.scale-100.png" />
+    <Content Include="Assets\package.scale-125.png" />
+    <Content Include="Assets\package.scale-150.png" />
+    <Content Include="Assets\package.scale-200.png" />
+    <Content Include="Assets\package.scale-400.png" />
     <Content Include="Assets\SmallTile.scale-100.png" />
     <Content Include="Assets\SmallTile.scale-125.png" />
     <Content Include="Assets\SmallTile.scale-150.png" />
     <Content Include="Assets\SmallTile.scale-200.png" />
     <Content Include="Assets\SmallTile.scale-400.png" />
-    <Content Include="Assets\SplashScreen.scale-100.png" />
-    <Content Include="Assets\SplashScreen.scale-125.png" />
-    <Content Include="Assets\SplashScreen.scale-150.png" />
-    <Content Include="Assets\SplashScreen.scale-400.png" />
     <Content Include="Assets\Square150x150Logo.scale-100.png" />
     <Content Include="Assets\Square150x150Logo.scale-125.png" />
     <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-400.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-16.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-256.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-32.png" />
-    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-48.png" />
-    <Content Include="Assets\Square44x44Logo.scale-100.png" />
-    <Content Include="Assets\Square44x44Logo.scale-125.png" />
-    <Content Include="Assets\Square44x44Logo.scale-150.png" />
-    <Content Include="Assets\Square44x44Logo.scale-400.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
-    <Content Include="Assets\StoreLogo.scale-100.png" />
-    <Content Include="Assets\StoreLogo.scale-125.png" />
-    <Content Include="Assets\StoreLogo.scale-150.png" />
-    <Content Include="Assets\StoreLogo.scale-200.png" />
-    <Content Include="Assets\StoreLogo.scale-400.png" />
-    <Content Include="Assets\MainPage\cube.png" />
+    <Content Include="Assets\vignette.scale-100.png" />
+    <Content Include="Assets\vignette.scale-125.png" />
+    <Content Include="Assets\vignette.scale-150.png" />
+    <Content Include="Assets\vignette.scale-200.png" />
+    <Content Include="Assets\vignette.scale-400.png" />
     <Content Include="Assets\weather-icons\foggy-day.png" />
     <Content Include="Assets\weather-icons\crescent-moon.png" />
     <Content Include="Assets\weather-icons\cloud-and-half-moon.png" />
@@ -209,30 +220,25 @@
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="id\id.txt" />
     <Content Include="Properties\Default.rd.xml" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\SplashScreen.scale-200.png" />
-    <Content Include="Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Globals\GestureIcone.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\AppPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\AppsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\ChooseUserPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -248,14 +254,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\TakePicturePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.9</Version>
+      <Version>6.2.9</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Animations">
+      <Version>5.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
+      <Version>5.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="sqlite-net">
+      <Version>1.0.8</Version>
+    </PackageReference>
+    <PackageReference Include="sqlite-net-pcl">
+      <Version>1.5.231</Version>
     </PackageReference>
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj">
+      <Project>{5d50cba8-e29e-4821-9e44-79f41cbc61e4}</Project>
+      <Name>DataAccessLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

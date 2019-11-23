@@ -1,49 +1,81 @@
 ﻿using NeoMir.Classes.Com;
 using NeoMir.Classes.Communication;
 using System;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Graphics.Imaging;
-using Windows.Storage.Streams;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using NeoMir.Classes;
+using System.Collections.Generic;
 
 namespace NeoMir.Pages
 {
     public sealed partial class AppPage : Page
     {
+        #region PROPERTIES
+
         private GestureCollector gestureCollector;
         private bool isLock;
-        //
-        // PROPERTIES
-        //
-
+        private Dictionary<EGestures, Action> gestActions;
         public string Link { get; private set; }
 
-        //
-        // CONSTRUCTOR
-        //
+        #endregion
+
+        #region CONSTRUCTOR
 
         public AppPage()
         {
-            isLock = false;
             this.InitializeComponent();
+            isLock = false;
             AppView.ScriptNotify += Classes.Communicate.ScriptNotify;
             AppView.NavigationCompleted += AppView_NavigationCompleted;
+            StartAnimations();
             GestureSetup();
         }
 
-        //
-        // METHODS
-        //
+        #endregion
 
-        // Nothing for the moment //
+        #region METHODS
 
-        //
-        // EVENTS
-        //
+        private void StartAnimations()
+        {
+            new Animation(NextAppButton, 5000);
+            new Animation(HomeButton, 5000);
+            new Animation(AppsButton, 5000);
+            new Animation(PrevAppButton, 5000);
+        }
+
+        private void GestureSetup()
+        {
+            gestureCollector = GestureCollector.Instance;
+            InitGestureBehavior();
+            gestureCollector.RegisterToGestures(this, ApplyGesture);
+        }
+
+
+        // Initialise un dictionnaire d'action qui serontt invoqué selon le geste détécté 
+        private void InitGestureBehavior()
+        {
+            gestActions = new Dictionary<EGestures, Action>();
+            gestActions.Add(EGestures.NextLeft, () => PrevAppButton_Tapped(null, null));
+            gestActions.Add(EGestures.NextRight, () => NextAppButton_Tapped(null, null));
+            gestActions.Add(EGestures.Lock, () => GoToLockPage());
+            gestActions.Add(EGestures.Validate, () => AppsButton_Tapped(null, null));
+            gestActions.Add(EGestures.Back, () => GoToMainPage());
+        }
+
+        // Applique les gestes
+        private void ApplyGesture(Gesture gesture)
+        {
+            EGestures eg = (EGestures)Enum.Parse(typeof(EGestures), gesture.Name);
+            if (gestActions.ContainsKey(eg))
+            {
+                gestActions[eg].Invoke();
+            }
+        }
+
+        #endregion
+
+        #region EVENTS
 
         private void AppView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
@@ -60,60 +92,38 @@ namespace NeoMir.Pages
             AppView.Source = uri;
         }
 
-        private void GestureSetup()
-        {
-            gestureCollector = GestureCollector.Instance;
-            gestureCollector.RegisterToGestures(this, ApplyGesture);
-        }
-
-        private async void ApplyGesture(Gesture gesture)
-        {
-
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                if (this == Classes.AppManager.GetCurrentPage() && !isLock)
-                {
-                    if (gesture.Name == "Next Right" && !gesture.IsConsumed)
-                    {
-                        NextAppButton_Tapped(null, null);
-                        gesture.IsConsumed = true;
-                    }
-                    else if (gesture.Name == "Back" && !gesture.IsConsumed)
-                    {
-                        PrevAppButton_Tapped(null, null);
-                        gesture.IsConsumed = true;
-                    }
-                    else if (gesture.Name == "Validate" && !gesture.IsConsumed)
-                    {
-                        HomeButton_Tapped(null, null);
-                        gesture.IsConsumed = true;
-                    }
-                }
-                if (gesture.Name == "Lock")
-                {
-                    isLock = !isLock;
-                }
-            });
-        }
-
         private void NextAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.NextApp();
+            Classes.FrameManager.NextApp();
+        }
+
+        // Va a la page de verouillage
+        private void GoToLockPage()
+        {
+            FrameManager.GoTo(FrameManager.LockPageFrame);
+        }
+
+        // Va a la page de verouillage
+        private void GoToMainPage()
+        {
+            FrameManager.GoTo(FrameManager.MainPageFrame);
         }
 
         private void PrevAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.PrevApp();
+            Classes.FrameManager.PrevApp();
         }
 
         private void HomeButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoTo(Classes.AppManager.MainPageFrame);
+            Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
         }
 
         private void AppsButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Classes.AppManager.GoTo(Classes.AppManager.AppsPageFrame);
+            Classes.FrameManager.GoTo(Classes.FrameManager.AppsPageFrame);
         }
+
+        #endregion
     }
 }

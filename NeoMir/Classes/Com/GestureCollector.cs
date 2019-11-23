@@ -1,8 +1,6 @@
 ﻿using NeoMir.Classes.Com;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
@@ -60,7 +58,7 @@ namespace NeoMir.Classes.Communication
                 try
                 {
                     await GetGesture(null, null);
-                    await Task.Delay(100);
+                    await Task.Delay(1000);
                 }
                 catch
                 {
@@ -75,7 +73,7 @@ namespace NeoMir.Classes.Communication
             if (text != lastMessage)
             {
                 lastMessage = text;
-                Page current = AppManager.GetCurrentPage();
+                Page current = FrameManager.GetCurrentPage();
                 if (pageEventDico.ContainsKey(current))
                 {
                     int index = text.IndexOf('-');

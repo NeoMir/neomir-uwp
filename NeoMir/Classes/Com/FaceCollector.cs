@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
@@ -59,8 +57,8 @@ namespace NeoMir.Classes.Com
             {
                 try
                 {
-                    await GetFace(null, null);
-                    await Task.Delay(100);
+                    await GetMessage(null, null);
+                    await Task.Delay(1000);
                 }
                 catch
                 {
@@ -68,14 +66,14 @@ namespace NeoMir.Classes.Com
             };
         }
 
-        private async Task GetFace(Windows.Storage.Search.IStorageQueryResultBase sender, object args)
+        private async Task GetMessage(Windows.Storage.Search.IStorageQueryResultBase sender, object args)
         {
             string text = await FileIO.ReadTextAsync(file);
             lastMessage = lastMessage == default(string) ? text : lastMessage;
             if (text != lastMessage)
             {
                 lastMessage = text;
-                Page current = AppManager.GetCurrentPage();
+                Page current = FrameManager.GetCurrentPage();
                 if (pageEventDico.ContainsKey(current))
                 {
                     int index = text.IndexOf('-');
