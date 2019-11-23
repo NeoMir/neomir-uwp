@@ -176,7 +176,7 @@ namespace NeoMir.Pages
             await StopCapture();
             var myPictures = await Windows.Storage.StorageLibrary.GetLibraryAsync(Windows.Storage.KnownLibraryId.Pictures);
             StorageFile file = await myPictures.SaveFolder.CreateFileAsync(
-                Path.Combine(Globals.GlobalNames.NewFacePicture, UserManager.Instance.CurrentProfile.Name + ".jpg"),
+                Path.Combine(Protocol.NewFaceFolder, UserManager.Instance.CurrentProfile.Name + ".jpg"),
                 CreationCollisionOption.ReplaceExisting);
 
             using (var captureStream = new InMemoryRandomAccessStream())
