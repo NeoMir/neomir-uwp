@@ -28,6 +28,7 @@ namespace NeoMir.Pages
 
         Timer timerDateTime;
         Timer timerWeather;
+        Dictionary<EGestures, Action> gestActions;
 
         GestureCollector gestureCollector;
 
@@ -165,37 +166,28 @@ namespace NeoMir.Pages
         private void GestureSetup()
         {
             gestureCollector = GestureCollector.Instance;
+            InitGestureBehavior();
             gestureCollector.RegisterToGestures(this, ApplyGesture);
+
+        }
+
+        // Initialise un dictionnaire d'action qui serontt invoqué selon le geste détécté 
+        private void InitGestureBehavior()
+        {
+            gestActions = new Dictionary<EGestures, Action>();
+            gestActions.Add(EGestures.NextLeft, () => PrevAppButton_Tapped(null, null));
+            gestActions.Add(EGestures.NextRight, () => NextAppButton_Tapped(null, null));
+            gestActions.Add(EGestures.Lock, () => LockButton_Tapped(null, null));
+            gestActions.Add(EGestures.Validate, () => LaunchAppButton_Tapped(null, null));
         }
 
         // Applique les gestes
         private void ApplyGesture(Gesture gesture)
         {
-            if (!gesture.IsConsumed)
+            EGestures eg = (EGestures)Enum.Parse(typeof(EGestures), gesture.Name);
+            if (gestActions.ContainsKey(eg))
             {
-                if (this == Classes.FrameManager.GetCurrentPage())
-                {
-                    if (gesture.Name == "Next Right" && !gesture.IsConsumed)
-                    {
-                        NextAppButton_Tapped(null, null);
-                        gesture.IsConsumed = true;
-                    }
-                    else if (gesture.Name == "Validate" && !gesture.IsConsumed)
-                    {
-                        LaunchAppButton_Tapped(null, null);
-                        gesture.IsConsumed = true;
-                    }
-                    else if (gesture.Name == "Back" && !gesture.IsConsumed)
-                    {
-                        PrevAppButton_Tapped(null, null);
-                        gesture.IsConsumed = true;
-                    }
-                    else if (gesture.Name == "Lock" && !gesture.IsConsumed)
-                    {
-                        LockButton_Tapped(null, null);
-                        gesture.IsConsumed = true;
-                    }
-                }
+                gestActions[eg].Invoke();
             }
         }
 
