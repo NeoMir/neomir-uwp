@@ -29,20 +29,8 @@
         </Grid.RowDefinitions>
 
         <MediaPlayerElement x:Name="_mediaPlayerElement" AreTransportControlsEnabled="False" HorizontalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="0" Grid.RowSpan="7"/>
-        <ScrollViewer x:Name="MainScroll" Visibility="Visible" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7" Grid.RowSpan="5" HorizontalScrollMode = "Disabled" VerticalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-            <ItemsControl HorizontalAlignment="Center" x:Name= "Users">
-                <ItemsControl.ItemContainerTransitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition FromVerticalOffset="500" IsStaggeringEnabled= "True"/>
-                    </TransitionCollection>
-                </ItemsControl.ItemContainerTransitions>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapGrid Height= "700"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
+        <Grid x:Name="Users" Grid.ColumnSpan="7" Grid.Row="0" Grid.RowSpan="7"></Grid>
         <TextBlock Name="DetectedMessage" Grid.Row="0" Grid.ColumnSpan="7" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="70" Foreground="ForestGreen"> </TextBlock>
+        <ContentControl x:Name="GestureIcone" Grid.ColumnSpan="10" Grid.RowSpan="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50"/>
     </Grid>
 </Page>

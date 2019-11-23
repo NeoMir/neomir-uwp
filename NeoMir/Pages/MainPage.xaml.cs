@@ -16,6 +16,9 @@ using Windows.UI.Xaml.Media.Imaging;
 using Microsoft.Toolkit.Uwp.UI.Animations;
 using Windows.UI.Xaml;
 using NeoMir.Classes;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Shapes;
+using NeoMir.Globals;
 
 namespace NeoMir.Pages
 {
@@ -62,6 +65,7 @@ namespace NeoMir.Pages
             StartAnimations();
             GestureSetup();
             UserManager.Instance.ProfileChanged += GetProfile;
+            GestureIcone.Content = new GestureIcone() { Icon = "Validate" };
         }
 
         #endregion
@@ -85,35 +89,24 @@ namespace NeoMir.Pages
         }
 
         // Recupère le profil de l'utilisateur actuellement connecté
-        private void GetProfile()
+        private async void GetProfile()
         {
-            //while (true)
-            //{
-            //    await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
-            //    {
-            //        var id = "";
-            //        var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///id/id.txt"));
-            //        using (var inputStream = await file.OpenReadAsync())
-            //        using (var classicStream = inputStream.AsStreamForRead())
-            //        using (var streamReader = new StreamReader(classicStream))
-            //        {
-            //            id = streamReader.ReadToEnd();
-            //        }
+            if (UserManager.Instance.CurrentProfile.IsFaceLinked)
+            {
+                msgWelcome.Text = "Bienvenue " + UserManager.Instance.CurrentProfile.Name;
 
-            //        var http = new HttpClient();
-            //        var url = String.Format("http://www.martinbaud.com/V1/getUserFromId.php?id=" + id);
-            //        var response = await http.GetAsync(url);
-            //        var result = await response.Content.ReadAsStringAsync();
-            //        msgWelcome.Text = "Welcome " + result;
-            //    });
-            //    await Task.Delay(1000);
-            //}
-            msgWelcome.Text = "Bienvenue " + UserManager.Instance.CurrentProfile.Name;
+                // Défini un offset pour que le message descende de manière proportionnelle à la taille de l'ecran.
+                float offset = (float)((Frame)Window.Current.Content).ActualHeight * 0.35f;
+                // Animation du message
+                msgWelcome.Offset(offsetX: 0, offsetY: offset, duration: 2500, delay: 500, easingType: EasingType.Default).Start();
+            }
+            else
+            {
+                msgWelcome.Text = Globals.GlobalNames.PhotoRequired;
+                await Task.Delay(3000);
+                FrameManager.GoTo(FrameManager.CapturePage);
+            }
 
-            // Défini un offset pour que le message descende de manière proportionnelle à la taille de l'ecran.
-            float offset = (float)((Frame)Window.Current.Content).ActualHeight * 0.35f;
-            // Animation du message
-            msgWelcome.Offset(offsetX: 0, offsetY: offset, duration: 2500, delay: 500, easingType: EasingType.Default).Start();
         }
 
         // Actualise la date et l'heure
@@ -209,6 +202,11 @@ namespace NeoMir.Pages
         #endregion
 
         #region EVENTS
+
+        private void Capture_Button_Click(object sender, RoutedEventArgs e)
+        {
+            FrameManager.GoTo(FrameManager.CapturePage, false);
+        }
 
         private void LaunchAppButton_Tapped(object sender, TappedRoutedEventArgs e)
         {

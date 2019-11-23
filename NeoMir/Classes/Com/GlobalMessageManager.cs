@@ -1,5 +1,8 @@
-﻿using System;
+﻿using NeoMir.Globals;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
@@ -8,16 +11,16 @@ using Windows.UI.Xaml.Controls;
 
 namespace NeoMir.Classes.Com
 {
-    public class FaceCollector
+    public class GlobalMessageManager
     {
-        private const string FileToReadName = "faces.txt";
-        private static volatile FaceCollector instance;
+        private static volatile GlobalMessageManager instance;
         private static object syncRoot = new object();
-        private StorageFile file;
+        private StorageFile p2cFile;
+        private StorageFile c2pFile;
         private StorageFileQueryResult query;
         private DateTimeOffset lastModification;
-        public delegate void FaceCollectedHandler(Face gesture);
-        private Dictionary<Page, Action<Face>> pageEventDico;
+        public delegate void GestureCollectedHandler(Gesture gesture);
+        private Dictionary<Page, Action<string>> pageEventDico;
         private BasicProperties prop;
         private string lastMessage;
 
@@ -25,7 +28,7 @@ namespace NeoMir.Classes.Com
         /// Gets an Instance of the classe if the it's already existing
         /// </summary>
         /// <value>LoggingHandler</value>
-        public static FaceCollector Instance
+        public static GlobalMessageManager Instance
         {
             get
             {
@@ -35,7 +38,7 @@ namespace NeoMir.Classes.Com
                     {
                         if (instance == null)
                         {
-                            instance = new FaceCollector();
+                            instance = new GlobalMessageManager();
                         }
                     }
                 }
@@ -43,21 +46,21 @@ namespace NeoMir.Classes.Com
             }
         }
 
-        private FaceCollector()
+        private GlobalMessageManager()
         {
+            pageEventDico = new Dictionary<Page, Action<string>>();
             GetQuery();
-            pageEventDico = new Dictionary<Page, Action<Face>>();
         }
 
         private async Task GetQuery()
         {
             StorageFolder folder = KnownFolders.PicturesLibrary;
-            file = await folder.GetFileAsync(FileToReadName);
+            p2cFile = await folder.CreateFileAsync(Protocol.P2CFile, Windows.Storage.CreationCollisionOption.OpenIfExists);
             while (true)
             {
                 try
                 {
-                    await GetMessage(null, null);
+                    await ReadMessageAsync(null, null);
                     await Task.Delay(1000);
                 }
                 catch
@@ -66,9 +69,9 @@ namespace NeoMir.Classes.Com
             };
         }
 
-        private async Task GetMessage(Windows.Storage.Search.IStorageQueryResultBase sender, object args)
+        private async Task ReadMessageAsync(Windows.Storage.Search.IStorageQueryResultBase sender, object args)
         {
-            string text = await FileIO.ReadTextAsync(file);
+            string text = await FileIO.ReadTextAsync(p2cFile);
             lastMessage = lastMessage == default(string) ? text : lastMessage;
             if (text != lastMessage)
             {
@@ -79,10 +82,17 @@ namespace NeoMir.Classes.Com
                     int index = text.IndexOf('-');
                     if (index > 0)
                     {
-                        pageEventDico[current].Invoke(new Face(text.Substring(0, index)));
+                        pageEventDico[current].Invoke(text.Substring(0, index));
                     }
                 }
             }
+        }
+
+        public async Task SendMessageAsync(string message)
+        {
+            StorageFolder folder = KnownFolders.PicturesLibrary;
+            c2pFile = await folder.CreateFileAsync(Protocol.C2PFile, Windows.Storage.CreationCollisionOption.OpenIfExists);
+            await FileIO.WriteTextAsync(c2pFile, message);
         }
 
         private int GetTimeElapsed(DateTimeOffset current, DateTimeOffset last)
@@ -92,12 +102,14 @@ namespace NeoMir.Classes.Com
             return currentMilli - lastMilli;
         }
 
-        public void RegisterToFace(Page page, Action<Face> action)
+        public void RegisterToGlobalMessage(Page page, Action<string> action)
         {
             if (!pageEventDico.ContainsKey(page))
             {
                 pageEventDico.Add(page, action);
             }
         }
+
+
     }
 }

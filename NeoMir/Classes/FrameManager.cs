@@ -1,9 +1,5 @@
 ﻿using DataAccessLibrary.Entitites;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -22,6 +18,8 @@ namespace NeoMir.Classes
         public static Frame LockPageFrame { get; set; }
         // La Frame de la page PairPage
         public static Frame PairPageFrame { get; set; }
+        // Frame de la page de capture photo
+        public static Frame CapturePage { get; set; }
         // Liste des applications installées
         public static List<App> InstalledApps = new List<App>();
         // Liste des applications ouvertes
@@ -48,6 +46,13 @@ namespace NeoMir.Classes
         // Ouvre une application
         public static void LaunchApp(App app)
         {
+            if (OpenedApps.Contains(app) == true)
+            {
+                var appIndex = OpenedApps.FindIndex(x => x.UserApp.AppId == app.UserApp.AppId);
+                AppPosition = appIndex + 1;
+                GoTo(OpenedApps[appIndex].Frame, true);
+                return;
+            }
             if (OpenedApps.Count == MaxApp)
             {
                 OpenedApps.Reverse();

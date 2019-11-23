@@ -12,6 +12,7 @@ using DataAccessLibrary.API;
 using NeoMir.UserManagment;
 using NeoMir.Helpers;
 using System.Threading.Tasks;
+using static NeoMir.Classes.GlobalStatusManager;
 
 namespace NeoMir
 {
@@ -54,6 +55,7 @@ namespace NeoMir
                 Classes.FrameManager.AppsPageFrame = new Frame();
                 Classes.FrameManager.LockPageFrame = new Frame();
                 Classes.FrameManager.PairPageFrame = new Frame();
+                Classes.FrameManager.CapturePage = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
@@ -77,6 +79,7 @@ namespace NeoMir
                     Classes.FrameManager.AppsPageFrame.Navigate(typeof(Pages.AppsPage));
                     Classes.FrameManager.PairPageFrame.Navigate(typeof(Pages.ConnectToApi));
                     Classes.FrameManager.LockPageFrame.Navigate(typeof(Pages.LockScreenPage));
+                    Classes.FrameManager.CapturePage.Navigate(typeof(Pages.TakePicturePage));
                 }
                 // Vérifiez que la fenêtre actuelle est active
                 if (GlobalStatusManager.Instance.GlobalStatus == EGlobalStatus.FirstLaunch)

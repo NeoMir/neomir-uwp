@@ -4,34 +4,25 @@ using DataAccessLibrary.Entitites;
 using NeoMir.Classes;
 using NeoMir.UserManagment;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
 
-// Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=234238
+using static NeoMir.Classes.GlobalStatusManager;
 
 namespace NeoMir.Pages
 {
-    /// <summary>
-    /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
-    /// </summary>
     public sealed partial class ConnectToApi : Page
     {
+        #region PROPERTIES
+
         private string id;
+
+        #endregion
+
+        #region METHODS
 
         public ConnectToApi()
         {
@@ -51,9 +42,7 @@ namespace NeoMir.Pages
 
         }
 
-        /// <summary>
-        /// How the Mirror ID to the user
-        /// </summary>
+        // Montre l'identifiant à l'utilisateur
         private void ShowId()
         {
             id = DataAccess.GetMiror()?.Id;
@@ -61,18 +50,13 @@ namespace NeoMir.Pages
             //WaitForLink();
         }
 
-        /// <summary>
-        /// Get the Id from the db through API request
-        /// </summary>
-        /// <returns></returns>
+        // Récupère l'ID depuis l'API
         private async Task GetIdFromDatabase()
         {
             id = await APIManager.GetMirorId();
         }
 
-        /// <summary>
-        /// Wait for the API to validate a link between this miror and a user account
-        /// </summary>
+        // Attente de la validation du lient entre le miroir et l'application par l'API
         private async void WaitForLink()
         {
             while (true)
@@ -125,5 +109,7 @@ namespace NeoMir.Pages
                 FrameManager.GoTo(FrameManager.MainPageFrame);
             }
         }
+
+        #endregion
     }
 }

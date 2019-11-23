@@ -97,6 +97,8 @@
     </Compile>
     <Compile Include="Classes\ActivityDetector.cs" />
     <Compile Include="Classes\Animation.cs" />
+    <Compile Include="Classes\Com\GlobalMessageManager.cs" />
+    <Compile Include="Classes\Com\Protocol.cs" />
     <Compile Include="Classes\FrameManager.cs" />
     <Compile Include="Classes\Communicate.cs" />
     <Compile Include="Classes\Com\Face.cs" />
@@ -107,6 +109,10 @@
     <Compile Include="Classes\App.cs" />
     <Compile Include="Classes\GlobalStatusManager.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
+    <Compile Include="Globals\GestureIcone.xaml.cs">
+      <DependentUpon>GestureIcone.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Globals\GlobalNames.cs" />
     <Compile Include="Helpers\AsyncHelper.cs" />
     <Compile Include="Helpers\ImagingHelper.cs" />
     <Compile Include="Helpers\MemoryRandomAccessStream.cs" />
@@ -124,6 +130,9 @@
     </Compile>
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TakePicturePage.xaml.cs">
+      <DependentUpon>TakePicturePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Wheather.cs" />
@@ -154,6 +163,11 @@
     <Content Include="Assets\demarage.scale-150.png" />
     <Content Include="Assets\demarage.scale-200.png" />
     <Content Include="Assets\demarage.scale-400.png" />
+    <Content Include="Assets\Gestures\Back.png" />
+    <Content Include="Assets\Gestures\Lock.png" />
+    <Content Include="Assets\Gestures\NextLeft.png" />
+    <Content Include="Assets\Gestures\NextRight.png" />
+    <Content Include="Assets\Gestures\Validate.png" />
     <Content Include="Assets\icone.altform-unplated_targetsize-16.png" />
     <Content Include="Assets\icone.altform-unplated_targetsize-24.png" />
     <Content Include="Assets\icone.altform-unplated_targetsize-256.png" />
@@ -215,6 +229,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Globals\GestureIcone.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\AppPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -232,6 +250,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TakePicturePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -265,6 +287,7 @@
       <Name>DataAccessLibrary</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -40,5 +40,6 @@
         <!-- Remove app button -->
 
         <Grid x:Name="AppsCarousel" Grid.ColumnSpan="8" Grid.Row="1" Grid.RowSpan="6"></Grid>
+        <ContentControl x:Name="GestureIcone" Grid.ColumnSpan="10" Grid.RowSpan="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50"/>
     </Grid>
 </Page>

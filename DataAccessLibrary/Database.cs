@@ -11,15 +11,17 @@ namespace DataAccessLibrary
 
     public class Database
     {
+        #region PROPERTIES
+
         private const string DbName = "NeoMirLocalDb.db";
         private static object syncRoot = new object();
         private static volatile Database instance;
 
+        #endregion
 
-        /// <summary>
-        /// Gets an Instance of the classe if the it's already existing
-        /// </summary>
-        /// <value>LoggingHandler</value>
+        #region CONSTRUCTOR
+
+        // Gets an Instance of the classe if the it's already existing
         public static Database Instance
         {
             get
@@ -46,9 +48,13 @@ namespace DataAccessLibrary
             Db.CreateTable<UserApp>();
         }
 
-        /// <summary>
-        /// Gets the database instance
-        /// </summary>
+        #endregion
+
+        #region METHODS
+
+        // Gets the database instance
         public SQLiteConnection Db { get; }
+
+        #endregion
     }
 }

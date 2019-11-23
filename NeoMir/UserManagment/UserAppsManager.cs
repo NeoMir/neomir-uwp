@@ -14,13 +14,16 @@ namespace NeoMir.UserManagment
 {
     public class UserAppsManager
     {
+        #region PROPERTIES
+
         private static object syncRoot = new object();
         private static volatile UserAppsManager instance;
 
-        /// <summary>
-        /// Gets an Instance of the classe if the it's already existing
-        /// </summary>
-        /// <value>LoggingHandler</value>
+        #endregion
+
+        #region CONSTRUCTOR
+
+        // Obtient une instance de la classe si elle existe déjà
         public static UserAppsManager Instance
         {
             get
@@ -43,6 +46,10 @@ namespace NeoMir.UserManagment
         {
             UserManager.Instance.ProfileChanged += ProfileChanged;
         }
+
+        #endregion
+
+        #region METHODS
 
         private async void ProfileChanged()
         {
@@ -68,10 +75,7 @@ namespace NeoMir.UserManagment
             //
         }
 
-        /// <summary>
-        /// Gets apps that are installled by default
-        /// </summary>
-        /// <returns></returns>
+        // Obtient les applications installées par défaut
         private void GetDefaultApps()
         {
             DataAccess.DeleteTableEntries<UserApp>();
@@ -129,5 +133,7 @@ namespace NeoMir.UserManagment
                 AppName = "Epitech"
             });
         }
+
+        #endregion
     }
 }

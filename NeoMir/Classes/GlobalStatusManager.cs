@@ -8,13 +8,22 @@ namespace NeoMir.Classes
 {
     public class GlobalStatusManager
     {
+        #region PROPERTIES
+
         private static object syncRoot = new object();
         private static volatile GlobalStatusManager instance;
-     
-        /// <summary>
-        /// Gets an Instance of the classe if the it's already existing
-        /// </summary>
-        /// <value>LoggingHandler</value>
+        public EGlobalStatus GlobalStatus { get; set; }
+        public enum EGlobalStatus
+        {
+            FirstLaunch,
+            Paired,
+        }
+
+        #endregion
+
+        #region CONSTRUCTOR
+
+        // Obtient une instance de la classe si elle existe déjà
         public static GlobalStatusManager Instance
         {
             get
@@ -33,18 +42,14 @@ namespace NeoMir.Classes
             }
         }
 
-        public EGlobalStatus GlobalStatus { get; set; }
-
         private GlobalStatusManager()
         {
             GlobalStatus = EGlobalStatus.Paired;
         }
+
+        #endregion
     }
 
 
-    public enum EGlobalStatus
-    {
-        FirstLaunch,
-        Paired,
-    }
+
 }
