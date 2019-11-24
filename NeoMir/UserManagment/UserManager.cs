@@ -117,11 +117,11 @@ namespace NeoMir.UserManagment
                 Name = "Admin"
             });
 
-            //DataAccess.AddEntity(new UserProfile()
-            //{
-            //    Id = 2,
-            //    Name = "Robin"
-            //});
+            DataAccess.AddEntity(new UserProfile()
+            {
+                Id = 2,
+                Name = "Guest"
+            });
 
             /*DataAccess.AddEntity(new UserProfile()
             {

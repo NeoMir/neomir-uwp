@@ -150,6 +150,7 @@ namespace NeoMir.Pages
                 FrameManager.GoTo(FrameManager.MainPageFrame);
                 LineGrid.Visibility = Visibility.Visible;
                 PhotoTookGrid.Visibility = Visibility.Collapsed;
+                await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StartGesture);
             }
             else if (str == Protocol.RegisterFaceKO)
             {
@@ -159,6 +160,10 @@ namespace NeoMir.Pages
                 await Task.Delay(4000);
                 LineGrid.Visibility = Visibility.Visible;
                 PhotoTookGrid.Visibility = Visibility.Collapsed;
+                await InitializeCameraAsync();
+            }
+            else if (str == Protocol.StopCamOK)
+            {
                 await InitializeCameraAsync();
             }
         }
@@ -208,7 +213,7 @@ namespace NeoMir.Pages
         {
             if (page == this)
             {
-                await InitializeCameraAsync();
+                await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopCam);
             }
             else
             {

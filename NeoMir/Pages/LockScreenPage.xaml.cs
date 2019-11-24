@@ -27,6 +27,8 @@ namespace NeoMir.Pages
         public static Thickness BoxMargin = new Thickness(10);
         private GestureCollector gestureCollector;
         private FaceCollector faceCollector;
+        private Dictionary<EGestures, Action> gestActions;
+        Carousel carousel;
 
         #endregion
 
@@ -52,6 +54,7 @@ namespace NeoMir.Pages
                 await UserManager.Instance.Init();
                 DisplayUsers();
                 Users.Visibility = Visibility.Visible;
+                await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StartFace);
             }
         }
 
@@ -59,6 +62,7 @@ namespace NeoMir.Pages
         {
             gestureCollector = GestureCollector.Instance;
             gestureCollector.RegisterToGestures(this, ApplyGesture);
+            InitGestureBehavior();
             faceCollector = FaceCollector.Instance;
             faceCollector.RegisterToFace(this, FaceDetected);
         }
@@ -74,7 +78,7 @@ namespace NeoMir.Pages
 
         private void DisplayUsers()
         {
-            Carousel carousel = new Carousel();
+            carousel = new Carousel();
 
             carousel.InvertPositive = false;
             carousel.ItemDepth = 400;
@@ -114,26 +118,26 @@ namespace NeoMir.Pages
             FrameManager.GoTo(FrameManager.MainPageFrame);
         }
 
+        // Initialise un dictionnaire d'action qui serontt invoqué selon le geste détécté 
+        private void InitGestureBehavior()
+        {
+            gestActions = new Dictionary<EGestures, Action>();
+            gestActions.Add(EGestures.NextLeft, () => PreviousProfile());
+            gestActions.Add(EGestures.NextRight, () => NextProfile());
+            gestActions.Add(EGestures.Validate, () => OpenProfile());
+        }
+
+        // Applique les gestes
         private void ApplyGesture(Gesture gesture)
         {
-            if (!gesture.IsConsumed)
+            EGestures eg = (EGestures)Enum.Parse(typeof(EGestures), gesture.Name);
+            if (gestActions.ContainsKey(eg))
             {
-                if (this == Classes.FrameManager.GetCurrentPage())
-                {
-                    if (gesture.Name == "Lock" && !gesture.IsConsumed)
-                    {
-                        if (UserManager.Instance.CurrentProfile == null)
-                        {
-                            UserManager.Instance.CurrentProfile = UserManager.Instance.Profiles[0];
-                        }
-                        Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
-                        gesture.IsConsumed = true;
-
-                    }
-                }
+                gestActions[eg].Invoke();
             }
         }
 
+        // Ouvre le profil dont la face a été detécté
         private async void FaceDetected(Face face)
         {
             if (!face.IsConsumed)
@@ -161,6 +165,26 @@ namespace NeoMir.Pages
                     }
                 }
             }
+        }
+
+        private void NextProfile()
+        {
+            carousel.SelectedIndex = (carousel.SelectedIndex + 1) % carousel.Items.Count;
+        }
+
+        private void PreviousProfile()
+        {
+            carousel.SelectedIndex = (carousel.SelectedIndex - 1) % carousel.Items.Count;
+        }
+
+        private async void OpenProfile()
+        {
+           UserProfile profile = UserManager.Instance.Profiles.Where(p => p.Name == (string)(carousel.SelectedItem as Button).Content).FirstOrDefault();
+           if (profile != null && !profile.IsFaceLinked)
+           {
+                button_Tapped(carousel.SelectedItem, null);
+                await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopFace);
+           }
         }
 
         #endregion
