@@ -86,8 +86,9 @@ namespace NeoMir.Pages
             carousel.ItemRotationX = 0;
             carousel.ItemRotationY = 0;
             carousel.ItemRotationZ = 0;
-            carousel.SelectedIndex = 0;
             carousel.Orientation = Orientation.Horizontal;
+           
+
 
             foreach (UserProfile profile in UserManager.Instance.Profiles)
             {
@@ -105,6 +106,7 @@ namespace NeoMir.Pages
 
             Users.Children.Clear();
             Users.Children.Add(carousel);
+            carousel.SelectedIndex = 0;
         }
 
         #endregion
@@ -179,11 +181,11 @@ namespace NeoMir.Pages
 
         private async void OpenProfile()
         {
-           UserProfile profile = UserManager.Instance.Profiles.Where(p => p.Name == (string)(carousel.SelectedItem as Button).Content).FirstOrDefault();
-           if (profile != null && !profile.IsFaceLinked)
+            await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopFace);
+            UserProfile profile = UserManager.Instance.Profiles.Where(p => p.Name == (string)(carousel.SelectedItem as Button).Content).FirstOrDefault();
+            if (profile != null && !profile.IsFaceLinked)
            {
                 button_Tapped(carousel.SelectedItem, null);
-                await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopFace);
            }
         }
 

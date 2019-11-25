@@ -91,8 +91,9 @@ namespace NeoMir.Classes.Com
         public async Task SendMessageAsync(string message)
         {
             StorageFolder folder = KnownFolders.PicturesLibrary;
-            c2pFile = await folder.CreateFileAsync(Protocol.C2PFile, Windows.Storage.CreationCollisionOption.OpenIfExists);
-            await FileIO.WriteTextAsync(c2pFile, message);
+            //c2pFile = await folder.CreateFileAsync(Protocol.C2PFile, Windows.Storage.CreationCollisionOption.OpenIfExists);
+            c2pFile = await folder.GetFileAsync(Protocol.C2PFile);
+            await FileIO.WriteTextAsync(c2pFile, message + '-' + DateTime.Now.ToString());
         }
 
         private int GetTimeElapsed(DateTimeOffset current, DateTimeOffset last)
