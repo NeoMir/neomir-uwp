@@ -22,6 +22,7 @@ namespace NeoMir.Classes.Communication
         private BasicProperties prop;
         private string lastMessage;
         private List<ContentControl> contents;
+        private bool isStop;
 
         /// <summary>
         /// Gets an Instance of the classe if the it's already existing
@@ -80,10 +81,15 @@ namespace NeoMir.Classes.Communication
                 if (pageEventDico.ContainsKey(current))
                 {
                     int index = text.IndexOf('-');
-                    if (index > 0)
+                    if (!isStop && index > 0 && text.Substring(0, index) != EGestures.Stop.ToString())
                     {
                         NotifyGestureIcone(text.Substring(0, index));
                         pageEventDico[current].Invoke(new Gesture(text.Substring(0, index)));
+                    }
+                    else if (text.Substring(0, index) == EGestures.Stop.ToString())
+                    {
+                        isStop = !isStop;
+                        NotifyGestureIcone(isStop.ToString());
                     }
                 }
             }

@@ -165,9 +165,11 @@
     <Content Include="Assets\demarage.scale-200.png" />
     <Content Include="Assets\demarage.scale-400.png" />
     <Content Include="Assets\Gestures\Back.png" />
+    <Content Include="Assets\Gestures\False.png" />
     <Content Include="Assets\Gestures\Lock.png" />
     <Content Include="Assets\Gestures\NextLeft.png" />
     <Content Include="Assets\Gestures\NextRight.png" />
+    <Content Include="Assets\Gestures\True.png" />
     <Content Include="Assets\Gestures\Validate.png" />
     <Content Include="Assets\icone.altform-unplated_targetsize-16.png" />
     <Content Include="Assets\icone.altform-unplated_targetsize-24.png" />

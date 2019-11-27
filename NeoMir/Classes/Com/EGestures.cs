@@ -13,5 +13,6 @@ namespace NeoMir.Classes.Com
         NextRight,
         NextLeft,
         Lock,
+        Stop
     }
 }
