@@ -148,11 +148,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\AppsPage\EasyBrush.png" />
-    <Content Include="Assets\AppsPage\Epitech.jpg" />
+    <Content Include="Assets\AppsPage\Epitech.png" />
     <Content Include="Assets\AppsPage\Facebook.png" />
     <Content Include="Assets\AppsPage\gmail.png" />
-    <Content Include="Assets\AppsPage\maps.jpg" />
-    <Content Include="Assets\AppsPage\train.jpg" />
+    <Content Include="Assets\AppsPage\Maps.png" />
+    <Content Include="Assets\AppsPage\Transport.png" />
     <Content Include="Assets\AppsPage\Youtube.png" />
     <Content Include="Assets\badge.scale-100.png" />
     <Content Include="Assets\badge.scale-125.png" />

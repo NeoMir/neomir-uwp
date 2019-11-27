@@ -19,6 +19,7 @@ using NeoMir.Classes;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Shapes;
 using NeoMir.Globals;
+using Windows.UI.Popups;
 
 namespace NeoMir.Pages
 {
@@ -66,7 +67,6 @@ namespace NeoMir.Pages
             StartAnimations();
             GestureSetup();
             UserManager.Instance.ProfileChanged += GetProfile;
-            GestureIcone.Content = new GestureIcone() { Icon = "Validate" };
         }
 
         #endregion
@@ -108,7 +108,6 @@ namespace NeoMir.Pages
                 await Task.Delay(3000);
                 FrameManager.GoTo(FrameManager.CapturePage);
             }
-
         }
 
         // Actualise la date et l'heure
@@ -169,7 +168,7 @@ namespace NeoMir.Pages
             gestureCollector = GestureCollector.Instance;
             InitGestureBehavior();
             gestureCollector.RegisterToGestures(this, ApplyGesture);
-
+            gestureCollector.RegisterToGestureIcone(GestureIcone);
         }
 
         // Initialise un dictionnaire d'action qui serontt invoqué selon le geste détécté 
@@ -185,6 +184,8 @@ namespace NeoMir.Pages
         // Applique les gestes
         private void ApplyGesture(Gesture gesture)
         {
+           // GestureIcone.Content = new GestureIcone() { Icon = gesture.Name };
+
             EGestures eg = (EGestures)Enum.Parse(typeof(EGestures), gesture.Name);
             if (gestActions.ContainsKey(eg))
             {

@@ -49,6 +49,7 @@ namespace NeoMir.Pages
             gestureCollector = GestureCollector.Instance;
             InitGestureBehavior();
             gestureCollector.RegisterToGestures(this, ApplyGesture);
+            gestureCollector.RegisterToGestureIcone(GestureIcone);
         }
 
 

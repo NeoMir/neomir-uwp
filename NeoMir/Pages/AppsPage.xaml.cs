@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace NeoMir.Pages
 {
@@ -129,6 +130,7 @@ namespace NeoMir.Pages
         {
             gestureCollector = GestureCollector.Instance;
             gestureCollector.RegisterToGestures(this, ApplyGesture);
+            gestureCollector.RegisterToGestureIcone(GestureIcone);
             InitGestureBehavior();
         }
 
@@ -201,19 +203,57 @@ namespace NeoMir.Pages
 
         private void NextApp()
         {
-            carousel.SelectedIndex = (carousel.SelectedIndex + 1) % carousel.Items.Count;
+            if (carousel.Items.Count > 0)
+            {
+                carousel.SelectedIndex = (carousel.SelectedIndex + 1) % carousel.Items.Count;
+            }
+            else
+            {
+
+            }
         }
 
-        private void PreviousApp()
+        private async void PreviousApp()
         {
-            carousel.SelectedIndex = (carousel.SelectedIndex - 1) % carousel.Items.Count;
+            if (carousel.Items.Count > 0)
+            {
+                if (carousel.SelectedIndex == 0)
+                {
+                    carousel.SelectedIndex = -1;
+                    await RefreshApps();
+                }
+                else
+                {
+                    carousel.SelectedIndex = (carousel.SelectedIndex - 1) % carousel.Items.Count;
+                }
+            }
+            else
+            {
+                await RefreshApps();
+            }
+        }
+
+
+
+        private async Task RefreshApps()
+        {
+            DoinitApp = true;
+            RefreshTxt.IsActive = true;
+            await UserAppsManager.Instance.GetAppsForProfil();
+            LoadProfilApps();
+            DisplayApps();
+            RefreshTxt.IsActive = false;
+            carousel.SelectedIndex = 0;
         }
 
 
         private void OpenApp()
         {
-            Ellipse img = (Ellipse)carousel.SelectedItem;
-           FrameManager.LaunchApp((Classes.App)img.Tag);
+            if (carousel.Items.Count > 0)
+            {
+                Ellipse img = (Ellipse)carousel.SelectedItem;
+                FrameManager.LaunchApp((Classes.App)img.Tag);
+            }
         }
         #endregion
     }

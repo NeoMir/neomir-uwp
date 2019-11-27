@@ -62,6 +62,7 @@ namespace NeoMir.Pages
         {
             gestureCollector = GestureCollector.Instance;
             gestureCollector.RegisterToGestures(this, ApplyGesture);
+            gestureCollector.RegisterToGestureIcone(GestureIcone);
             InitGestureBehavior();
             faceCollector = FaceCollector.Instance;
             faceCollector.RegisterToFace(this, FaceDetected);
@@ -150,6 +151,7 @@ namespace NeoMir.Pages
                     UserProfile profile = UserManager.Instance.Profiles.Where((u) => u.Name == face.Name).FirstOrDefault();
                     if (profile != null)
                     {
+                        await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopFace);
                         this.DetectedMessage.Text = string.Format("{0} has been detected", face.Name);
                         this.DetectedMessage.Text = string.Empty;
                         UserManager.Instance.CurrentProfile = profile;

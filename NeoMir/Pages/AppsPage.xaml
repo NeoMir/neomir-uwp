@@ -38,7 +38,7 @@
         <TextBlock Grid.Column= "3" Grid.Row= "0" Grid.ColumnSpan= "2" x:Name="AppsTitle" HorizontalAlignment= "Center" VerticalAlignment="Center" FontSize= "20" FontStyle= "Italic" Text= "Applications" Margin= "0,0,0,50" ></TextBlock >
         <TextBlock Grid.Column= "3" Grid.RowSpan="2" Grid.Row= "3" Grid.ColumnSpan= "2" x:Name="NoAppsTitle" HorizontalAlignment= "Center" VerticalAlignment="Center" FontSize= "20" FontStyle= "Italic" Text= "Aucune application disponible." ></TextBlock >
         <!-- Remove app button -->
-
+        <ProgressRing Name="RefreshTxt"  Grid.Row="6" Grid.ColumnSpan="10" HorizontalAlignment="Center" VerticalAlignment="Bottom" IsActive="True"/>
         <Grid x:Name="AppsCarousel" Grid.ColumnSpan="8" Grid.Row="1" Grid.RowSpan="6"></Grid>
         <ContentControl x:Name="GestureIcone" Grid.ColumnSpan="10" Grid.RowSpan="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50"/>
     </Grid>

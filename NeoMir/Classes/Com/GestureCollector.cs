@@ -1,4 +1,5 @@
 ﻿using NeoMir.Classes.Com;
+using NeoMir.Globals;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace NeoMir.Classes.Communication
         private Dictionary<Page, Action<Gesture>> pageEventDico;
         private BasicProperties prop;
         private string lastMessage;
+        private List<ContentControl> contents;
 
         /// <summary>
         /// Gets an Instance of the classe if the it's already existing
@@ -47,6 +49,7 @@ namespace NeoMir.Classes.Communication
         {
             GetQuery();
             pageEventDico = new Dictionary<Page, Action<Gesture>>();
+            contents = new List<ContentControl>();
         }
 
         private async Task GetQuery()
@@ -79,9 +82,18 @@ namespace NeoMir.Classes.Communication
                     int index = text.IndexOf('-');
                     if (index > 0)
                     {
+                        NotifyGestureIcone(text.Substring(0, index));
                         pageEventDico[current].Invoke(new Gesture(text.Substring(0, index)));
                     }
                 }
+            }
+        }
+
+        private async Task NotifyGestureIcone(string icone)
+        {
+            foreach (var content in contents)
+            {
+                content.Content = new GestureIcone() { Icon = icone };
             }
         }
 
@@ -98,6 +110,11 @@ namespace NeoMir.Classes.Communication
             {
                 pageEventDico.Add(page, action);
             }
+        }
+
+        public void RegisterToGestureIcone(ContentControl content)
+        {
+            contents?.Add(content);
         }
     }
 }
