@@ -42,15 +42,15 @@ namespace NeoMir.Globals
         {
             ImgBrush.ImageSource = new BitmapImage(new Uri("ms-appx:///Assets//Gestures//" + gesture + ".png"));
             ImgBrush.Opacity = 0;
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
-                ImgBrush.Opacity +=0.1;
-                await Task.Delay(100);
+                ImgBrush.Opacity +=0.2;
+                await Task.Delay(50);
             }
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
-                ImgBrush.Opacity -= 0.1;
-                await Task.Delay(100);
+                ImgBrush.Opacity -= 0.2;
+                await Task.Delay(50);
             }
         }
     }

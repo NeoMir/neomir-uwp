@@ -88,7 +88,7 @@ namespace NeoMir.Pages
             carousel.ItemRotationY = 0;
             carousel.ItemRotationZ = 0;
             carousel.Orientation = Orientation.Horizontal;
-           
+
 
 
             foreach (UserProfile profile in UserManager.Instance.Profiles)
@@ -171,24 +171,53 @@ namespace NeoMir.Pages
             }
         }
 
-        private void NextProfile()
+        private async void NextProfile()
         {
-            carousel.SelectedIndex = (carousel.SelectedIndex + 1) % carousel.Items.Count;
+            if (carousel.Items.Count > 0)
+            {
+                carousel.SelectedIndex = (carousel.SelectedIndex + 1) % carousel.Items.Count;
+            }
+            else
+            {
+                await RefreshProfiles();
+            }
         }
 
-        private void PreviousProfile()
+        private async void PreviousProfile()
         {
-            carousel.SelectedIndex = (carousel.SelectedIndex - 1) % carousel.Items.Count;
+            if (carousel.Items.Count > 0)
+            {
+                if (carousel.SelectedIndex == 0)
+                {
+                    carousel.SelectedIndex = -1;
+                    await RefreshProfiles();
+                }
+                else
+                {
+                    carousel.SelectedIndex = (carousel.SelectedIndex - 1) % carousel.Items.Count;
+                }
+            }
+            else
+            {
+                await RefreshProfiles();
+            }
+        }
+
+        private async Task RefreshProfiles()
+        {
+            await UserManager.Instance.Init();
+            DisplayUsers();
+            carousel.SelectedIndex = 0;
         }
 
         private async void OpenProfile()
         {
-            await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopFace);
             UserProfile profile = UserManager.Instance.Profiles.Where(p => p.Name == (string)(carousel.SelectedItem as Button).Content).FirstOrDefault();
             if (profile != null && !profile.IsFaceLinked)
-           {
+            {
+                await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopFace);
                 button_Tapped(carousel.SelectedItem, null);
-           }
+            }
         }
 
         #endregion

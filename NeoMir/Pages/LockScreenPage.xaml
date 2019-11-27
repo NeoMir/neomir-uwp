@@ -32,6 +32,5 @@
         <Grid x:Name="Users" Grid.ColumnSpan="7" Grid.Row="0" Grid.RowSpan="7"></Grid>
         <TextBlock Name="DetectedMessage" Grid.Row="0" Grid.ColumnSpan="7" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="70" Foreground="ForestGreen"> </TextBlock>
         <ContentControl x:Name="GestureIcone" Grid.ColumnSpan="10" Grid.RowSpan="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50"/>
-        <Ellipse x:Name="GestursdsdeIcone" Grid.ColumnSpan="10" Grid.RowSpan="10" Width="50" Height="50" Fill="White" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50"/>
     </Grid>
 </Page>

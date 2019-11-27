@@ -201,7 +201,7 @@ namespace NeoMir.Pages
         }
 
 
-        private void NextApp()
+        private async void NextApp()
         {
             if (carousel.Items.Count > 0)
             {
@@ -209,7 +209,7 @@ namespace NeoMir.Pages
             }
             else
             {
-
+                await RefreshApps();
             }
         }
 
@@ -238,12 +238,12 @@ namespace NeoMir.Pages
         private async Task RefreshApps()
         {
             DoinitApp = true;
-            RefreshTxt.IsActive = true;
+            RefreshTxt.Visibility = Visibility.Visible;
             await UserAppsManager.Instance.GetAppsForProfil();
             LoadProfilApps();
             DisplayApps();
-            RefreshTxt.IsActive = false;
             carousel.SelectedIndex = 0;
+            RefreshTxt.Visibility = Visibility.Collapsed;
         }
 
 
