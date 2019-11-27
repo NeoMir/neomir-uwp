@@ -212,7 +212,7 @@ namespace NeoMir.Pages
 
         private async void OpenProfile()
         {
-            UserProfile profile = UserManager.Instance.Profiles.Where(p => p.Name == (string)(carousel.SelectedItem as Button).Content).FirstOrDefault();
+            UserProfile profile = UserManager.Instance.Profiles.Where(p => p.Name == (string)(carousel.Items[carousel.SelectedIndex] as Button).Content).FirstOrDefault();
             if (profile != null && !profile.IsFaceLinked)
             {
                 await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopFace);

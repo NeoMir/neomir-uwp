@@ -251,7 +251,7 @@ namespace NeoMir.Pages
         {
             if (carousel.Items.Count > 0)
             {
-                Ellipse img = (Ellipse)carousel.SelectedItem;
+                Ellipse img = (Ellipse)carousel.Items[carousel.SelectedIndex];
                 FrameManager.LaunchApp((Classes.App)img.Tag);
             }
         }
