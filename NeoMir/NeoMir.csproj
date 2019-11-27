@@ -113,7 +113,7 @@
     <Compile Include="Globals\GestureIcone.xaml.cs">
       <DependentUpon>GestureIcone.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Globals\GlobalNames.cs" />
+    <Compile Include="Globals\GlobalStrings.cs" />
     <Compile Include="Helpers\AsyncHelper.cs" />
     <Compile Include="Helpers\ImagingHelper.cs" />
     <Compile Include="Helpers\MemoryRandomAccessStream.cs" />
@@ -126,8 +126,8 @@
     <Compile Include="Pages\LockScreenPage.xaml.cs">
       <DependentUpon>LockScreenPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ConnectToApi.xaml.cs">
-      <DependentUpon>ConnectToApi.xaml</DependentUpon>
+    <Compile Include="Pages\MirorLink.xaml.cs">
+      <DependentUpon>MirorLink.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -248,7 +248,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ConnectToApi.xaml">
+    <Page Include="Pages\MirorLink.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

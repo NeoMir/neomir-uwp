@@ -49,6 +49,7 @@ namespace NeoMir.Classes.Com
             pageEventDico = new Dictionary<Page, Action<Face>>();
         }
 
+        // Lance le file watching
         private async Task GetQuery()
         {
             StorageFolder folder = KnownFolders.PicturesLibrary;
@@ -66,6 +67,7 @@ namespace NeoMir.Classes.Com
             };
         }
 
+        // Ouvre le fichier 
         private async Task GetMessage(Windows.Storage.Search.IStorageQueryResultBase sender, object args)
         {
             string text = await FileIO.ReadTextAsync(file);
@@ -92,6 +94,7 @@ namespace NeoMir.Classes.Com
             return currentMilli - lastMilli;
         }
 
+        // Methode a utiliser pour s'enregistrer à l'évènement de reconnaissance faciale
         public void RegisterToFace(Page page, Action<Face> action)
         {
             if (!pageEventDico.ContainsKey(page))

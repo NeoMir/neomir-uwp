@@ -46,12 +46,14 @@ namespace NeoMir.Classes.Com
             }
         }
 
+        // ctor
         private GlobalMessageManager()
         {
             pageEventDico = new Dictionary<Page, Action<string>>();
             GetQuery();
         }
 
+        // Lance le file watching
         private async Task GetQuery()
         {
             StorageFolder folder = KnownFolders.PicturesLibrary;
@@ -69,6 +71,7 @@ namespace NeoMir.Classes.Com
             };
         }
 
+        // Ouvre le fichier de communication p2c et lie son contenue
         private async Task ReadMessageAsync(Windows.Storage.Search.IStorageQueryResultBase sender, object args)
         {
             string text = await FileIO.ReadTextAsync(p2cFile);
@@ -88,6 +91,7 @@ namespace NeoMir.Classes.Com
             }
         }
 
+        // Envoie un message au fichier de communication c2p
         public async Task SendMessageAsync(string message)
         {
             StorageFolder folder = KnownFolders.PicturesLibrary;
@@ -103,6 +107,7 @@ namespace NeoMir.Classes.Com
             return currentMilli - lastMilli;
         }
 
+        // Methode a utiliser pour s'enregistrer à l'évènement de message p2c
         public void RegisterToGlobalMessage(Page page, Action<string> action)
         {
             if (!pageEventDico.ContainsKey(page))

@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 
 namespace NeoMir.Globals
 {
-    public static class GlobalNames
+    public static class GlobalStrings
     {
         public static string PhotoRegistred = "Votre photo est enregistré, vous pouvez maintenant vous connécter via la reconnaissance facial";
         public static string PhotoNotRegistred = "Veuillez réessayer en placent votre visage au centre du miroir";
         public static string PhotoTookProcessing = "Traitement de la photo";
         public static string PhotoRequired = "L'enregistrement de votre photo de connexion va commencer ...";
+
+        public static string DoLockToScanFace = "Faites le geste de vérouillage pour commencer la reconnaissance faciale";
+        public static string NoFaceDetected = "Aucune personne reconnu";
+        public static string FaceScanningRunning = "Reconnaissance faciale en cours ...";
 
     }
 }

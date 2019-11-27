@@ -23,9 +23,7 @@ namespace NeoMir.Pages
     {
         #region PROPERTIES
 
-        private static int ConfNumber;
         private bool DoinitApp;
-        private bool isLock;
         GestureCollector gestureCollector;
         private Dictionary<EGestures, Action> gestActions;
         private Carousel carousel;
@@ -38,7 +36,6 @@ namespace NeoMir.Pages
         public AppsPage()
         {
             this.InitializeComponent();
-            this.InitializeVariables();
             UserManager.Instance.ProfileChanged += ProfileChanged;
             FrameManager.NavigatedEvent += NavigateOn;
             GestureSetup();
@@ -60,13 +57,6 @@ namespace NeoMir.Pages
         {
             FrameManager.InstalledApps.Clear();
             DoinitApp = true;
-        }
-
-        // Initialise les variables
-        private void InitializeVariables()
-        {
-            ConfNumber = 0;
-            isLock = false;
         }
 
         // Récupère toutes les applications installées
@@ -234,7 +224,7 @@ namespace NeoMir.Pages
         }
 
 
-
+        // Rafraichi la liste des applications
         private async Task RefreshApps()
         {
             DoinitApp = true;
@@ -246,7 +236,7 @@ namespace NeoMir.Pages
             RefreshTxt.Visibility = Visibility.Collapsed;
         }
 
-
+        // Ouvre l'application séléctionné
         private void OpenApp()
         {
             if (carousel.Items.Count > 0)

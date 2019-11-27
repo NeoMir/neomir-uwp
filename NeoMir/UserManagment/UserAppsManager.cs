@@ -53,10 +53,10 @@ namespace NeoMir.UserManagment
 
         private async void ProfileChanged()
         {
-            //GetDefaultApps();
             await GetAppsForProfil();
         }
 
+        // Recupère la liste des profil associé aux compte via l'API
         public async Task GetAppsForProfil()
         {
             List<UserApp> installed = DataAccess.GetEntities<UserApp>();

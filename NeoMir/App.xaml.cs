@@ -77,7 +77,7 @@ namespace NeoMir
                     // paramètre
                     rootFrame.Navigate(typeof(Pages.MainPage), e.Arguments);
                     Classes.FrameManager.AppsPageFrame.Navigate(typeof(Pages.AppsPage));
-                    Classes.FrameManager.PairPageFrame.Navigate(typeof(Pages.ConnectToApi));
+                    Classes.FrameManager.PairPageFrame.Navigate(typeof(Pages.MirorLink));
                     Classes.FrameManager.LockPageFrame.Navigate(typeof(Pages.LockScreenPage));
                     Classes.FrameManager.CapturePage.Navigate(typeof(Pages.TakePicturePage));
                 }

@@ -7,6 +7,7 @@ using NeoMir.UserManagment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Media.Core;
@@ -23,12 +24,16 @@ namespace NeoMir.Pages
     {
         #region PROPERTIES
 
+
+
         public static int HoverSize = 20;
         public static Thickness BoxMargin = new Thickness(10);
         private GestureCollector gestureCollector;
         private FaceCollector faceCollector;
         private Dictionary<EGestures, Action> gestActions;
-        Carousel carousel;
+        private Carousel carousel;
+        private bool isScanningFace = false;
+        private Timer timer;
 
         #endregion
 
@@ -54,7 +59,7 @@ namespace NeoMir.Pages
                 await UserManager.Instance.Init();
                 DisplayUsers();
                 Users.Visibility = Visibility.Visible;
-                await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StartFace);
+                this.DetectedMessage.Text = Globals.GlobalStrings.DoLockToScanFace;
             }
         }
 
@@ -128,13 +133,14 @@ namespace NeoMir.Pages
             gestActions.Add(EGestures.NextLeft, () => PreviousProfile());
             gestActions.Add(EGestures.NextRight, () => NextProfile());
             gestActions.Add(EGestures.Validate, () => OpenProfile());
+            gestActions.Add(EGestures.Lock, () => StartFaceScanning());
         }
 
         // Applique les gestes
         private void ApplyGesture(Gesture gesture)
         {
             EGestures eg = (EGestures)Enum.Parse(typeof(EGestures), gesture.Name);
-            if (gestActions.ContainsKey(eg))
+            if (gestActions.ContainsKey(eg) && !isScanningFace)
             {
                 gestActions[eg].Invoke();
             }
@@ -151,21 +157,13 @@ namespace NeoMir.Pages
                     UserProfile profile = UserManager.Instance.Profiles.Where((u) => u.Name == face.Name).FirstOrDefault();
                     if (profile != null)
                     {
-                        await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopFace);
-                        this.DetectedMessage.Text = string.Format("{0} has been detected", face.Name);
-                        this.DetectedMessage.Text = string.Empty;
+                        StopFaceScanning(false);
+                        this.DetectedMessage.Text = string.Format("{0} détecté", face.Name);
                         UserManager.Instance.CurrentProfile = profile;
                         face.IsConsumed = true;
                         await Task.Delay(2000);
                         Classes.FrameManager.GoTo(Classes.FrameManager.MainPageFrame);
-                    }
-                    else
-                    {
-                        this.DetectedMessage.Foreground = new SolidColorBrush(Colors.Red);
-                        this.DetectedMessage.Text = string.Format("{0} is not a valid user", face.Name);
-                        await Task.Delay(2000);
-                        this.DetectedMessage.Text = string.Empty;
-                        this.DetectedMessage.Foreground = new SolidColorBrush(Colors.ForestGreen);
+                        this.DetectedMessage.Text = Globals.GlobalStrings.DoLockToScanFace;
                     }
                 }
             }
@@ -203,13 +201,15 @@ namespace NeoMir.Pages
             }
         }
 
+        // Rafraichi la liste des profiles
         private async Task RefreshProfiles()
         {
             await UserManager.Instance.Init();
             DisplayUsers();
             carousel.SelectedIndex = 0;
         }
-
+        
+        // Ouvre le profile séléctioné
         private async void OpenProfile()
         {
             UserProfile profile = UserManager.Instance.Profiles.Where(p => p.Name == (string)(carousel.Items[carousel.SelectedIndex] as Button).Content).FirstOrDefault();
@@ -217,6 +217,40 @@ namespace NeoMir.Pages
             {
                 await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopFace);
                 button_Tapped(carousel.SelectedItem, null);
+            }
+
+        }
+
+        // Stop la reconnaisance faciale
+        private async void StopFaceScanning(object info)
+        {
+            bool inf = (bool)info;
+            if (isScanningFace)
+            {
+                await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopFace);
+                isScanningFace = false;
+                timer?.Dispose();
+                timer = null;
+                if(inf)
+                {
+
+                    this.DetectedMessage.Text = Globals.GlobalStrings.NoFaceDetected;
+                    await Task.Delay(3000);
+                    this.DetectedMessage.Text = Globals.GlobalStrings.DoLockToScanFace;
+                }
+            }
+        }
+
+        // Lnace la reconnaissance faciale
+        private async void StartFaceScanning()
+        {
+            if (!isScanningFace)
+            {
+                isScanningFace = true;
+                await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StartFace);
+                this.DetectedMessage.Text = Globals.GlobalStrings.FaceScanningRunning;
+                await Task.Delay(5000);
+                StopFaceScanning(true);
             }
         }
 

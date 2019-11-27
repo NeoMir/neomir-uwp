@@ -130,7 +130,7 @@ namespace NeoMir.Pages
             LineGrid.Visibility = Visibility.Collapsed;
             PhotoTookGrid.Visibility = Visibility.Visible;
             await GlobalMessageManager.Instance.SendMessageAsync(Protocol.RequiredFaceSave);
-            PhotoTookMessage.Text = Globals.GlobalNames.PhotoTookProcessing;
+            PhotoTookMessage.Text = Globals.GlobalStrings.PhotoTookProcessing;
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace NeoMir.Pages
             {
                 LineGrid.Visibility = Visibility.Collapsed;
                 PhotoTookGrid.Visibility = Visibility.Visible;
-                PhotoTookMessage.Text = Globals.GlobalNames.PhotoRegistred;
+                PhotoTookMessage.Text = Globals.GlobalStrings.PhotoRegistred;
                 await Task.Delay(4000);
                 UserManager.Instance.CurrentProfile.IsFaceLinked = true;
                 UserManager.Instance.CurrentProfilUpdated();
@@ -156,7 +156,7 @@ namespace NeoMir.Pages
             {
                 LineGrid.Visibility = Visibility.Collapsed;
                 PhotoTookGrid.Visibility = Visibility.Visible;
-                PhotoTookMessage.Text = Globals.GlobalNames.PhotoNotRegistred;
+                PhotoTookMessage.Text = Globals.GlobalStrings.PhotoNotRegistred;
                 await Task.Delay(4000);
                 LineGrid.Visibility = Visibility.Visible;
                 PhotoTookGrid.Visibility = Visibility.Collapsed;
@@ -203,6 +203,7 @@ namespace NeoMir.Pages
             PhotoRegistred();
         }
 
+        // Go to Home Page
         private void HomeButton_Tapped(object sender, RoutedEventArgs e)
         {
             FrameManager.GoTo(FrameManager.MainPageFrame);

@@ -95,6 +95,7 @@ namespace NeoMir.Classes.Communication
             }
         }
 
+        // Notifie les page avec l'icone du geste reconnu
         private async Task NotifyGestureIcone(string icone)
         {
             foreach (var content in contents)
@@ -110,6 +111,7 @@ namespace NeoMir.Classes.Communication
             return currentMilli - lastMilli;
         }
 
+        // Methode a utiliser pour s'enregistrer à l'évènement de reconnaissance de geste
         public void RegisterToGestures(Page page, Action<Gesture> action)
         {
             if (!pageEventDico.ContainsKey(page))

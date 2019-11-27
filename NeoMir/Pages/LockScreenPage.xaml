@@ -30,7 +30,7 @@
 
         <MediaPlayerElement x:Name="_mediaPlayerElement" AreTransportControlsEnabled="False" HorizontalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="0" Grid.RowSpan="7"/>
         <Grid x:Name="Users" Grid.ColumnSpan="7" Grid.Row="0" Grid.RowSpan="7"></Grid>
-        <TextBlock Name="DetectedMessage" Grid.Row="0" Grid.ColumnSpan="7" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="70" Foreground="ForestGreen"> </TextBlock>
+        <TextBlock Name="DetectedMessage" Grid.Row="0" Grid.ColumnSpan="7" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="50" Foreground="White"> </TextBlock>
         <ContentControl x:Name="GestureIcone" Grid.ColumnSpan="10" Grid.RowSpan="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50"/>
     </Grid>
 </Page>

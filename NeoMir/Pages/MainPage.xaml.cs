@@ -104,7 +104,7 @@ namespace NeoMir.Pages
             else
             {
                 await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StartGesture);
-                msgWelcome.Text = Globals.GlobalNames.PhotoRequired;
+                msgWelcome.Text = Globals.GlobalStrings.PhotoRequired;
                 await Task.Delay(3000);
                 FrameManager.GoTo(FrameManager.CapturePage);
             }
