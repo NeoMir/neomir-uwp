@@ -56,8 +56,8 @@ namespace NeoMir.Pages
             {"04n", "cloudy-sky.png"},
 
         };
-        private SpeechRecognizer recognizer;
-        private CoreDispatcher _dispatcher;
+ 
+        public mySpeechRecognition SR { get; }
 
 
         #endregion
@@ -72,6 +72,9 @@ namespace NeoMir.Pages
             GestureSetup();
             UserManager.Instance.ProfileChanged += GetProfile;
             GestureIcone.Content = new GestureIcone() { Icon = "Validate" };
+
+            SR = new mySpeechRecognition();
+            SR.StartContinuousRecognition();
         }
 
         #endregion
@@ -233,64 +236,15 @@ namespace NeoMir.Pages
         // Permet de compléter une note grâce à la reconnaissance vocale
         private async void btnNoteTapped(object sender, TappedRoutedEventArgs e)
         {
-            _dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-
-            /*
+            /*_dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+*/
+            
             var SR = new mySpeechRecognition();
-            txtNote.Text = await SR.GetStringFromSpeechRecognition();*/
-            await MyContinuousRecognition();
+            txtNote.Text = await SR.GetStringFromSpeechRecognition();
+            /*await MyContinuousRecognition();
             await recognizer.ContinuousRecognitionSession.StartAsync();
-
+*/
         }
-
-
-        async public Task MyContinuousRecognition()
-        {
-            this.recognizer = new SpeechRecognizer();
-            var expectedResonses = new String[] { "bonjour", "test" };
-            var listConstraint = new SpeechRecognitionListConstraint(expectedResonses, "Contrainte");
-            this.recognizer.Constraints.Add(listConstraint);
-            await this.recognizer.CompileConstraintsAsync();
-
-            this.recognizer.ContinuousRecognitionSession.Completed += ContinuousRecognitionSession_Completed;
-            this.recognizer.ContinuousRecognitionSession.ResultGenerated += ContinuousRecognitionSession_ResultGenerated;
-        }
-
-        private async void ContinuousRecognitionSession_Completed(SpeechContinuousRecognitionSession sender, SpeechContinuousRecognitionCompletedEventArgs args)
-        {
-            if (this.recognizer.State == SpeechRecognizerState.Idle)
-            {
-                await this.recognizer.ContinuousRecognitionSession.StartAsync();
-            }
-        }
-
-        private async void ContinuousRecognitionSession_ResultGenerated(SpeechContinuousRecognitionSession sender, SpeechContinuousRecognitionResultGeneratedEventArgs args)
-        {
-            if (args.Result.Confidence == SpeechRecognitionConfidence.Medium || args.Result.Confidence == SpeechRecognitionConfidence.High)
-            {
-                await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                {
-                    await DoAction(args.Result.Text);
-                });
-            }
-        }
-
-        private Task DoAction(string phrase)
-        {
-            var cleanedPhrase = phrase.ToLower().Replace(".", string.Empty);
-            var list = new String[] { "bonjour", "test" };
-
-
-            if (list.Contains(cleanedPhrase))
-            {
-                txtNote.Text = cleanedPhrase;
-            }
-
-            return Task.CompletedTask;
-        }
-
-
-
         #endregion
     }
 }

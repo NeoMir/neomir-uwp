@@ -94,7 +94,7 @@ namespace NeoMir.UserManagment
                     {
                         if (Profiles.Where(p => p.Name == list[i]).FirstOrDefault() == null)
                         {
-                            DataAccess.AddEntity(new UserProfile() { Id = i + 1, Name = list[i], IsFaceLinked= false });
+                            DataAccess.AddEntity(new UserProfile() { Id = i + 1, Name = list[i], IsFaceLinked= true });
                         }
                     }
                     List<UserProfile> profiles = Profiles;
