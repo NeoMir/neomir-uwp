@@ -42,6 +42,7 @@ namespace NeoMir.Pages
 
         public TakePicturePage()
         {
+
             this.InitializeComponent();
             FrameManager.NavigatedEvent += NavigateOn;
             GlobalMessageManager.Instance.RegisterToGlobalMessage(this, PythonResponse);

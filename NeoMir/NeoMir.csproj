@@ -109,6 +109,7 @@
     <Compile Include="Classes\Config.cs" />
     <Compile Include="Classes\App.cs" />
     <Compile Include="Classes\GlobalStatusManager.cs" />
+    <Compile Include="Classes\mySpeechRecognition.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Globals\GestureIcone.xaml.cs">
       <DependentUpon>GestureIcone.xaml</DependentUpon>

@@ -53,6 +53,23 @@
             <TextBlock Grid.Column= "0" Grid.Row= "0" HorizontalAlignment= "Center" VerticalAlignment= "Bottom" FontSize= "100" x:Name= "time_field" FontStyle= "Italic" Foreground= "White" ></TextBlock>
             <TextBlock Grid.Column= "0" Grid.Row= "1" HorizontalAlignment= "Center" VerticalAlignment= "Top" FontSize= "30" x:Name= "date_field" FontStyle= "Italic" Foreground= "White" ></TextBlock>
 
+
+        </Grid>
+
+        <Grid x:Name= "NoteCell" Grid.Column= "3" Grid.Row= "3">
+
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions >
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Button Grid.Column= "0" Grid.Row="0" HorizontalAlignment="Center"  FontFamily="Segoe MDL2 Assets" Content="&#xE72E;" x:Name= "btnNote" Height="70" Width="70"  Tapped= "btnNoteTapped" Background="{x:Null}" ></Button>
+            <TextBlock Grid.Column= "0" Grid.Row= "1" x:Name= "txtNote" HorizontalAlignment= "Center" VerticalAlignment= "Center" FontSize= "20" FontStyle= "Italic" Text= "" Margin= "0,15,0,0" ></TextBlock>
+
+
         </Grid>
 
         <Button Grid.Column= "1" Grid.Row= "0" Grid.ColumnSpan= "2" x:Name= "LaunchAppButton" FontFamily="Segoe MDL2 Assets" Content="&#xE971;" HorizontalAlignment= "Center" VerticalAlignment= "Center" Height="70" Width="70" FontSize="50" Tapped="LaunchAppButton_Tapped" Margin= "0,0,0,100" Background="{x:Null}" Opacity="0.5"/>
