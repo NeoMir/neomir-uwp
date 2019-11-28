@@ -192,7 +192,7 @@ namespace NeoMir.Pages
                 }
                 else
                 {
-                    carousel.SelectedIndex = (carousel.SelectedIndex - 1) % carousel.Items.Count;
+                    carousel.SelectedIndex = Math.Max((carousel.SelectedIndex - 1) % carousel.Items.Count, 0);
                 }
             }
             else

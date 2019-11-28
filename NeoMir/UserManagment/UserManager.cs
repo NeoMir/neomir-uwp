@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 using static NeoMir.Classes.GlobalStatusManager;
 
 namespace NeoMir.UserManagment
@@ -107,7 +108,7 @@ namespace NeoMir.UserManagment
                     {
                         if (list.Where(p => p == profil.Name).FirstOrDefault() == null)
                         {
-                            DataAccess.DeleteEntity(profil);
+                            DeleteProfile(profil);
                         }
                         else
                         {
@@ -115,6 +116,26 @@ namespace NeoMir.UserManagment
                         }
                     }
                 }
+            }
+        }
+
+        private async void DeleteProfile(UserProfile profile)
+        {
+            DataAccess.DeleteEntity(profile);
+            if (profile.IsFaceLinked)
+            {
+                try
+                {
+                    StorageFolder folder = KnownFolders.PicturesLibrary;
+                    string fileName = string.Format("Faces\\{0}.jpg", profile.Name);
+                    StorageFile file = await folder.GetFileAsync(fileName);
+                    await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
+                }
+                catch (Exception e)
+                {
+                    Console.Write(e.Message);
+                }
+
             }
         }
 

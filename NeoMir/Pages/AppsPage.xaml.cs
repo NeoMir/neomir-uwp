@@ -23,7 +23,6 @@ namespace NeoMir.Pages
     {
         #region PROPERTIES
 
-        private bool DoinitApp;
         GestureCollector gestureCollector;
         private Dictionary<EGestures, Action> gestActions;
         private Carousel carousel;
@@ -37,7 +36,6 @@ namespace NeoMir.Pages
         {
             this.InitializeComponent();
             UserManager.Instance.ProfileChanged += ProfileChanged;
-            FrameManager.NavigatedEvent += NavigateOn;
             GestureSetup();
             StartAnimations();
         }
@@ -53,10 +51,9 @@ namespace NeoMir.Pages
         }
 
         // Détecte s'il y a un changement de profil
-        private void ProfileChanged()
+        private async void ProfileChanged()
         {
-            FrameManager.InstalledApps.Clear();
-            DoinitApp = true;
+            await RefreshApps();
         }
 
         // Récupère toutes les applications installées
@@ -65,10 +62,7 @@ namespace NeoMir.Pages
             var mirorId = DataAccess.GetMiror().Id;
             foreach (UserApp app in DataAccess.GetEntities<UserApp>())
             {
-                if (FrameManager.InstalledApps.Where((a) => a.UserApp.AppName == app.AppName).FirstOrDefault() == null)
-                {
-                    FrameManager.CreateApp(app);
-                }
+                FrameManager.CreateApp(app);
             }
         }
 
@@ -148,12 +142,8 @@ namespace NeoMir.Pages
         // Charge les applications du profil
         private void LoadProfilApps()
         {
-            if (DoinitApp)
-            {
-                FrameManager.InstalledApps.Clear();
-                GetAllInstalledApplication();
-                DoinitApp = false;
-            }
+            FrameManager.InstalledApps.Clear();
+            GetAllInstalledApplication();
         }
 
         #endregion
@@ -170,19 +160,8 @@ namespace NeoMir.Pages
         // Evenement pour retourner sur la page d'accueil
         private void BackButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            FrameManager.GoTo(FrameManager.MainPageFrame); 
+            FrameManager.GoTo(FrameManager.MainPageFrame);
         }
-
-        // Evenement de navigation
-        private void NavigateOn(Page page)
-        {
-            if (page == this)
-            {
-                LoadProfilApps();
-                DisplayApps();
-            }
-        }
-
 
         // Va a la page de verouillage
         private void GoToLockPage()
@@ -214,7 +193,7 @@ namespace NeoMir.Pages
                 }
                 else
                 {
-                    carousel.SelectedIndex = (carousel.SelectedIndex - 1) % carousel.Items.Count;
+                    carousel.SelectedIndex = Math.Max((carousel.SelectedIndex - 1) % carousel.Items.Count, 0); ;
                 }
             }
             else
@@ -227,7 +206,6 @@ namespace NeoMir.Pages
         // Rafraichi la liste des applications
         private async Task RefreshApps()
         {
-            DoinitApp = true;
             RefreshTxt.Visibility = Visibility.Visible;
             await UserAppsManager.Instance.GetAppsForProfil();
             LoadProfilApps();
