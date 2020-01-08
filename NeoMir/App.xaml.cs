@@ -125,21 +125,41 @@ namespace NeoMir
 
         private async Task SetStatus()
         {
-            Miror miror = DataAccess.GetMiror();
-            if (miror != null && miror.IsPaired)
+            Miror miror = DataAccess.GetMiror();           
+            if (miror != null)
             {
-                GlobalStatusManager.Instance.GlobalStatus = EGlobalStatus.Paired;
-            }
-            else if (miror != null && !miror.IsPaired)
-            {
-                GlobalStatusManager.Instance.GlobalStatus = EGlobalStatus.FirstLaunch;
+                miror = await APIManager.GetIsLinked(miror.Id);
+                if (miror == null)
+                {
+                    await FirstLaunch();
+                    return;
+                }
+                if (miror.IsLinked)
+                {
+                    UserManager.Instance.CurrentUser = miror.UserParent;
+                    DataAccess.AddEntity<User>(miror.UserParent);
+                }
+                else
+                {
+                    miror = await APIManager.GetMirorToken(miror.Id);
+                }
+                DataAccess.UpdateEntity(miror);
+                GlobalStatusManager.Instance.GlobalStatus = miror.IsLinked ? EGlobalStatus.Paired : EGlobalStatus.FirstLaunch;
             }
             else
             {
-                GlobalStatusManager.Instance.GlobalStatus = EGlobalStatus.FirstLaunch;
-                string id = await APIManager.GetMirorId();
-                DataAccess.AddEntity<Miror>(new Miror() { Id = id, IsPaired = false });
+               await FirstLaunch();
             }
+        }
+
+        private async Task FirstLaunch()
+        {
+            GlobalStatusManager.Instance.GlobalStatus = EGlobalStatus.FirstLaunch;
+            Miror newMiror = await APIManager.PostMiror(new Miror() { Name = "NeoMir" });
+            newMiror = await APIManager.GetMirorToken(newMiror.Id);
+            DataAccess.DeleteTableEntries<Miror>();
+            DataAccess.AddEntity(newMiror);
+            UserManager.Instance.CurrentUser = newMiror.UserParent;
         }
     }
 }

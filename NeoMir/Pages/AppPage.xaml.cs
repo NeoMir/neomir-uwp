@@ -6,6 +6,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using NeoMir.Classes;
 using System.Collections.Generic;
+using Windows.UI.Xaml;
 
 namespace NeoMir.Pages
 {
@@ -62,6 +63,7 @@ namespace NeoMir.Pages
             gestActions.Add(EGestures.Lock, () => GoToLockPage());
             gestActions.Add(EGestures.Validate, () => AppsButton_Tapped(null, null));
             gestActions.Add(EGestures.Back, () => GoToMainPage());
+            gestActions.Add(EGestures.Stop, () => IsLock.Visibility = IsLock.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible);
         }
 
         // Applique les gestes

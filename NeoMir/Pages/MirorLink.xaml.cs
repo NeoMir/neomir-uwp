@@ -32,22 +32,10 @@ namespace NeoMir.Pages
             // Logo.Source = new BitmapImage(new Uri("ms-appx:///Assets/vignette.scale-400.png"));
         }
 
-        private async void getID()
-        {
-
-            var http = new HttpClient();
-            var url = String.Format("http://www.martinbaud.com/V1/gid.php?id");
-            var response = await http.GetAsync(url);
-            var result = await response.Content.ReadAsStringAsync();
-
-        }
-
         // Montre l'identifiant à l'utilisateur
         private void ShowId()
         {
-            id = DataAccess.GetMiror()?.Id;
-            MirorID.Text = id;
-            //WaitForLink();
+            MirorID.Text = DataAccess.GetMiror()?.Token;
         }
 
         // Récupère l'ID depuis l'API
@@ -59,18 +47,18 @@ namespace NeoMir.Pages
         // Attente de la validation du lient entre le miroir et l'application par l'API
         private async void WaitForLink()
         {
+            Miror miror = DataAccess.GetMiror();
+
             while (true)
             {
-                Tuple<bool, string> status = await APIManager.GetIsLinked(DataAccess.GetMiror().Id);
-                if (status.Item1 && !string.IsNullOrEmpty(status.Item2))
+                 miror = await APIManager.GetIsLinked(DataAccess.GetMiror().Id);
+                if (miror.IsLinked)
                 {
                     //BackHomePanel.Visibility = Visibility.Visible;
                     LinkDone.Visibility = Visibility.Visible;
-                    Miror miror = DataAccess.GetMiror();
-                    miror.Usermail = status.Item2;
-                    miror.IsPaired = true;
                     DataAccess.UpdateEntity(miror);
                     GlobalStatusManager.Instance.GlobalStatus = EGlobalStatus.Paired;
+                    UserManager.Instance.CurrentUser = miror.UserParent;
                     await UserManager.Instance.Init();
                     await Task.Delay(2000);
                     break;

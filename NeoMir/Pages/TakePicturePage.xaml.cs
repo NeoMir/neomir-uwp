@@ -57,7 +57,7 @@ namespace NeoMir.Pages
             backFacingDevice = cameraDevices.FirstOrDefault(c => c.EnclosureLocation?.Panel == Windows.Devices.Enumeration.Panel.Back);
 
             // but if that doesn't exist, take the first camera device available
-            preferredDevice = cameraDevices[1];
+            //preferredDevice = cameraDevices[1];
         }
 
         private async Task InitializeCameraAsync()

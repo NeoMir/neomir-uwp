@@ -18,7 +18,7 @@ namespace NeoMir.UserManagment
 
         private static object syncRoot = new object();
         private static volatile UserManager instance;
-        private UserProfile currentProfile;
+        private Profile currentProfile;
         public event ProfileChangedHandler ProfileChanged;
 
         #endregion
@@ -53,15 +53,17 @@ namespace NeoMir.UserManagment
 
         #region METHODS
 
-        public List<UserProfile> Profiles
+        public List<Profile> Profiles
         {
-            get { return DataAccess.GetEntities<UserProfile>(); }
+            get { return DataAccess.GetEntities<Profile>(); }
         }
 
         public delegate void ProfileChangedHandler();
 
+        public User CurrentUser { get; set; }
+
         // Profil actuel
-        public UserProfile CurrentProfile
+        public Profile CurrentProfile
         {
             get { return currentProfile; }
             set
@@ -88,25 +90,21 @@ namespace NeoMir.UserManagment
             }
             else
             {
-                List<string> list = await APIManager.GetUserProfiles(DataAccess.GetMiror().Usermail);
+                Miror miror = DataAccess.GetMiror();
+                List<Profile> list = await APIManager.GetUserProfiles(CurrentUser.Id);
                 if (list.Count > 0)
                 {
-                    for (int i = 0; i < list.Count; i++)
+                    foreach(Profile profil in list)
                     {
-                        UserProfile profile = Profiles.Where(p => p.Name == list[i]).FirstOrDefault();
-                        if (profile == null)
+                        if (!Profiles.Any(p => p.Id == profil.Id))
                         {
-                            DataAccess.AddEntity(new UserProfile() { Id = i + 1, Name = list[i], IsFaceLinked = false });
-                        }
-                        else
-                        {
-                            profile.Id = i + 1;
+                            DataAccess.AddEntity(profil);
                         }
                     }
-                    List<UserProfile> profiles = Profiles;
-                    foreach (UserProfile profil in Profiles)
+
+                    foreach (Profile profil in Profiles)
                     {
-                        if (list.Where(p => p == profil.Name).FirstOrDefault() == null)
+                        if (!list.Any(p => p.Id == profil.Id))
                         {
                             DeleteProfile(profil);
                         }
@@ -119,7 +117,7 @@ namespace NeoMir.UserManagment
             }
         }
 
-        private async void DeleteProfile(UserProfile profile)
+        private async void DeleteProfile(Profile profile)
         {
             DataAccess.DeleteEntity(profile);
             if (profile.IsFaceLinked)
@@ -141,15 +139,15 @@ namespace NeoMir.UserManagment
 
         private void GetDefaultProfiles()
         {
-            DataAccess.AddEntity(new UserProfile()
+            DataAccess.AddEntity(new Profile()
             {
-                Id = 1,
+                Id = 0,
                 Name = "Admin"
             });
 
-            DataAccess.AddEntity(new UserProfile()
+            DataAccess.AddEntity(new Profile()
             {
-                Id = 2,
+                Id = 0,
                 Name = "Guest"
             });
 

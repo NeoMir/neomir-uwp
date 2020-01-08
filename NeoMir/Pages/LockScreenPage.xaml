@@ -28,6 +28,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <Ellipse x:Name="IsLock" Width="100" Height="100" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed">
+            <Ellipse.Fill>
+                <ImageBrush ImageSource="/Assets/Gestures/True.png"/>
+            </Ellipse.Fill>
+        </Ellipse>
+
         <MediaPlayerElement x:Name="_mediaPlayerElement" AreTransportControlsEnabled="False" HorizontalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="0" Grid.RowSpan="7"/>
         <Grid x:Name="Users" Grid.ColumnSpan="7" Grid.Row="0" Grid.RowSpan="7"></Grid>
         <TextBlock Name="DetectedMessage" Grid.Row="0" Grid.ColumnSpan="7" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="50" Foreground="White"> </TextBlock>

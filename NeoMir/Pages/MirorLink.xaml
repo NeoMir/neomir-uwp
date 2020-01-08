@@ -14,12 +14,12 @@
             <RowDefinition Height="50*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Votre ID Miroir :" FontSize="50" Margin="5"/>
+            <TextBlock Text="Votre Token Miroir :" FontSize="50" Margin="5"/>
             <TextBlock x:Name="MirorID" FontSize="50" Margin="5"/>
         </StackPanel>
         <StackPanel Grid.Row="1">
             <Image Name="Logo" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-            <TextBlock Text="Entrez l'ID Miroir sur votre application mobile afin de lier votre miroir à votre compte." 
+            <TextBlock Text="Entrez le token Miroir sur votre application mobile afin de lier votre miroir à votre compte." 
                    FontSize="25"
                    HorizontalAlignment="Center"></TextBlock>
             <TextBlock x:Name="LinkDone" Text="Votre NeoMir est maintenant lié à votre compte !" FontSize="50" Foreground="GreenYellow" Margin="10" HorizontalAlignment="Center"></TextBlock>

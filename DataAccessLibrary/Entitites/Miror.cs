@@ -1,13 +1,18 @@
 ﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
 
 namespace DataAccessLibrary.Entitites
 {
     public class Miror : IEntity
     {
         [PrimaryKey]
-        public string Id { get; set; }
-        public string MAC { get; set; }
-        public bool IsPaired { get; set; }
-        public string Usermail { get; set; }
+        public long Id { get; set; }
+        public bool IsLinked { get; set; }
+        public string Name { get; set; }
+        public string Token { get; set; }
+        public long UserParentId { get; set; }
+        [ManyToOne]
+        public virtual User UserParent { get; set; }
+        public bool IsVolatile { get; set; }
     }
 }

@@ -48,7 +48,7 @@ namespace NeoMir.Classes
         {
             if (OpenedApps.Contains(app) == true)
             {
-                var appIndex = OpenedApps.FindIndex(x => x.UserApp.AppId == app.UserApp.AppId);
+                var appIndex = OpenedApps.FindIndex(x => x.UserApp.Id == app.UserApp.Id);
                 AppPosition = appIndex + 1;
                 GoTo(OpenedApps[appIndex].Frame, true);
                 return;
@@ -66,7 +66,7 @@ namespace NeoMir.Classes
                 OpenedApps.Add(app);
             }
             AppPosition = OpenedApps.Count;
-            app.Frame.Navigate(typeof(Pages.AppPage), app.UserApp.AppLink);
+            app.Frame.Navigate(typeof(Pages.AppPage), app.UserApp.Url);
             Window.Current.Content = app.Frame;
             Window.Current.Activate();
         }

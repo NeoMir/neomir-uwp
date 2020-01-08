@@ -43,9 +43,10 @@ namespace DataAccessLibrary
         private Database()
         {
             Db = new SQLiteConnection(DbName);
-            Db.CreateTable<Miror>();
-            Db.CreateTable<UserProfile>();
+            Db.CreateTable<User>();
             Db.CreateTable<UserApp>();
+            Db.CreateTable<Profile>();
+            Db.CreateTable<Miror>();
         }
 
         #endregion

@@ -19,7 +19,7 @@
         </Grid>
         <Border BorderThickness="5" BorderBrush="White" />
         <Image Name="PhotoTook"/>
-        <Button x:Name= "HomeButton" FontFamily="Segoe MDL2 Assets" Content="&#xEA8A;"  HorizontalAlignment= "Center" VerticalAlignment= "Top" Height="70" Width="70" FontSize="50" Tapped="HomeButton_Tapped" Background="{x:Null}" Opacity="0.5"/>
+       
         <Button Height="100" Width="100" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Foreground="Beige" Click="Button_Click">
             <Ellipse Name="EllipseButton" Width="50" Height="50" Fill="AliceBlue"></Ellipse>
         </Button>
@@ -29,7 +29,7 @@
                 <TextBlock Name="CountDown" HorizontalAlignment="Center" FontSize="80" Foreground="White"></TextBlock>
             </StackPanel>    
         </Grid>
-        
-              
+        <Button x:Name= "HomeButton" FontFamily="Segoe MDL2 Assets" Content="&#xEA8A;"  HorizontalAlignment= "Center" VerticalAlignment= "Top" Height="70" Width="70" FontSize="50" Tapped="HomeButton_Tapped" Background="{x:Null}" Opacity="0.5"/>
+
     </Grid>
 </Page>

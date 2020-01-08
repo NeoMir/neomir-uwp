@@ -96,7 +96,7 @@ namespace NeoMir.Pages
 
 
 
-            foreach (UserProfile profile in UserManager.Instance.Profiles)
+            foreach (Profile profile in UserManager.Instance.Profiles)
             {
                 Button button = new Button();
                 button.Content = profile.Name;
@@ -122,7 +122,7 @@ namespace NeoMir.Pages
         private void button_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Button button = (Button)sender;
-            UserManager.Instance.CurrentProfile = (UserProfile)button.Tag;
+            UserManager.Instance.CurrentProfile = (Profile)button.Tag;
             FrameManager.GoTo(FrameManager.MainPageFrame);
         }
 
@@ -134,6 +134,7 @@ namespace NeoMir.Pages
             gestActions.Add(EGestures.NextRight, () => NextProfile());
             gestActions.Add(EGestures.Validate, () => OpenProfile());
             gestActions.Add(EGestures.Lock, () => StartFaceScanning());
+            gestActions.Add(EGestures.Stop, () => IsLock.Visibility = IsLock.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible);
         }
 
         // Applique les gestes
@@ -154,7 +155,7 @@ namespace NeoMir.Pages
 
                 if (this == Classes.FrameManager.GetCurrentPage())
                 {
-                    UserProfile profile = UserManager.Instance.Profiles.Where((u) => u.Name == face.Name).FirstOrDefault();
+                    Profile profile = UserManager.Instance.Profiles.Where((u) => u.Name == face.Name).FirstOrDefault();
                     if (profile != null)
                     {
                         StopFaceScanning(false);
@@ -212,7 +213,7 @@ namespace NeoMir.Pages
         // Ouvre le profile séléctioné
         private async void OpenProfile()
         {
-            UserProfile profile = UserManager.Instance.Profiles.Where(p => p.Name == (string)(carousel.Items[carousel.SelectedIndex] as Button).Content).FirstOrDefault();
+            Profile profile = UserManager.Instance.Profiles.Where(p => p.Name == (string)(carousel.Items[carousel.SelectedIndex] as Button).Content).FirstOrDefault();
             if (profile != null && !profile.IsFaceLinked)
             {
                 await GlobalMessageManager.Instance.SendMessageAsync(Protocol.StopFace);

@@ -179,6 +179,7 @@ namespace NeoMir.Pages
             gestActions.Add(EGestures.NextRight, () => NextAppButton_Tapped(null, null));
             gestActions.Add(EGestures.Lock, () => LockButton_Tapped(null, null));
             gestActions.Add(EGestures.Validate, () => LaunchAppButton_Tapped(null, null));
+            gestActions.Add(EGestures.Stop, () => IsLock.Visibility = IsLock.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible);
         }
 
         // Applique les gestes

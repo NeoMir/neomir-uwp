@@ -120,13 +120,15 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="API\APIException.cs" />
     <Compile Include="API\APIManager.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="DataAccess.cs" />
     <Compile Include="Entitites\IEntity.cs" />
     <Compile Include="Entitites\Miror.cs" />
+    <Compile Include="Entitites\User.cs" />
     <Compile Include="Entitites\UserApp.cs" />
-    <Compile Include="Entitites\UserProfile.cs" />
+    <Compile Include="Entitites\Profile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\DataAccessLibrary.rd.xml" />
   </ItemGroup>
@@ -142,6 +144,9 @@
     </PackageReference>
     <PackageReference Include="sqlite-net-pcl">
       <Version>1.5.231</Version>
+    </PackageReference>
+    <PackageReference Include="SQLiteNetExtensions">
+      <Version>2.1.0</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

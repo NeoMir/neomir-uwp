@@ -67,7 +67,7 @@ namespace NeoMir.Pages
         }
 
         // Affiche les applications
-        private void DisplayApps()
+        private async void DisplayApps()
         {
             int numberOfApps = FrameManager.InstalledApps.Count;
             carousel = new Carousel();
@@ -90,12 +90,13 @@ namespace NeoMir.Pages
                 NoAppsTitle.Visibility = Visibility.Collapsed;
                 foreach (Classes.App app in FrameManager.InstalledApps)
                 {
+                    await app.UserApp.SetImage();
                     Ellipse ellipse = new Ellipse();
                     ImageBrush imageBrush = new ImageBrush();
 
-                    ellipse.Height = 700;
-                    ellipse.Width = 700;
-                    imageBrush.ImageSource = new BitmapImage(new Uri(app.UserApp.AppIconLink));
+                    ellipse.Height = 400;
+                    ellipse.Width = 400;
+                    imageBrush.ImageSource = app.UserApp.IconSource;
                     ellipse.Fill = imageBrush;
                     ellipse.Tapped += new TappedEventHandler(OpenAppTapped);
                     ellipse.Tag = app;
@@ -127,6 +128,7 @@ namespace NeoMir.Pages
             gestActions.Add(EGestures.Back, () => BackButton_Tapped(null, null));
             gestActions.Add(EGestures.Lock, () => GoToLockPage());
             gestActions.Add(EGestures.Validate, () => OpenApp());
+            gestActions.Add(EGestures.Stop, () => IsLock.Visibility = IsLock.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible);
         }
 
         // Applique les gestes

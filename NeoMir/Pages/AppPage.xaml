@@ -9,6 +9,12 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <Ellipse x:Name="IsLock" Width="100" Height="100" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed">
+            <Ellipse.Fill>
+                <ImageBrush ImageSource="/Assets/Gestures/True.png"/>
+            </Ellipse.Fill>
+        </Ellipse>
+
         <WebView x:Name="AppView" Margin="0,0,0,0"/>
         <Ellipse HorizontalAlignment="Center" Height="190" Margin="0,-100,0,0" VerticalAlignment="Top" Width="280" Fill="Black"/>
         <Ellipse HorizontalAlignment="Left" Height="150" Margin="-120,0,0,0" VerticalAlignment="Center" Width="200" Fill="Black"/>

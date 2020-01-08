@@ -90,6 +90,7 @@ namespace NeoMir.Classes.Communication
                     {
                         isStop = !isStop;
                         NotifyGestureIcone(isStop.ToString());
+                        pageEventDico[current].Invoke(new Gesture(text.Substring(0, index)));
                     }
                 }
             }

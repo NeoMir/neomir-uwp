@@ -61,10 +61,8 @@ namespace NeoMir.UserManagment
         {
             List<UserApp> installed = DataAccess.GetEntities<UserApp>();
             DataAccess.DeleteTableEntries<UserApp>();
-            foreach (var app in await APIManager.GetProfileApps(DataAccess.GetMiror().Usermail, UserManager.Instance.CurrentProfile.Id))
+            foreach (var app in await APIManager.GetProfileApps(UserManager.Instance.CurrentProfile.Id))
             {
-                app.AppId = DataAccess.GetEntities<UserApp>().Count;
-                app.ProfileId = UserManager.Instance.CurrentProfile.Id;
                 DataAccess.AddEntity(app);
             }
         }

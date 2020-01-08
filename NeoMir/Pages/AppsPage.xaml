@@ -32,6 +32,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <Ellipse x:Name="IsLock" Width="100" Height="100" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed">
+            <Ellipse.Fill>
+                <ImageBrush ImageSource="/Assets/Gestures/True.png"/>
+            </Ellipse.Fill>
+        </Ellipse>
+
         <!-- Return Button & Text -->
         <Button Grid.Column="3" Grid.Row= "8" Grid.ColumnSpan= "2" x:Name= "BackButton" FontFamily="Segoe MDL2 Assets" Content="&#xE972;"  HorizontalAlignment= "Center" VerticalAlignment= "Center" Height="70" Width="70" FontSize="50" Tapped= "BackButton_Tapped" Margin= "0,20,0,0" Background="{x:Null}" Opacity="0.5" />
         <TextBlock Grid.Column= "3" Grid.Row= "8" Grid.ColumnSpan= "2" x:Name="BackButtonName" HorizontalAlignment= "Center" VerticalAlignment= "Center" FontSize= "20" FontStyle= "Italic" Text= "Ecran principal" Margin= "0,0,0,100" ></TextBlock >
